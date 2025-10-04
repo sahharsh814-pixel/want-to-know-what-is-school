@@ -1303,7 +1303,7 @@ const PrincipalDashboard = () => {
                                         e.currentTarget.style.display = 'none';
                                       }}
                                     />
-                                  ) : (a.studentPhoto && typeof a.studentPhoto === 'object' && a.studentPhoto instanceof Blob) ? (
+                                  ) : (a.studentPhoto && typeof a.studentPhoto === 'object' && (a.studentPhoto as any) instanceof Blob) ? (
                                     <img 
                                       src={URL.createObjectURL(a.studentPhoto as Blob)} 
                                       alt="Student" 
@@ -1377,7 +1377,7 @@ const PrincipalDashboard = () => {
                                           // Regular URL
                                           window.open(a.aadhaarCard, '_blank');
                                         }
-                                      } else if (a.aadhaarCard && typeof a.aadhaarCard === 'object' && a.aadhaarCard instanceof Blob) {
+                                      } else if (a.aadhaarCard && typeof a.aadhaarCard === 'object' && (a.aadhaarCard as any) instanceof Blob) {
                                         const url = URL.createObjectURL(a.aadhaarCard as Blob);
                                         window.open(url, '_blank');
                                       } else {
@@ -1420,7 +1420,7 @@ const PrincipalDashboard = () => {
                                           // Regular URL
                                           window.open(a.birthCertificate, '_blank');
                                         }
-                                      } else if (a.birthCertificate && typeof a.birthCertificate === 'object' && a.birthCertificate instanceof Blob) {
+                                      } else if (a.birthCertificate && typeof a.birthCertificate === 'object' && (a.birthCertificate as any) instanceof Blob) {
                                         const url = URL.createObjectURL(a.birthCertificate as Blob);
                                         window.open(url, '_blank');
                                       } else {
@@ -1463,7 +1463,7 @@ const PrincipalDashboard = () => {
                                           // Regular URL
                                           window.open(a.studentPhoto, '_blank');
                                         }
-                                      } else if (a.studentPhoto && typeof a.studentPhoto === 'object' && a.studentPhoto instanceof Blob) {
+                                      } else if (a.studentPhoto && typeof a.studentPhoto === 'object' && (a.studentPhoto as any) instanceof Blob) {
                                         const url = URL.createObjectURL(a.studentPhoto as Blob);
                                         window.open(url, '_blank');
                                       } else {
