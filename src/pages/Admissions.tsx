@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useEffect } from "react";
+import { getSupabaseData, setSupabaseData } from "@/lib/supabaseHelpers";
 
 const Admissions = () => {
   const [formData, setFormData] = useState({
@@ -64,41 +65,41 @@ const Admissions = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Load pricing and admissions data from localStorage
+  // Load pricing and admissions data from Supabase
   useEffect(() => {
-    const loadData = () => {
+    const loadData = async () => {
       try {
-        console.log('Loading admissions page data...');
+        console.log('[Admissions] Loading data from Supabase...');
         
-        const savedPricing = localStorage.getItem('royal-academy-pricing');
-        if (savedPricing) {
-          setPricing(JSON.parse(savedPricing));
-        }
+        // Load pricing from Supabase
+        const savedPricing = await getSupabaseData<typeof pricing>('royal-academy-pricing', { monthly: 5000, yearly: 50000 });
+        console.log('[Admissions] Loaded pricing:', savedPricing);
+        setPricing(savedPricing);
 
-        const savedAdmissionsData = localStorage.getItem('royal-academy-admissions');
+        // Load admissions page content from Supabase
+        const savedAdmissionsData = await getSupabaseData<any>('royal-academy-admissions-page', null);
         if (savedAdmissionsData) {
-          const parsedData = JSON.parse(savedAdmissionsData);
-          console.log('Loading custom admissions data:', parsedData);
+          console.log('[Admissions] Loading custom admissions page data:', savedAdmissionsData);
           setAdmissionsData(prev => ({
             ...prev,
-            ...parsedData,
+            ...savedAdmissionsData,
             // Ensure nested objects are properly merged
             affordability: {
               ...prev.affordability,
-              ...parsedData.affordability
+              ...savedAdmissionsData.affordability
             },
             campus: {
               ...prev.campus,
-              ...parsedData.campus
+              ...savedAdmissionsData.campus
             }
           }));
         } else {
-          console.log('No custom admissions data - using defaults');
+          console.log('[Admissions] No custom admissions data - using defaults');
         }
       } catch (error) {
-        console.error('Error loading admissions data:', error);
+        console.error('[Admissions] Error loading data:', error);
         // Keep default data, don't set to null
-        console.log('Using fallback default data');
+        console.log('[Admissions] Using fallback default data');
       }
     };
 
@@ -107,7 +108,7 @@ const Admissions = () => {
 
     // Listen for storage changes (when Principal updates data)
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'royal-academy-admissions' || e.key === 'royal-academy-pricing') {
+      if (e.key === 'royal-academy-admissions-page' || e.key === 'royal-academy-pricing') {
         loadData();
       }
     };
@@ -348,47 +349,103 @@ const Admissions = () => {
     }
   };
 
-  // Save admission to localStorage
-  const saveAdmission = (paymentStatus: 'paid' | 'test', paymentMethod?: 'razorpay' | 'paypal' | 'stripe' | null) => {
+  // Helper function to convert File to base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  // Save admission to Supabase
+  const saveAdmission = async (paymentStatus: 'paid' | 'test', paymentMethod?: 'razorpay' | 'paypal' | 'stripe' | null) => {
     try {
-      const existing = localStorage.getItem('royal-academy-admissions');
-      const list = existing ? JSON.parse(existing) : [];
+      console.log('[Admissions] Saving admission to Supabase...');
+      
+      // Convert files to base64 for storage
+      let aadhaarCardBase64 = null;
+      let birthCertificateBase64 = null;
+      let studentPhotoBase64 = null;
+
+      if (formData.aadhaarCard) {
+        aadhaarCardBase64 = await fileToBase64(formData.aadhaarCard);
+      }
+      if (formData.birthCertificate) {
+        birthCertificateBase64 = await fileToBase64(formData.birthCertificate);
+      }
+      if (formData.studentPhoto) {
+        studentPhotoBase64 = await fileToBase64(formData.studentPhoto);
+      }
+      
+      // Get existing admissions from Supabase
+      const existing = await getSupabaseData<any[]>('royal-academy-admissions', []);
+      
+      // Create new admission record with base64 encoded files
       const record = {
         id: Date.now().toString(),
         createdAt: new Date().toISOString(),
         paymentStatus,
         paymentMethod: paymentStatus === 'paid' ? paymentMethod ?? selectedPaymentMethod : 'test',
         subscriptionType,
-        ...formData,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        class: formData.class,
+        rollNumber: formData.rollNumber,
+        aadhaarCard: aadhaarCardBase64,
+        birthCertificate: birthCertificateBase64,
+        studentPhoto: studentPhotoBase64,
       };
-      console.log('Saving admission record:', record);
-      localStorage.setItem('royal-academy-admissions', JSON.stringify([record, ...list]));
-      console.log('Admission saved to localStorage. Total records:', [record, ...list].length);
-      // Show a visible confirmation
-      alert(`Admission saved! Record ID: ${record.id}\nName: ${record.firstName} ${record.lastName}\nStatus: ${record.paymentStatus}`);
+      
+      console.log('[Admissions] Saving admission record (files converted to base64)');
+      
+      // Save to Supabase (this also saves to localStorage as fallback)
+      const success = await setSupabaseData('royal-academy-admissions', [record, ...existing]);
+      
+      if (success) {
+        console.log('[Admissions] Admission saved successfully. Total records:', [record, ...existing].length);
+        alert(`Admission saved successfully!\n\nRecord ID: ${record.id}\nName: ${record.firstName} ${record.lastName}\nStatus: ${record.paymentStatus}\n\nThe principal can now view this in the dashboard.`);
+      } else {
+        console.warn('[Admissions] Supabase save failed, but saved to localStorage');
+        alert(`Admission saved to local storage!\n\nRecord ID: ${record.id}\nName: ${record.firstName} ${record.lastName}\nStatus: ${record.paymentStatus}`);
+      }
     } catch (err) {
-      console.error('Failed to save admission:', err);
+      console.error('[Admissions] Failed to save admission:', err);
       alert('Error saving admission: ' + err);
     }
   };
 
-  const handleFormSubmission = (
+  const handleFormSubmission = async (
     paymentStatus: 'paid' | 'test',
     paymentMethod?: 'razorpay' | 'paypal' | 'stripe' | null
   ) => {
-    saveAdmission(paymentStatus, paymentMethod);
-    console.log("Application submitted:", { ...formData, paymentStatus, paymentMethod });
-    alert('Application submitted successfully! You will receive a confirmation email shortly.');
+    await saveAdmission(paymentStatus, paymentMethod);
+    console.log("[Admissions] Application submitted:", { ...formData, paymentStatus, paymentMethod });
     setShowModal(false);
     setCurrentStep(0);
     setPaymentSuccess(false);
     setSelectedPaymentMethod(null);
+    // Reset form
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      class: "",
+      rollNumber: "",
+      aadhaarCard: null,
+      birthCertificate: null,
+      studentPhoto: null
+    });
   };
 
   // Test submission without payment
-  const handleTestSubmission = () => {
-    console.log('handleTestSubmission called');
-    console.log('Current formData:', formData);
+  const handleTestSubmission = async () => {
+    console.log('[Admissions] handleTestSubmission called');
+    console.log('[Admissions] Current formData:', formData);
     
     // Basic validation for required fields from earlier steps
     const requiredTextFields = [
@@ -405,7 +462,7 @@ const Admissions = () => {
       formData.studentPhoto
     ];
     
-    console.log('Required fields check:', {
+    console.log('[Admissions] Required fields check:', {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
@@ -433,8 +490,8 @@ const Admissions = () => {
       return;
     }
     
-    console.log('Validation passed, calling handleFormSubmission');
-    handleFormSubmission('test', null);
+    console.log('[Admissions] Validation passed, calling handleFormSubmission');
+    await handleFormSubmission('test', null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {

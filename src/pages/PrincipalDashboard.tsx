@@ -139,6 +139,8 @@ const PrincipalDashboard = () => {
   
   const [admissions, setAdmissions] = useState<AdmissionRecord[]>([]);
   const [admissionsSearch, setAdmissionsSearch] = useState("");
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<{ show: boolean; admissionId: string | null; studentName: string }>({ show: false, admissionId: null, studentName: '' });
+  const [neverAskAgain, setNeverAskAgain] = useState(false);
   
   // Timetable management state
   const [selectedTimetableClass, setSelectedTimetableClass] = useState("1");
@@ -372,6 +374,46 @@ const PrincipalDashboard = () => {
     } catch (e) {
       console.error('[PrincipalDashboard] Error loading admissions:', e);
       setAdmissions([]);
+    }
+  };
+
+  // Delete admission record
+  const handleDeleteAdmission = async (admissionId: string) => {
+    try {
+      console.log('[PrincipalDashboard] Deleting admission:', admissionId);
+      const updated = admissions.filter(a => a.id !== admissionId);
+      setAdmissions(updated);
+      await setSupabaseData('royal-academy-admissions', updated);
+      alert('Admission record deleted successfully!');
+    } catch (error) {
+      console.error('[PrincipalDashboard] Error deleting admission:', error);
+      alert('Failed to delete admission record');
+    }
+  };
+
+  // Show delete confirmation
+  const showDeleteConfirmation = (admissionId: string, studentName: string) => {
+    // Check if user selected "never ask again"
+    const neverAsk = localStorage.getItem('never-ask-delete-admission');
+    if (neverAsk === 'true') {
+      handleDeleteAdmission(admissionId);
+      return;
+    }
+    
+    setDeleteConfirmModal({ show: true, admissionId, studentName });
+  };
+
+  // Confirm deletion
+  const confirmDelete = async () => {
+    if (deleteConfirmModal.admissionId) {
+      // Save preference if checked
+      if (neverAskAgain) {
+        localStorage.setItem('never-ask-delete-admission', 'true');
+      }
+      
+      await handleDeleteAdmission(deleteConfirmModal.admissionId);
+      setDeleteConfirmModal({ show: false, admissionId: null, studentName: '' });
+      setNeverAskAgain(false);
     }
   };
 
@@ -1231,6 +1273,7 @@ const PrincipalDashboard = () => {
                       <th className="py-3 pr-4">Payment</th>
                       <th className="py-3 pr-4">Documents</th>
                       <th className="py-3 pr-4">Submitted</th>
+                      <th className="py-3 pr-4">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1260,7 +1303,7 @@ const PrincipalDashboard = () => {
                                         e.currentTarget.style.display = 'none';
                                       }}
                                     />
-                                  ) : (typeof a.studentPhoto === 'object') ? (
+                                  ) : (a.studentPhoto && typeof a.studentPhoto === 'object' && a.studentPhoto instanceof Blob) ? (
                                     <img 
                                       src={URL.createObjectURL(a.studentPhoto as Blob)} 
                                       alt="Student" 
@@ -1315,8 +1358,26 @@ const PrincipalDashboard = () => {
                                   onClick={() => {
                                     try {
                                       if (typeof a.aadhaarCard === 'string') {
-                                        window.open(a.aadhaarCard, '_blank');
-                                      } else if (typeof a.aadhaarCard === 'object') {
+                                        // Check if it's a base64 string
+                                        if (a.aadhaarCard.startsWith('data:')) {
+                                          // Open base64 in new window
+                                          const newWindow = window.open();
+                                          if (newWindow) {
+                                            newWindow.document.write(`
+                                              <html>
+                                                <head><title>Aadhaar Card</title></head>
+                                                <body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#000;">
+                                                  <img src="${a.aadhaarCard}" style="max-width:100%;max-height:100vh;object-fit:contain;" />
+                                                </body>
+                                              </html>
+                                            `);
+                                            newWindow.document.close();
+                                          }
+                                        } else {
+                                          // Regular URL
+                                          window.open(a.aadhaarCard, '_blank');
+                                        }
+                                      } else if (a.aadhaarCard && typeof a.aadhaarCard === 'object' && a.aadhaarCard instanceof Blob) {
                                         const url = URL.createObjectURL(a.aadhaarCard as Blob);
                                         window.open(url, '_blank');
                                       } else {
@@ -1340,8 +1401,26 @@ const PrincipalDashboard = () => {
                                   onClick={() => {
                                     try {
                                       if (typeof a.birthCertificate === 'string') {
-                                        window.open(a.birthCertificate, '_blank');
-                                      } else if (typeof a.birthCertificate === 'object') {
+                                        // Check if it's a base64 string
+                                        if (a.birthCertificate.startsWith('data:')) {
+                                          // Open base64 in new window
+                                          const newWindow = window.open();
+                                          if (newWindow) {
+                                            newWindow.document.write(`
+                                              <html>
+                                                <head><title>Birth Certificate</title></head>
+                                                <body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#000;">
+                                                  <img src="${a.birthCertificate}" style="max-width:100%;max-height:100vh;object-fit:contain;" />
+                                                </body>
+                                              </html>
+                                            `);
+                                            newWindow.document.close();
+                                          }
+                                        } else {
+                                          // Regular URL
+                                          window.open(a.birthCertificate, '_blank');
+                                        }
+                                      } else if (a.birthCertificate && typeof a.birthCertificate === 'object' && a.birthCertificate instanceof Blob) {
                                         const url = URL.createObjectURL(a.birthCertificate as Blob);
                                         window.open(url, '_blank');
                                       } else {
@@ -1365,8 +1444,26 @@ const PrincipalDashboard = () => {
                                   onClick={() => {
                                     try {
                                       if (typeof a.studentPhoto === 'string') {
-                                        window.open(a.studentPhoto, '_blank');
-                                      } else if (typeof a.studentPhoto === 'object') {
+                                        // Check if it's a base64 string
+                                        if (a.studentPhoto.startsWith('data:')) {
+                                          // Open base64 in new window
+                                          const newWindow = window.open();
+                                          if (newWindow) {
+                                            newWindow.document.write(`
+                                              <html>
+                                                <head><title>Student Photo</title></head>
+                                                <body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#000;">
+                                                  <img src="${a.studentPhoto}" style="max-width:100%;max-height:100vh;object-fit:contain;" />
+                                                </body>
+                                              </html>
+                                            `);
+                                            newWindow.document.close();
+                                          }
+                                        } else {
+                                          // Regular URL
+                                          window.open(a.studentPhoto, '_blank');
+                                        }
+                                      } else if (a.studentPhoto && typeof a.studentPhoto === 'object' && a.studentPhoto instanceof Blob) {
                                         const url = URL.createObjectURL(a.studentPhoto as Blob);
                                         window.open(url, '_blank');
                                       } else {
@@ -1389,11 +1486,23 @@ const PrincipalDashboard = () => {
                             </div>
                           </td>
                           <td className="py-3 pr-4 text-muted-foreground text-xs">{new Date(a.createdAt).toLocaleString()}</td>
+                          <td className="py-3 pr-4">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => showDeleteConfirmation(a.id, `${a.firstName} ${a.lastName}`)}
+                              className="h-7 px-2 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-600"
+                              title="Delete Admission"
+                            >
+                              <X className="h-3 w-3 mr-1" />
+                              Delete
+                            </Button>
+                          </td>
                         </tr>
                       ))}
                     {admissions.length === 0 && (
                       <tr>
-                        <td className="py-6 text-center text-muted-foreground" colSpan={7}>No admissions yet.</td>
+                        <td className="py-6 text-center text-muted-foreground" colSpan={8}>No admissions yet.</td>
                       </tr>
                     )}
                   </tbody>
@@ -3290,6 +3399,51 @@ const PrincipalDashboard = () => {
             </motion.div></div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmModal.show && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setDeleteConfirmModal({ show: false, admissionId: null, studentName: '' })}>
+          <div className="bg-background rounded-2xl shadow-2xl w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-border">
+              <h3 className="text-lg font-heading font-bold text-red-600">Confirm Deletion</h3>
+              <Button variant="ghost" size="sm" onClick={() => setDeleteConfirmModal({ show: false, admissionId: null, studentName: '' })}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="p-6">
+              <p className="text-foreground mb-4">
+                Are you sure you want to delete the admission record for <strong>{deleteConfirmModal.studentName}</strong>?
+              </p>
+              <p className="text-sm text-muted-foreground mb-4">
+                This action cannot be undone. All information including documents will be permanently deleted from Supabase.
+              </p>
+              <div className="flex items-center space-x-2 mb-6">
+                <input
+                  type="checkbox"
+                  id="neverAskAgain"
+                  checked={neverAskAgain}
+                  onChange={(e) => setNeverAskAgain(e.target.checked)}
+                  className="w-4 h-4 rounded border-border"
+                />
+                <label htmlFor="neverAskAgain" className="text-sm text-muted-foreground cursor-pointer">
+                  Don't ask me again
+                </label>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2 p-4 border-t border-border">
+              <Button variant="outline" onClick={() => {
+                setDeleteConfirmModal({ show: false, admissionId: null, studentName: '' });
+                setNeverAskAgain(false);
+              }}>
+                Cancel
+              </Button>
+              <Button onClick={confirmDelete} className="bg-red-600 hover:bg-red-700 text-white">
+                Delete Permanently
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
