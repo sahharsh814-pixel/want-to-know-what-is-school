@@ -657,9 +657,15 @@ const TeacherDashboard = () => {
   const handleTakeAttendance = () => {
     const classStudents = students.filter(s => s.class === selectedClass && s.section === selectedSection);
     
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    
     const attendanceRecord: AttendanceRecord = {
       id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
+      date: dateStr,
       class: selectedClass,
       section: selectedSection,
       students: classStudents.map(student => ({
@@ -674,13 +680,17 @@ const TeacherDashboard = () => {
     setAttendanceRecords(updatedAttendance);
     localStorage.setItem('royal-academy-attendance', JSON.stringify(updatedAttendance));
     
-    // Update student attendance records
+    // Update student attendance records in main students array
     const updatedStudents = students.map(student => {
       if (student.class === selectedClass && student.section === selectedSection) {
+        const existingAttendance = student.attendance || [];
+        // Remove any existing attendance for today
+        const filteredAttendance = existingAttendance.filter(a => a.date !== dateStr);
+        // Add new attendance
         return {
           ...student,
-          attendance: [...student.attendance, {
-            date: attendanceRecord.date,
+          attendance: [...filteredAttendance, {
+            date: dateStr,
             status: currentAttendance[student.id] || 'present',
             remarks: attendanceRemarks[student.id] || ''
           }]
@@ -692,19 +702,32 @@ const TeacherDashboard = () => {
     setStudents(updatedStudents);
     localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
     
-    // Also update auth students for student dashboard access
+    // Critical: Update auth students for student dashboard access
     const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
     const updatedAuthStudents = authStudents.map((authStudent: any) => {
-      const matchingStudent = updatedStudents.find(s => s.id === authStudent.studentId || s.email === authStudent.email);
+      const matchingStudent = updatedStudents.find(s => 
+        s.id === authStudent.studentId || 
+        s.id === authStudent.id ||
+        s.email === authStudent.email ||
+        s.rollNumber === authStudent.rollNumber
+      );
       if (matchingStudent) {
         return {
           ...authStudent,
-          attendance: matchingStudent.attendance
+          attendance: matchingStudent.attendance || []
         };
       }
       return authStudent;
     });
     localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
+    
+    console.log('Attendance updated:', {
+      date: dateStr,
+      studentsUpdated: classStudents.length,
+      authStudentsUpdated: updatedAuthStudents.filter(s => 
+        classStudents.some(cs => cs.id === s.studentId || cs.email === s.email)
+      ).length
+    });
     
     alert(`Attendance taken for Class ${selectedClass}-${selectedSection}!`);
     setCurrentAttendance({});
@@ -753,19 +776,35 @@ const TeacherDashboard = () => {
     setStudents(updatedStudents);
     localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
     
-    // Also update auth students for student dashboard access
+    // Critical: Update auth students for student dashboard access with comprehensive matching
     const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
     const updatedAuthStudents = authStudents.map((authStudent: any) => {
-      const matchingStudent = updatedStudents.find(s => s.id === authStudent.studentId || s.email === authStudent.email);
+      const matchingStudent = updatedStudents.find(s => 
+        s.id === authStudent.studentId || 
+        s.id === authStudent.id ||
+        s.email === authStudent.email ||
+        s.rollNumber === authStudent.rollNumber ||
+        s.name === authStudent.name ||
+        s.name === authStudent.fullName
+      );
       if (matchingStudent) {
         return {
           ...authStudent,
-          attendance: matchingStudent.attendance
+          attendance: matchingStudent.attendance || []
         };
       }
       return authStudent;
     });
     localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
+    
+    console.log('Edit day attendance updated:', {
+      date: selectedEditDate,
+      studentId,
+      status,
+      authStudentUpdated: updatedAuthStudents.some(s => 
+        s.studentId === studentId || s.id === studentId
+      )
+    });
     
     // Show success message
     const studentName = students.find(s => s.id === studentId)?.name || 'Student';
