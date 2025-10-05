@@ -1,0 +1,99 @@
+Failed to load resource: the server responded with a status of 400 ()Understand this error
+chunk-FJ2A54M7.js?v=88cd695e:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+supabaseClient.ts:23 [supabaseClient] Falling back to provided public Supabase credentials. Configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment for production.
+(anonymous) @ supabaseClient.ts:23Understand this warning
+principal:1 <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">Understand this warning
+react-router-dom.js?v=23fcde7f:4393 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+warnOnce @ react-router-dom.js?v=23fcde7f:4393Understand this warning
+react-router-dom.js?v=23fcde7f:4393 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+warnOnce @ react-router-dom.js?v=23fcde7f:4393Understand this warning
+PrincipalLogin.tsx:29 [PrincipalLogin] Login successful, auth set
+PrincipalDashboard.tsx:325 Auth check: Object
+PrincipalDashboard.tsx:364 Authentication successful, email set: principal.1025@gmail.com
+PrincipalDashboard.tsx:383 [PrincipalDashboard] Loading admissions from Supabase...
+PrincipalDashboard.tsx:385 [PrincipalDashboard] Loaded admissions: 1
+PrincipalDashboard.tsx:280 [PrincipalDashboard] Loading teachers from Supabase...
+PrincipalDashboard.tsx:282 [PrincipalDashboard] Loaded teachers: 1
+2@radix-ui_react-select.js?v=c89d2399:1941 Uncaught Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at @radix-ui_react-select.js?v=c89d2399:1941:13
+    at renderWithHooks (chunk-FJ2A54M7.js?v=88cd695e:11548:26)
+    at updateForwardRef (chunk-FJ2A54M7.js?v=88cd695e:14325:28)
+    at beginWork (chunk-FJ2A54M7.js?v=88cd695e:15946:22)
+    at HTMLUnknownElement.callCallback2 (chunk-FJ2A54M7.js?v=88cd695e:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-FJ2A54M7.js?v=88cd695e:3699:24)
+    at invokeGuardedCallback (chunk-FJ2A54M7.js?v=88cd695e:3733:39)
+    at beginWork$1 (chunk-FJ2A54M7.js?v=88cd695e:19765:15)
+    at performUnitOfWork (chunk-FJ2A54M7.js?v=88cd695e:19198:20)
+    at workLoopSync (chunk-FJ2A54M7.js?v=88cd695e:19137:13)Understand this error
+chunk-FJ2A54M7.js?v=88cd695e:14032 The above error occurred in the <SelectItem> component:
+
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/@radix-ui_react-select.js?v=c89d2399:1914:7
+    at _c8 (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/src/components/ui/select.tsx:234:60)
+    at div
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-CII2QCO4.js?v=88cd695e:43:13
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-K27R4B7K.js?v=88cd695e:79:13
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-K27R4B7K.js?v=88cd695e:56:13
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-Q2LNJYHA.js?v=88cd695e:41:15
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/@radix-ui_react-select.js?v=c89d2399:1825:13
+    at div
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-K27R4B7K.js?v=88cd695e:79:13
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-K27R4B7K.js?v=88cd695e:56:13
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-Q2LNJYHA.js?v=88cd695e:41:15
+    at Provider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-O2CNVHOO.js?v=88cd695e:22:15)
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/@radix-ui_react-select.js?v=c89d2399:1368:58
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-K27R4B7K.js?v=88cd695e:79:13
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-K27R4B7K.js?v=88cd695e:56:13
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-CII2QCO4.js?v=88cd695e:43:13
+    at https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-RYUCMBTT.js?v=88cd695e:262:22
+    at SelectPortal
+    at _c4 (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/src/components/ui/select.tsx:141:63)
+    at Provider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-O2CNVHOO.js?v=88cd695e:22:15)
+    at Provider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-O2CNVHOO.js?v=88cd695e:22:15)
+    at CollectionProvider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-Q2LNJYHA.js?v=88cd695e:31:13)
+    at Provider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-O2CNVHOO.js?v=88cd695e:22:15)
+    at Provider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-O2CNVHOO.js?v=88cd695e:22:15)
+    at Popper (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-EGE24QT6.js?v=88cd695e:1957:11)
+    at Select (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/@radix-ui_react-select.js?v=c89d2399:1154:5)
+    at div
+    at div
+    at EventsManager (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/src/components/EventsManager.tsx:33:33)
+    at div
+    at div
+    at MotionComponent (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=e4c0b434:945:40)
+    at div
+    at div
+    at PrincipalDashboard (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/src/pages/PrincipalDashboard.tsx:42:49)
+    at div
+    at MotionComponent (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=e4c0b434:945:40)
+    at RenderedRoute (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=23fcde7f:4088:5)
+    at Routes (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=23fcde7f:4558:5)
+    at PresenceChild (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=e4c0b434:121:24)
+    at AnimatePresence (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=e4c0b434:210:26)
+    at AnimatedRoutes (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/src/App.tsx:82:22)
+    at Router (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=23fcde7f:4501:15)
+    at BrowserRouter (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=23fcde7f:5247:5)
+    at Provider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/chunk-O2CNVHOO.js?v=88cd695e:22:15)
+    at TooltipProvider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=b332a3b1:58:5)
+    at O (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/next-themes.js?v=93050f54:23:25)
+    at z (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/next-themes.js?v=93050f54:21:18)
+    at ThemeProvider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/src/components/ThemeProvider.tsx:23:33)
+    at QueryClientProvider (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/node_modules/.vite/deps/@tanstack_react-query.js?v=4181d793:2934:3)
+    at App (https://6d5f7ee1-cac1-4b4d-91f8-a79195a39c41-00-6t07vcy9rjmq.pike.replit.dev:5000/src/App.tsx:2783:5)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-FJ2A54M7.js?v=88cd695e:14032Understand this error
+chunk-FJ2A54M7.js?v=88cd695e:9129 Uncaught Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at @radix-ui_react-select.js?v=c89d2399:1941:13
+    at renderWithHooks (chunk-FJ2A54M7.js?v=88cd695e:11548:26)
+    at updateForwardRef (chunk-FJ2A54M7.js?v=88cd695e:14325:28)
+    at beginWork (chunk-FJ2A54M7.js?v=88cd695e:15946:22)
+    at beginWork$1 (chunk-FJ2A54M7.js?v=88cd695e:19753:22)
+    at performUnitOfWork (chunk-FJ2A54M7.js?v=88cd695e:19198:20)
+    at workLoopSync (chunk-FJ2A54M7.js?v=88cd695e:19137:13)
+    at renderRootSync (chunk-FJ2A54M7.js?v=88cd695e:19116:15)
+    at recoverFromConcurrentError (chunk-FJ2A54M7.js?v=88cd695e:18736:28)
+    at performSyncWorkOnRoot (chunk-FJ2A54M7.js?v=88cd695e:18879:28)Understand this error
+rqcurvueraeqhvenohba.supabase.co/rest/v1/app_state?select=value&key=eq.royal-academy-events:1  Failed to load resource: the server responded with a status of 406 ()Understand this error
+supabaseHelpers.ts:17 [Supabase] Error fetching royal-academy-events: Cannot coerce the result to a single JSON object
+getSupabaseData @ supabaseHelpers.ts:17Understand this warning

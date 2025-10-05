@@ -42,7 +42,7 @@ const EventsManager = () => {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [message, setMessage] = useState("");
-  const [filterCategory, setFilterCategory] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
 
   const categories = ["Academic", "Sports", "Arts", "Social", "Cultural", "Technology"];
 
@@ -142,9 +142,9 @@ const EventsManager = () => {
     });
   };
 
-  const filteredEvents = filterCategory 
-    ? events.filter(e => e.category === filterCategory)
-    : events;
+  const filteredEvents = filterCategory === "all" || !filterCategory
+    ? events
+    : events.filter(e => e.category === filterCategory);
 
   return (
     <div className="space-y-6">
@@ -175,7 +175,7 @@ const EventsManager = () => {
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Categories</SelectItem>
+            <SelectItem value="all">All Categories</SelectItem>
             {categories.map(category => (
               <SelectItem key={category} value={category}>{category}</SelectItem>
             ))}
