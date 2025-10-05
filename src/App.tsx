@@ -53,6 +53,7 @@ import ManageTeacherID from "./pages/ManageTeacherID";
 import ManageTeachers from "./pages/ManageTeachers";
 import TeacherProfileSettings from "./pages/TeacherProfileSettings";
 import StudentProfileSettings from "./pages/StudentProfileSettings";
+import CoursesManagement from "./pages/CoursesManagement";
 
 const queryClient = new QueryClient();
 
@@ -519,6 +520,16 @@ function AnimatedRoutes() {
             transition={{ duration: 0.4 }}
           >
             <ManageTeachers />
+          </motion.div>
+        } />
+        <Route path="/courses-management" element={
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <CoursesManagement />
           </motion.div>
         } />
         <Route path="*" element={<NotFound />} />

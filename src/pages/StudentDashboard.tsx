@@ -649,27 +649,27 @@ const StudentDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         className="bg-card/95 backdrop-blur-md border-b border-border/50 sticky top-0 z-50"
       >
-        <div className="container-wide py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
+        <div className="container-wide py-2 sm:py-4 px-2 sm:px-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
+              <div className="relative flex-shrink-0">
                 {studentProfile.photo ? (
                   <img
                     src={studentProfile.photo}
                     alt="Profile"
-                    className="h-12 w-12 rounded-full object-cover border-2 border-gold"
+                    className="h-8 w-8 sm:h-12 sm:w-12 rounded-full object-cover border-2 border-gold"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-royal to-gold flex items-center justify-center">
-                    <User className="h-5 w-5 text-white" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-royal to-gold flex items-center justify-center">
+                    <User className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                   </div>
                 )}
               </div>
-              <div>
-                <h1 className="text-xl font-heading font-bold text-foreground">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-sm sm:text-xl font-heading font-bold text-foreground truncate">
                   {studentProfile.name || studentData.fullName}
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-[10px] sm:text-sm text-muted-foreground hidden sm:block">
                   Welcome back, {studentProfile.name || studentData.fullName}
                 </p>
               </div>

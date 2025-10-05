@@ -1053,7 +1053,7 @@ const PrincipalDashboard = () => {
                 { title: "Edit Homepage", desc: "Update main page content", icon: Edit, action: () => setActiveSection("homepage") },
                 { title: "Manage Teachers", desc: "Add/edit teacher profiles", icon: Users, action: () => setActiveSection("teachers") },
                 { title: "Send Announcements", desc: "Create and manage announcements", icon: Bell, action: () => setActiveSection("announcements") },
-                { title: "Manage Courses", desc: "Add/edit academic programs", icon: BookOpen, action: () => setActiveSection("courses") },
+                { title: "Manage Courses", desc: "Add/edit academic programs", icon: BookOpen, action: () => navigate('/courses-management') },
                 { title: "Update Gallery", desc: "Manage photo galleries", icon: Eye, action: () => setActiveSection("gallery") },
                 { title: "Edit About Page", desc: "Update school information", icon: FileText, action: () => setActiveSection("about") },
                 { title: "View Admissions", desc: "Review submitted applications", icon: FileText, action: () => setActiveSection("admissions") },

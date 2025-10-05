@@ -57,7 +57,7 @@ const DocumentViewer = ({ documentUrl, documentName, onClose }: DocumentViewerPr
           const response = await fetch(documentUrl);
           const blob = await response.blob();
           const file = new File([blob], `${documentName}.png`, { type: blob.type });
-          
+
           await navigator.share({
             title: documentName,
             text: `Sharing ${documentName}`,
@@ -108,7 +108,7 @@ const DocumentViewer = ({ documentUrl, documentName, onClose }: DocumentViewerPr
       <div className="bg-black/80 border-b border-white/10 p-4" onClick={(e) => e.stopPropagation()}>
         <div className="container-wide flex items-center justify-between">
           <h3 className="text-white font-semibold text-lg">{documentName}</h3>
-          
+
           <div className="flex items-center gap-2">
             {/* Zoom Out */}
             <Button
@@ -178,7 +178,31 @@ const DocumentViewer = ({ documentUrl, documentName, onClose }: DocumentViewerPr
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleShare}
+              onClick={async () => {
+                try {
+                  // Share functionality
+                  if (navigator.share && navigator.canShare) {
+                    await navigator.share({
+                      title: documentName,
+                      text: `Check out this document: ${documentName}`,
+                      url: window.location.href
+                    });
+                  } else {
+                    // Fallback: copy to clipboard
+                    await navigator.clipboard.writeText(documentUrl);
+                    alert('Document link copied to clipboard!');
+                  }
+                } catch (err) {
+                  console.error('Share failed:', err);
+                  // Fallback for any errors
+                  try {
+                    await navigator.clipboard.writeText(documentUrl);
+                    alert('Document link copied to clipboard!');
+                  } catch (clipErr) {
+                    alert('Unable to share or copy link');
+                  }
+                }
+              }}
               className="text-white hover:bg-white/10"
               title="Share"
             >

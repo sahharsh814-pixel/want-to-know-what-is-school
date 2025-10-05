@@ -1415,38 +1415,36 @@ const TeacherDashboard = () => {
       {/* Royal Header */}
       <div className="bg-gradient-to-r from-royal via-purple-900 to-royal backdrop-blur-md border-b border-gold/30 sticky top-0 z-40 shadow-lg">
         <div className="absolute inset-0 bg-gradient-to-r from-gold/10 via-transparent to-gold/10"></div>
-        <div className="px-4 py-3 lg:px-6 lg:py-6 relative">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0">
+        <div className="px-2 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-6 relative">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
             {/* Profile Section - Mobile Optimized */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
               <div className="relative flex-shrink-0">
                 {teacherProfile.photo ? (
                   <img
                     src={teacherProfile.photo}
                     alt="Profile"
-                    className="h-14 w-14 lg:h-16 lg:w-16 rounded-full object-cover border-2 lg:border-3 border-gold shadow-lg ring-2 lg:ring-4 ring-gold/20"
+                    className="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 rounded-full object-cover border-2 border-gold shadow-lg ring-2 ring-gold/20"
                   />
                 ) : (
-                  <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-gold flex items-center justify-center shadow-lg ring-2 lg:ring-4 ring-gold/20">
-                    <User className="h-7 w-7 lg:h-8 lg:w-8 text-royal" />
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-gold flex items-center justify-center shadow-lg ring-2 ring-gold/20">
+                    <User className="h-5 w-5 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-royal" />
                   </div>
                 )}
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 lg:w-6 lg:h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></div>
                 </div>
               </div>
               <div className="min-w-0 flex-1">
-                <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-heading font-bold text-white mb-1 tracking-wide leading-tight">
-                  {(teacherProfile.name || teacherName).split(' ').map((word, index) => (
-                    <span key={index} className="inline-block mr-2">{word}</span>
-                  ))}
+                <h1 className="text-sm sm:text-base md:text-lg lg:text-2xl font-heading font-bold text-white mb-0.5 sm:mb-1 tracking-wide leading-tight truncate">
+                  {(teacherProfile.name || teacherName)}
                 </h1>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-gold/90 text-xs sm:text-sm font-medium flex items-center">
-                    <GraduationCap className="h-3 w-3 sm:h-4 sm:w-4 mr-2 flex-shrink-0" />
-                    <span className="">{teacherSubject} Teacher</span>
+                <div className="flex flex-col space-y-0.5 sm:space-y-1">
+                  <p className="text-gold/90 text-[10px] sm:text-xs md:text-sm font-medium flex items-center">
+                    <GraduationCap className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 flex-shrink-0" />
+                    <span className="truncate">{teacherSubject} Teacher</span>
                   </p>
-                  <p className="hidden sm:block text-white/80 text-xs font-medium">Royal Academy • Excellence in Education</p>
+                  <p className="hidden md:block text-white/80 text-[10px] sm:text-xs font-medium">Royal Academy • Excellence in Education</p>
                 </div>
               </div>
             </div>
