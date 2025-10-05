@@ -44,7 +44,7 @@ export async function getSupabaseData<T>(key: string, defaultValue: T): Promise<
 export async function setSupabaseData<T>(key: string, value: T): Promise<boolean> {
   try {
     const jsonValue = JSON.stringify(value);
-    
+
     // Save to localStorage first (immediate)
     localStorage.setItem(key, jsonValue);
 
@@ -161,4 +161,43 @@ export function subscribeToSupabaseChanges<T>(
   return () => {
     supabase.removeChannel(channel);
   };
+}
+
+// Mock getDefaultBranding for demonstration purposes, replace with your actual function
+function getDefaultBranding() {
+  console.log('[Supabase] Using default branding');
+  return {
+    logoUrl: '/default-logo.png',
+    primaryColor: '#3498db',
+    secondaryColor: '#2ecc71',
+    fontFamily: 'Arial, sans-serif',
+  };
+}
+
+/**
+ * Get branding configuration from Supabase app_state table
+ */
+export async function getBranding() {
+  const { data, error } = await supabase
+    .from('app_state')
+    .select('value')
+    .eq('key', 'branding')
+    .maybeSingle();
+
+  if (error) {
+    console.error('[Supabase] Error fetching branding:', error.message);
+    return getDefaultBranding();
+  }
+
+  if (!data?.value) {
+    console.log('[Supabase] No branding data found, using defaults');
+    return getDefaultBranding();
+  }
+
+  try {
+    return JSON.parse(data.value);
+  } catch (e) {
+    console.error('[Supabase] Error parsing branding data:', e);
+    return getDefaultBranding();
+  }
 }
