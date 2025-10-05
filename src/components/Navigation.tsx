@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, Home, Users, BookOpen, Building, GraduationCap, Camera, Calendar, Phone, Trophy, Bell, Eye, Zap } from "lucide-react";
+import { Menu, X, ChevronDown, Trophy, Bell, Eye, Zap } from "lucide-react";
 import { Button } from "./ui/button-variants";
 import { ThemeToggle } from "./ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 import schoolLogo from "@/assets/school-logo.png";
+import { getSupabaseData } from "@/lib/supabaseHelpers";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,6 +52,29 @@ const Navigation = () => {
   ]);
   const location = useLocation();
 
+  // Branding state
+  const [brandingData, setBrandingData] = useState({
+    schoolName: "Royal Academy",
+    tagline: "Excellence in Education",
+    logoUrl: schoolLogo
+  });
+
+  // Load branding data from Supabase
+  useEffect(() => {
+    getSupabaseData('royal-academy-branding', {
+      schoolName: "Royal Academy",
+      tagline: "Excellence in Education",
+      logoUrl: schoolLogo
+    }).then(data => {
+      setBrandingData({
+        schoolName: data.schoolName || "Royal Academy",
+        tagline: data.tagline || "Excellence in Education",
+        logoUrl: data.logoUrl || schoolLogo
+      });
+    });
+  }, []);
+
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -80,7 +104,7 @@ const Navigation = () => {
     console.log('Performance mode toggled:', newMode);
     setPerformanceMode(newMode);
     localStorage.setItem('performance-mode', newMode.toString());
-    
+
     // Apply performance mode styles to document
     if (newMode) {
       document.documentElement.classList.add('performance-mode');
@@ -107,9 +131,9 @@ const Navigation = () => {
   }, []);
 
   const markAsRead = (notificationId: number) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === notificationId 
+    setNotifications(prev =>
+      prev.map(notif =>
+        notif.id === notificationId
           ? { ...notif, unread: false }
           : notif
       )
@@ -120,21 +144,21 @@ const Navigation = () => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 24) {
-      return date.toLocaleTimeString('en-US', { 
-        hour12: false, 
-        hour: '2-digit', 
-        minute: '2-digit' 
+      return date.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit'
       });
     } else {
-      return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric' 
-      }) + ' ' + date.toLocaleTimeString('en-US', { 
-        hour12: false, 
-        hour: '2-digit', 
-        minute: '2-digit' 
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric'
+      }) + ' ' + date.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit'
       });
     }
   };
@@ -157,7 +181,7 @@ const Navigation = () => {
   // Calculate dynamic opacity and blur based on scroll position
   const opacity = Math.min(scrollY / 100, 0.9);
   const blurAmount = Math.min(scrollY / 30, 20);
-  
+
   return (
     <motion.nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -168,7 +192,7 @@ const Navigation = () => {
     >
       <div className="container-wide">
         <div className="flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6">
-          
+
           {/* Logo with Dropdown (PC Only) */}
           <div className="relative">
             <motion.button
@@ -180,17 +204,17 @@ const Navigation = () => {
             >
               <div className="relative">
                 <img
-                  src={schoolLogo}
-                  alt="Royal Academy"
+                  src={brandingData.logoUrl}
+                  alt={brandingData.schoolName}
                   className="h-8 w-8 sm:h-12 sm:w-12 animate-glow group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg sm:text-xl font-heading font-bold text-gradient-gold">
-                  Royal Academy
+                  {brandingData.schoolName}
                 </span>
                 <span className="text-xs text-muted-foreground tracking-wider hidden sm:block">
-                  Excellence in Education
+                  {brandingData.tagline}
                 </span>
               </div>
               <motion.div
@@ -224,7 +248,7 @@ const Navigation = () => {
                       >
                         <Link
                           to={item.path}
-                          className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 group hover:bg-gold/10 ${
+                          className={`flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 group ${
                             location.pathname === item.path
                               ? "bg-gold/15 border border-gold/30"
                               : "hover:bg-muted/50"
@@ -304,7 +328,7 @@ const Navigation = () => {
             {(() => {
               const teacherAuth = localStorage.getItem("teacherAuth");
               const studentAuth = localStorage.getItem("studentAuth");
-              
+
               if (teacherAuth) {
                 return (
                   <Link to="/teacher-dashboard" className="hidden sm:block">
@@ -318,7 +342,7 @@ const Navigation = () => {
                   </Link>
                 );
               }
-              
+
               if (studentAuth) {
                 return (
                   <Link to="/student-dashboard" className="hidden sm:block">
@@ -332,7 +356,7 @@ const Navigation = () => {
                   </Link>
                 );
               }
-              
+
               // Show Sign Up button if not logged in
               return (
                 <Link to="/auth" className="hidden sm:block">
@@ -347,15 +371,15 @@ const Navigation = () => {
               );
             })()}
             <ThemeToggle />
-            
+
             {/* Performance Mode Toggle */}
             <Button
               variant="ghost"
               size="sm"
               onClick={togglePerformanceMode}
               className={`p-2 transition-all duration-300 hidden sm:flex ${
-                performanceMode 
-                  ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30 border border-green-500/30' 
+                performanceMode
+                  ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30 border border-green-500/30'
                   : 'hover:bg-gold/10 text-muted-foreground hover:text-gold border border-transparent'
               }`}
               title={performanceMode ? 'Disable Performance Mode' : 'Enable Performance Mode'}
@@ -364,7 +388,7 @@ const Navigation = () => {
                 performanceMode ? 'text-green-400' : 'text-muted-foreground'
               }`} />
             </Button>
-            
+
             {/* Notification Bell - Always visible */}
             <div className="relative" data-notification-container>
               <Button
@@ -399,7 +423,7 @@ const Navigation = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="max-h-80 overflow-y-auto">
                       {notifications.length === 0 ? (
                         <div className="p-6 text-center text-muted-foreground">
@@ -463,7 +487,7 @@ const Navigation = () => {
                         ))
                       )}
                     </div>
-                    
+
                     {notifications.length > 0 && (
                       <div className="p-3 border-t border-border bg-muted/20">
                         <div className="text-center">
@@ -482,7 +506,7 @@ const Navigation = () => {
                 )}
               </AnimatePresence>
             </div>
-            
+
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
@@ -511,7 +535,7 @@ const Navigation = () => {
                   {(() => {
                     const teacherAuth = localStorage.getItem("teacherAuth");
                     const studentAuth = localStorage.getItem("studentAuth");
-                    
+
                     if (teacherAuth) {
                       return (
                         <Link to="/teacher-dashboard">
@@ -525,7 +549,7 @@ const Navigation = () => {
                         </Link>
                       );
                     }
-                    
+
                     if (studentAuth) {
                       return (
                         <Link to="/student-dashboard">
@@ -539,7 +563,7 @@ const Navigation = () => {
                         </Link>
                       );
                     }
-                    
+
                     // Show Sign Up button if not logged in
                     return (
                       <Link
@@ -553,7 +577,7 @@ const Navigation = () => {
                     );
                   })()}
                 </div>
-                
+
                 {navItems.map((item, index) => (
                   <motion.div
                     key={item.path}
@@ -578,7 +602,7 @@ const Navigation = () => {
                     </Link>
                   </motion.div>
                 ))}
-                
+
                 {/* Additional Navigation Items for Footer Pages */}
                 <div className="border-t border-border pt-4 mt-4">
                   <div className="text-xs font-semibold text-gold mb-3 px-4">PROGRAMS</div>
@@ -640,7 +664,7 @@ const Navigation = () => {
                   ))}
                 </div>
 
-                
+
 
                 {/* Mobile Performance Mode Toggle */}
                 <div className="border-t border-border pt-4 mt-4">
@@ -648,8 +672,8 @@ const Navigation = () => {
                     variant="ghost"
                     onClick={togglePerformanceMode}
                     className={`w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg transition-all duration-300 ${
-                      performanceMode 
-                        ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' 
+                      performanceMode
+                        ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
                         : 'hover:bg-gold/10 text-muted-foreground hover:text-gold'
                     }`}
                   >

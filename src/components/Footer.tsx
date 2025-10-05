@@ -41,7 +41,7 @@ const Footer = () => {
 
   // Load branding data from Supabase
   useEffect(() => {
-    getSupabaseData('branding', {
+    getSupabaseData('royal-academy-branding', {
       schoolName: "Royal Academy",
       tagline: "Excellence in Education",
       logoUrl: schoolLogo

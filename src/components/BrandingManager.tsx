@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { supabase } from '@/lib/supabaseClient'
+import { getSupabaseData, setSupabaseData } from '@/lib/supabaseHelpers';
 
 interface BrandingData {
   schoolName: string;
@@ -41,39 +41,24 @@ const BrandingManager = () => {
   useEffect(() => {
     const fetchBranding = async () => {
       try {
-        const { data, error } = await supabase
-          .from('app_state')
-          .select('value')
-          .eq('key', 'branding')
-          .limit(1);
+        const brandingData = await getSupabaseData<BrandingData>('royal-academy-branding', {
+          schoolName: "Royal Academy",
+          tagline: "Excellence in Education",
+          logoUrl: "",
+          faviconUrl: "",
+          primaryColor: "#1e40af",
+          secondaryColor: "#f59e0b",
+          accentColor: "#10b981",
+          contactEmail: "info@royalacademy.edu",
+          contactPhone: "+1 (555) 123-4567",
+          address: "123 Education Street, Knowledge City, ED 12345"
+        });
 
-        if (error) throw error;
-
-        if (data && data.length > 0 && data[0]?.value) {
-          const brandingData = JSON.parse(data[0].value);
-          setBranding(brandingData);
-          if (brandingData.logoUrl) setLogoPreview(brandingData.logoUrl);
-          if (brandingData.faviconUrl) setFaviconPreview(brandingData.faviconUrl);
-        } else {
-          // If no branding found in Supabase, load from localStorage
-          const saved = localStorage.getItem('royal-academy-branding');
-          if (saved) {
-            const data = JSON.parse(saved);
-            setBranding(data);
-            if (data.logoUrl) setLogoPreview(data.logoUrl);
-            if (data.faviconUrl) setFaviconPreview(data.faviconUrl);
-          }
-        }
+        setBranding(brandingData);
+        if (brandingData.logoUrl) setLogoPreview(brandingData.logoUrl);
+        if (brandingData.faviconUrl) setFaviconPreview(brandingData.faviconUrl);
       } catch (error: any) {
-        console.error('[Supabase] Error fetching branding:', error.message);
-        // Fallback to localStorage if Supabase fetch fails
-        const saved = localStorage.getItem('royal-academy-branding');
-        if (saved) {
-          const data = JSON.parse(saved);
-          setBranding(data);
-          if (data.logoUrl) setLogoPreview(data.logoUrl);
-          if (data.faviconUrl) setFaviconPreview(data.faviconUrl);
-        }
+        console.error('[BrandingManager] Error fetching branding:', error);
       }
     };
 
@@ -107,35 +92,37 @@ const BrandingManager = () => {
   };
 
   const saveBranding = async () => {
-    // Save to localStorage
-    localStorage.setItem('royal-academy-branding', JSON.stringify(branding));
-
-    // Save to Supabase
     try {
-      const { error } = await supabase
-        .from('app_state')
-        .upsert({ key: 'branding', value: JSON.stringify(branding) }, { onConflict: 'key' });
+      // Save to Supabase (which also saves to localStorage)
+      const success = await setSupabaseData('royal-academy-branding', branding);
 
-      if (error) throw error;
-
-      setMessage("Branding updated successfully in Supabase and local storage!");
-    } catch (error: any) {
-      console.error('[Supabase] Error saving branding:', error.message);
-      setMessage(`Error saving branding: ${error.message}. It has been saved to local storage.`);
-    }
-
-    // Update document title and favicon immediately for preview
-    document.title = `${branding.schoolName} - ${branding.tagline}`;
-    if (branding.faviconUrl) {
-      const favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
-      if (favicon) {
-        favicon.href = branding.faviconUrl;
+      if (success) {
+        setMessage("✅ Branding updated successfully! Changes will appear across all pages.");
       } else {
-        const newFavicon = document.createElement('link');
-        newFavicon.rel = 'icon';
-        newFavicon.href = branding.faviconUrl;
-        document.head.appendChild(newFavicon);
+        setMessage("⚠️ Branding saved locally but Supabase sync had issues. Changes will still work.");
       }
+
+      // Update document title and favicon immediately for preview
+      document.title = `${branding.schoolName} - ${branding.tagline}`;
+      if (branding.faviconUrl) {
+        const favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
+        if (favicon) {
+          favicon.href = branding.faviconUrl;
+        } else {
+          const newFavicon = document.createElement('link');
+          newFavicon.rel = 'icon';
+          newFavicon.href = branding.faviconUrl;
+          document.head.appendChild(newFavicon);
+        }
+      }
+
+      // Trigger a page reload after 2 seconds to show changes
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error: any) {
+      console.error('[BrandingManager] Error saving branding:', error);
+      setMessage(`❌ Error saving branding: ${error.message}`);
     }
 
     setTimeout(() => setMessage(""), 5000);

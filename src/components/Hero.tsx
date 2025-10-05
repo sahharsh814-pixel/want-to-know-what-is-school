@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { ArrowRight, Award, Users, BookOpen } from "lucide-react";
+import { ArrowRight, Award, BookOpen, Users } from "lucide-react";
 import { Button } from "./ui/button-variants";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-school.jpg";
+import schoolLogo from "@/assets/school-logo.png"; // Import the school logo
+import { getSupabaseData } from "@/lib/supabaseHelpers"; // Import Supabase helper
 
 interface HomepageData {
   heroTitle: string;
@@ -31,6 +33,7 @@ interface HomepageData {
 }
 
 const Hero = () => {
+  // State for homepage data
   const [homepageData, setHomepageData] = useState<HomepageData>({
     heroTitle: "Royal Academy",
     heroSubtitle: "Shaping tomorrow's leaders through excellence in education, character development, and innovative learning experiences.",
@@ -57,15 +60,61 @@ const Hero = () => {
     }
   });
 
+  // State for branding data
+  const [brandingData, setBrandingData] = useState({
+    schoolName: "Royal Academy",
+    tagline: "Excellence in Education",
+    logoUrl: schoolLogo
+  });
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Load homepage data from localStorage
+  // Load homepage data from Supabase
   useEffect(() => {
-    const savedData = localStorage.getItem('royal-academy-homepage');
-    if (savedData) {
-      setHomepageData(JSON.parse(savedData));
-    }
+    getSupabaseData('royal-academy-homepage', {
+      heroTitle: "Royal Academy",
+      heroSubtitle: "Shaping tomorrow's leaders through excellence in education, character development, and innovative learning experiences.",
+      heroButtonPrimary: "Apply for Admission",
+      heroButtonSecondary: "Discover Our Legacy",
+      bannerImages: [],
+      autoRotate: true,
+      rotationInterval: 5,
+      stats: {
+        students: { number: "2,500+", label: "Students" },
+        programs: { number: "150+", label: "Programs" },
+        awards: { number: "25+", label: "Awards" }
+      },
+      colors: {
+        primary: "#1e40af",
+        secondary: "#f59e0b",
+        accent: "#10b981",
+        background: "#ffffff",
+        text: "#1f2937"
+      },
+      fonts: {
+        heading: "Inter",
+        body: "Inter"
+      }
+    }).then(data => {
+      setHomepageData(data);
+    });
   }, []);
+
+  // Load branding data from Supabase
+  useEffect(() => {
+    getSupabaseData('royal-academy-branding', {
+      schoolName: "Royal Academy",
+      tagline: "Excellence in Education",
+      logoUrl: schoolLogo
+    }).then(data => {
+      setBrandingData({
+        schoolName: data.schoolName || "Royal Academy",
+        tagline: data.tagline || "Excellence in Education",
+        logoUrl: data.logoUrl || schoolLogo
+      });
+    });
+  }, []);
+
 
   // Auto-rotate banner images
   useEffect(() => {
@@ -119,6 +168,14 @@ const Hero = () => {
         <div className="max-w-5xl mx-auto space-y-6 sm:space-y-8 animate-slide-up">
           {/* Main Heading */}
           <div className="space-y-4 sm:space-y-6">
+             {/* School Logo */}
+             {brandingData.logoUrl && (
+              <img 
+                src={brandingData.logoUrl} 
+                alt="School Logo" 
+                className="h-24 w-auto mx-auto mb-4" 
+              />
+            )}
             <h1 
               className="text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-heading font-bold leading-tight sm:leading-normal"
               style={{ fontFamily: homepageData.fonts.heading }}
