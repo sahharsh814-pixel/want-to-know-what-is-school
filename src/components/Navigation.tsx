@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, Trophy, Bell, Eye, Zap } from "lucide-react";
-import { Button } from "./ui/button-variants";
-import { ThemeToggle } from "./ThemeToggle";
+import { Menu, X, ChevronDown, GraduationCap, BookOpen, Users, Calendar, Mail, LogIn, Home } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import schoolLogo from "@/assets/school-logo.png";
+import { Button } from "./ui/button-variants";
 import { getSupabaseData } from "@/lib/supabaseHelpers";
+import { ThemeToggle } from "./ThemeToggle";
+import schoolLogo from "@/assets/school-logo.png";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -175,7 +175,7 @@ const Navigation = () => {
     { name: "Gallery", path: "/gallery", icon: Camera, description: "Campus life in pictures" },
     { name: "Top Scorers", path: "/top-scorers", icon: Trophy, description: "Academic excellence showcase" },
     { name: "Events", path: "/events", icon: Calendar, description: "Upcoming events and activities" },
-    { name: "Contact", path: "/contact", icon: Phone, description: "Get in touch with us" },
+    { name: "Contact", path: "/contact", icon: Mail, description: "Get in touch with us" },
   ];
 
   // Calculate dynamic opacity and blur based on scroll position
