@@ -178,26 +178,26 @@ function getDefaultBranding() {
  * Get branding configuration from Supabase app_state table
  */
 export async function getBranding() {
-  const { data, error } = await supabase
-    .from('app_state')
-    .select('value')
-    .eq('key', 'branding')
-    .maybeSingle();
-
-  if (error) {
-    console.error('[Supabase] Error fetching branding:', error.message);
-    return getDefaultBranding();
-  }
-
-  if (!data?.value) {
-    console.log('[Supabase] No branding data found, using defaults');
-    return getDefaultBranding();
-  }
-
   try {
-    return JSON.parse(data.value);
+    const { data, error } = await supabase
+      .from('app_state')
+      .select('value')
+      .eq('key', 'branding')
+      .maybeSingle();
+
+    if (error) {
+      console.warn('[Supabase] Branding fetch error, using defaults:', error.message);
+      return getDefaultBranding();
+    }
+
+    if (!data?.value) {
+      console.log('[Supabase] No branding data found, using defaults');
+      return getDefaultBranding();
+    }
+
+    return typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
   } catch (e) {
-    console.error('[Supabase] Error parsing branding data:', e);
+    console.warn('[Supabase] Branding error, using defaults:', e);
     return getDefaultBranding();
   }
 }
