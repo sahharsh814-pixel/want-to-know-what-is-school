@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, GraduationCap, BookOpen, Users, Calendar, Mail, LogIn, Home } from "lucide-react";
+import { Menu, X, ChevronDown, GraduationCap, BookOpen, Users, Calendar, Mail, LogIn, Home, Building, Camera, Trophy, Bell, Eye, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button-variants";
 import { getSupabaseData } from "@/lib/supabaseHelpers";
