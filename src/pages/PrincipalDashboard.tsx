@@ -39,6 +39,7 @@ import AdmissionsPageManager from "@/components/AdmissionsPageManager";
 import DocumentViewer from "@/components/DocumentViewer";
 import BrandingManager from "@/components/BrandingManager";
 import EventsManager from "@/components/EventsManager";
+import CategoryManager from "@/components/CategoryManager";
 import { getSupabaseData, setSupabaseData, subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
 
 // Notification interfaces
@@ -126,7 +127,7 @@ interface TeacherRecord {
 const PrincipalDashboard = () => {
   const [principalEmail, setPrincipalEmail] = useState("");
   // Restore active section from sessionStorage on mount
-  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager" | "branding" | "events">(() => {
+  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager" | "branding" | "events" | "categories">(() => {
     const saved = sessionStorage.getItem('principalActiveSection');
     return (saved as any) || "dashboard";
   });
@@ -1066,6 +1067,7 @@ const PrincipalDashboard = () => {
                 { title: "Manage Teachers", desc: "Add/edit teacher profiles", icon: Users, action: () => setActiveSection("teachers") },
                 { title: "Send Announcements", desc: "Create and manage announcements", icon: Bell, action: () => setActiveSection("announcements") },
                 { title: "Manage Events & News", desc: "Create and manage events", icon: Calendar, action: () => setActiveSection("events") },
+                { title: "Manage Categories", desc: "Create and manage event categories", icon: Settings, action: () => setActiveSection("categories") },
                 { title: "Manage Courses", desc: "Add/edit academic programs", icon: BookOpen, action: () => navigate('/courses-management') },
                 { title: "Update Gallery", desc: "Manage photo galleries", icon: Eye, action: () => setActiveSection("gallery") },
                 { title: "Edit About Page", desc: "Update school information", icon: FileText, action: () => setActiveSection("about") },
@@ -2827,6 +2829,30 @@ const PrincipalDashboard = () => {
                 </Button>
               </div>
               <EventsManager />
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === "categories" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-8"
+          >
+            <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-heading font-bold text-foreground">
+                  Event Categories Management
+                </h2>
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveSection("dashboard")}
+                  size="sm"
+                >
+                  Back to Dashboard
+                </Button>
+              </div>
+              <CategoryManager />
             </div>
           </motion.div>
         )}

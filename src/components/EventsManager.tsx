@@ -36,32 +36,72 @@ interface Event {
   published: boolean;
 }
 
+interface Category {
+  id: string;
+  name: string;
+  color: string;
+  description: string;
+}
+
 const EventsManager = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [message, setMessage] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
 
-  const categories = ["Academic", "Sports", "Arts", "Social", "Cultural", "Technology"];
-
   useEffect(() => {
     loadEvents();
+    loadCategories();
   }, []);
 
   const loadEvents = async () => {
-    const data = await getSupabaseData<Event[]>('royal-academy-events', []);
-    setEvents(data);
+    try {
+      const data = await getSupabaseData<Event[]>('royal-academy-events', []);
+      setEvents(data);
+    } catch (error) {
+      console.error("Error loading events:", error);
+      setEvents([]);
+      setMessage("Error loading events. Please refresh the page.");
+      setTimeout(() => setMessage(""), 3000);
+    }
+  };
+
+  const loadCategories = async () => {
+    try {
+      const data = await getSupabaseData<Category[]>('royal-academy-event-categories', []);
+      if (data.length === 0) {
+        const defaultCategories: Category[] = [
+          { id: "academic", name: "Academic", color: "#3b82f6", description: "Academic events and programs" },
+          { id: "sports", name: "Sports", color: "#f97316", description: "Athletic and sports activities" },
+          { id: "arts", name: "Arts", color: "#ec4899", description: "Arts and cultural events" },
+          { id: "social", name: "Social", color: "#fbbf24", description: "Social gatherings" }
+        ];
+        await setSupabaseData('royal-academy-event-categories', defaultCategories);
+        setCategories(defaultCategories);
+      } else {
+        setCategories(data);
+      }
+    } catch (error) {
+      console.error("Error loading categories:", error);
+      setCategories([]);
+    }
   };
 
   const handleAddEvent = () => {
+    if (categories.length === 0) {
+      alert("Please create at least one event category first before adding events.");
+      return;
+    }
+    
     const newEvent: Event = {
       id: Date.now().toString(),
       title: "",
       description: "",
       fullContent: "",
-      category: "Academic",
+      category: categories[0].name,
       date: new Date().toISOString().split('T')[0],
       time: "10:00 AM",
       location: "",
@@ -90,21 +130,43 @@ const EventsManager = () => {
       ? [...events, editingEvent]
       : events.map(e => e.id === editingEvent.id ? editingEvent : e);
 
-    setEvents(updatedEvents);
-    await setSupabaseData('royal-academy-events', updatedEvents);
-    setIsEditing(false);
-    setEditingEvent(null);
-    setMessage(isAddingNew ? "Event created successfully!" : "Event updated successfully!");
-    setTimeout(() => setMessage(""), 3000);
+    try {
+      const success = await setSupabaseData('royal-academy-events', updatedEvents);
+      if (success) {
+        setEvents(updatedEvents);
+        setIsEditing(false);
+        setEditingEvent(null);
+        setMessage(isAddingNew ? "Event created successfully!" : "Event updated successfully!");
+        setTimeout(() => setMessage(""), 3000);
+      } else {
+        setMessage("Failed to save event. Please try again.");
+        setTimeout(() => setMessage(""), 3000);
+      }
+    } catch (error) {
+      console.error("Error saving event:", error);
+      setMessage("Error saving event. Please check your connection and try again.");
+      setTimeout(() => setMessage(""), 3000);
+    }
   };
 
   const handleDeleteEvent = async (id: string) => {
     if (confirm("Are you sure you want to delete this event?")) {
       const updatedEvents = events.filter(e => e.id !== id);
-      setEvents(updatedEvents);
-      await setSupabaseData('royal-academy-events', updatedEvents);
-      setMessage("Event deleted successfully!");
-      setTimeout(() => setMessage(""), 3000);
+      try {
+        const success = await setSupabaseData('royal-academy-events', updatedEvents);
+        if (success) {
+          setEvents(updatedEvents);
+          setMessage("Event deleted successfully!");
+          setTimeout(() => setMessage(""), 3000);
+        } else {
+          setMessage("Failed to delete event. Please try again.");
+          setTimeout(() => setMessage(""), 3000);
+        }
+      } catch (error) {
+        console.error("Error deleting event:", error);
+        setMessage("Error deleting event. Please check your connection and try again.");
+        setTimeout(() => setMessage(""), 3000);
+      }
     }
   };
 
@@ -112,11 +174,23 @@ const EventsManager = () => {
     const updatedEvents = events.map(e => 
       e.id === id ? { ...e, published: !e.published } : e
     );
-    setEvents(updatedEvents);
-    await setSupabaseData('royal-academy-events', updatedEvents);
-    const event = updatedEvents.find(e => e.id === id);
-    setMessage(event?.published ? "Event published!" : "Event unpublished!");
-    setTimeout(() => setMessage(""), 3000);
+    
+    try {
+      const success = await setSupabaseData('royal-academy-events', updatedEvents);
+      if (success) {
+        setEvents(updatedEvents);
+        const event = updatedEvents.find(e => e.id === id);
+        setMessage(event?.published ? "Event published!" : "Event unpublished!");
+        setTimeout(() => setMessage(""), 3000);
+      } else {
+        setMessage("Failed to update event status. Please try again.");
+        setTimeout(() => setMessage(""), 3000);
+      }
+    } catch (error) {
+      console.error("Error publishing event:", error);
+      setMessage("Error updating event status. Please check your connection and try again.");
+      setTimeout(() => setMessage(""), 3000);
+    }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,7 +251,7 @@ const EventsManager = () => {
           <SelectContent>
             <SelectItem value="all">All Categories</SelectItem>
             {categories.map(category => (
-              <SelectItem key={category} value={category}>{category}</SelectItem>
+              <SelectItem key={category.id} value={category.name}>{category.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -233,7 +307,7 @@ const EventsManager = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map(category => (
-                        <SelectItem key={category} value={category}>{category}</SelectItem>
+                        <SelectItem key={category.id} value={category.name}>{category.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

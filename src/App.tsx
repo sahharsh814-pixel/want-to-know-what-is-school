@@ -16,6 +16,7 @@ import TopScorers from "./pages/TopScorers";
 import TopScorersLearnMore from "./pages/TopScorersLearnMore";
 import StudentProfile from "./pages/StudentProfile";
 import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -172,6 +173,16 @@ function AnimatedRoutes() {
             transition={{ duration: 0.4 }}
           >
             <Events />
+          </motion.div>
+        } />
+        <Route path="/events/:eventId" element={
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <EventDetail />
           </motion.div>
         } />
         <Route path="/contact" element={
