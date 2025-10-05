@@ -131,6 +131,36 @@ function patchLocalStorage() {
   }
 }
 
+// Track if we're already syncing to prevent infinite loops
+let isSyncing = false;
+
+// Override localStorage methods to sync with Supabase
+const originalSetItem = window.localStorage.setItem.bind(window.localStorage);
+const originalRemoveItem = window.localStorage.removeItem.bind(window.localStorage);
+
+window.localStorage.setItem = function(key: string, value: string) {
+  originalSetItem(key, value);
+  // Only sync to Supabase if we're not already syncing
+  if (!isSyncing) {
+    isSyncing = true;
+    upsertKey(key, value)
+      .catch(err => console.error('Failed to sync to Supabase:', err))
+      .finally(() => { isSyncing = false; });
+  }
+};
+
+window.localStorage.removeItem = function(key: string) {
+  originalRemoveItem(key);
+  // Only remove from Supabase if we're not already syncing
+  if (!isSyncing) {
+    isSyncing = true;
+    deleteKey(key)
+      .catch(err => console.error('Failed to remove from Supabase:', err))
+      .finally(() => { isSyncing = false; });
+  }
+};
+
+
 function subscribeRealtime() {
   // Subscribe to changes on public.app_state
   supabase

@@ -145,6 +145,7 @@ const Navigation = () => {
     { name: "Home", path: "/", icon: Home, description: "Welcome to Royal Academy" },
     { name: "About", path: "/about", icon: Users, description: "Our history and mission" },
     { name: "Academics", path: "/academics", icon: BookOpen, description: "Academic programs and curriculum" },
+    { name: "Courses", path: "/courses", icon: BookOpen, description: "Browse our courses" },
     { name: "Facilities", path: "/facilities", icon: Building, description: "Campus and infrastructure" },
     { name: "Admissions", path: "/admissions", icon: GraduationCap, description: "Join our academy" },
     { name: "Gallery", path: "/gallery", icon: Camera, description: "Campus life in pictures" },
