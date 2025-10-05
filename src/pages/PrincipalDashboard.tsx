@@ -37,6 +37,7 @@ import CourseManager from "@/components/CourseManager";
 import TopScorersManager from "@/components/TopScorersManager";
 import AdmissionsPageManager from "@/components/AdmissionsPageManager";
 import DocumentViewer from "@/components/DocumentViewer";
+import BrandingManager from "@/components/BrandingManager";
 import { getSupabaseData, setSupabaseData, subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
 
 // Notification interfaces
@@ -124,7 +125,7 @@ interface TeacherRecord {
 const PrincipalDashboard = () => {
   const [principalEmail, setPrincipalEmail] = useState("");
   // Restore active section from sessionStorage on mount
-  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager">(() => {
+  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager" | "branding">(() => {
     const saved = sessionStorage.getItem('principalActiveSection');
     return (saved as any) || "dashboard";
   });
@@ -699,6 +700,7 @@ const PrincipalDashboard = () => {
     { icon: Bell, label: "Send Announcement", color: "from-red-500 to-red-600", action: () => setActiveSection("announcements") },
     { icon: MessageSquare, label: "Notify Students", color: "from-purple-500 to-purple-600", action: () => setShowStudentNotificationModal(true) },
     { icon: Star, label: "Principal Remarks", color: "from-yellow-500 to-yellow-600", action: () => setShowPrincipalRemarksModal(true) },
+    { icon: Settings, label: "Branding & Logo", color: "from-pink-500 to-pink-600", action: () => setActiveSection("branding") },
     { icon: Clock, label: "Manage Timetable", color: "from-indigo-500 to-indigo-600", action: () => setActiveSection("timetable") },
     { icon: GraduationCap, label: "Edit Admissions Page", color: "from-teal-500 to-teal-600", action: () => setActiveSection("admissionsmanager") }
   ];
@@ -2797,6 +2799,30 @@ const PrincipalDashboard = () => {
               </div>
 
               <AdmissionsPageManager />
+            </div>
+          </motion.div>
+        )}
+
+        {/* Branding Manager Section */}
+        {activeSection === "branding" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+            <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
+              <div className="flex items-center justify-between mb-6">
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveSection("dashboard")}
+                  size="sm"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </div>
+
+              <BrandingManager />
             </div>
           </motion.div>
         )}

@@ -135,3 +135,90 @@ export function subscribeToSupabaseChanges<T>(
     supabase.removeChannel(channel);
   };
 }
+import { supabase } from './supabaseClient'
+
+/**
+ * Get data from Supabase with localStorage fallback
+ */
+export async function getSupabaseData<T>(key: string, defaultValue: T): Promise<T> {
+  try {
+    const { data, error } = await supabase
+      .from('app_state')
+      .select('value')
+      .eq('key', key)
+      .single()
+
+    if (error) {
+      console.warn(`[getSupabaseData] Error fetching ${key}:`, error)
+      // Fallback to localStorage
+      const localData = localStorage.getItem(key)
+      return localData ? JSON.parse(localData) : defaultValue
+    }
+
+    return data?.value ? JSON.parse(data.value) : defaultValue
+  } catch (err) {
+    console.error(`[getSupabaseData] Exception for ${key}:`, err)
+    // Fallback to localStorage
+    const localData = localStorage.getItem(key)
+    return localData ? JSON.parse(localData) : defaultValue
+  }
+}
+
+/**
+ * Set data to Supabase with localStorage sync
+ */
+export async function setSupabaseData<T>(key: string, value: T): Promise<void> {
+  try {
+    const stringValue = JSON.stringify(value)
+    
+    // Save to localStorage immediately
+    localStorage.setItem(key, stringValue)
+    
+    // Save to Supabase
+    const { error } = await supabase
+      .from('app_state')
+      .upsert({ key, value: stringValue })
+      .single()
+
+    if (error) {
+      console.warn(`[setSupabaseData] Error saving ${key}:`, error)
+    }
+  } catch (err) {
+    console.error(`[setSupabaseData] Exception for ${key}:`, err)
+  }
+}
+
+/**
+ * Subscribe to realtime changes for a specific key
+ */
+export function subscribeToSupabaseChanges<T>(
+  key: string,
+  callback: (newData: T) => void
+): () => void {
+  const channel = supabase
+    .channel(`app_state_${key}`)
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'app_state',
+        filter: `key=eq.${key}`
+      },
+      (payload: any) => {
+        if (payload.new?.value) {
+          try {
+            const newData = JSON.parse(payload.new.value)
+            callback(newData)
+          } catch (err) {
+            console.error(`[subscribeToSupabaseChanges] Parse error for ${key}:`, err)
+          }
+        }
+      }
+    )
+    .subscribe()
+
+  return () => {
+    supabase.removeChannel(channel)
+  }
+}

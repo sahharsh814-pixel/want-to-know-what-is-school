@@ -52,6 +52,35 @@
   animation: none !important;
 }
 
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* Reduce all animations on mobile for better performance */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Disable complex animations */
+  .animate-float,
+  .animate-glow,
+  .animate-3d-rotate,
+  .animate-pulse-slow,
+  .animate-bounce-slow {
+    animation: none !important;
+  }
+  
+  /* Simplify backdrops */
+  .backdrop-blur-md,
+  .backdrop-blur-lg {
+    backdrop-filter: blur(8px) !important;
+  }
+  
+  /* Reduce gradient complexity */
+  .bg-gradient-radial {
+    background: var(--background) !important;
+  }
+}
+
 @layer base {
   :root {
     /* Royal Color Palette */
