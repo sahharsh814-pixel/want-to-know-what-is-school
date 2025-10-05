@@ -148,7 +148,7 @@ const Hero = () => {
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button variant="outline" size="xl" asChild className="border-gold/50 text-gold hover:bg-gold/10">
+            <Button variant="outline" size="xl" asChild className="border-gold/50 text-black hover:bg-gold/10">
               <Link to="/about">
                 {homepageData.heroButtonSecondary}
               </Link>

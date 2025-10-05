@@ -172,9 +172,6 @@ const Courses = () => {
                           <div className="pt-4 border-t border-border">
                             <div className="flex items-center justify-between">
                               <span className="text-lg font-bold text-gold">{course.fee}</span>
-                              <Button size="sm" variant="outline">
-                                Learn More
-                              </Button>
                             </div>
                           </div>
                         </motion.div>
