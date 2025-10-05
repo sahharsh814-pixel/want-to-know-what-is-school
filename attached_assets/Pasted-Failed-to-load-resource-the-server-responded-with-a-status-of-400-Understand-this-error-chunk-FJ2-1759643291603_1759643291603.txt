@@ -1,0 +1,121 @@
+Failed to load resource: the server responded with a status of 400 ()Understand this error
+chunk-FJ2A54M7.js?v=5885f028:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+(index):1 <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">Understand this warning
+Navigation.tsx:173 Uncaught ReferenceError: Building is not defined
+    at Navigation (Navigation.tsx:173:54)
+    at renderWithHooks (chunk-FJ2A54M7.js?v=5885f028:11548:26)
+    at mountIndeterminateComponent (chunk-FJ2A54M7.js?v=5885f028:14926:21)
+    at beginWork (chunk-FJ2A54M7.js?v=5885f028:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-FJ2A54M7.js?v=5885f028:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-FJ2A54M7.js?v=5885f028:3699:24)
+    at invokeGuardedCallback (chunk-FJ2A54M7.js?v=5885f028:3733:39)
+    at beginWork$1 (chunk-FJ2A54M7.js?v=5885f028:19765:15)
+    at performUnitOfWork (chunk-FJ2A54M7.js?v=5885f028:19198:20)
+    at workLoopSync (chunk-FJ2A54M7.js?v=5885f028:19137:13)
+Navigation @ Navigation.tsx:173
+renderWithHooks @ chunk-FJ2A54M7.js?v=5885f028:11548
+mountIndeterminateComponent @ chunk-FJ2A54M7.js?v=5885f028:14926
+beginWork @ chunk-FJ2A54M7.js?v=5885f028:15914
+callCallback2 @ chunk-FJ2A54M7.js?v=5885f028:3674
+invokeGuardedCallbackDev @ chunk-FJ2A54M7.js?v=5885f028:3699
+invokeGuardedCallback @ chunk-FJ2A54M7.js?v=5885f028:3733
+beginWork$1 @ chunk-FJ2A54M7.js?v=5885f028:19765
+performUnitOfWork @ chunk-FJ2A54M7.js?v=5885f028:19198
+workLoopSync @ chunk-FJ2A54M7.js?v=5885f028:19137
+renderRootSync @ chunk-FJ2A54M7.js?v=5885f028:19116
+performConcurrentWorkOnRoot @ chunk-FJ2A54M7.js?v=5885f028:18678
+workLoop @ chunk-FJ2A54M7.js?v=5885f028:197
+flushWork @ chunk-FJ2A54M7.js?v=5885f028:176
+performWorkUntilDeadline @ chunk-FJ2A54M7.js?v=5885f028:384Understand this error
+Navigation.tsx:173 Uncaught ReferenceError: Building is not defined
+    at Navigation (Navigation.tsx:173:54)
+    at renderWithHooks (chunk-FJ2A54M7.js?v=5885f028:11548:26)
+    at mountIndeterminateComponent (chunk-FJ2A54M7.js?v=5885f028:14926:21)
+    at beginWork (chunk-FJ2A54M7.js?v=5885f028:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-FJ2A54M7.js?v=5885f028:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-FJ2A54M7.js?v=5885f028:3699:24)
+    at invokeGuardedCallback (chunk-FJ2A54M7.js?v=5885f028:3733:39)
+    at beginWork$1 (chunk-FJ2A54M7.js?v=5885f028:19765:15)
+    at performUnitOfWork (chunk-FJ2A54M7.js?v=5885f028:19198:20)
+    at workLoopSync (chunk-FJ2A54M7.js?v=5885f028:19137:13)
+Navigation @ Navigation.tsx:173
+renderWithHooks @ chunk-FJ2A54M7.js?v=5885f028:11548
+mountIndeterminateComponent @ chunk-FJ2A54M7.js?v=5885f028:14926
+beginWork @ chunk-FJ2A54M7.js?v=5885f028:15914
+callCallback2 @ chunk-FJ2A54M7.js?v=5885f028:3674
+invokeGuardedCallbackDev @ chunk-FJ2A54M7.js?v=5885f028:3699
+invokeGuardedCallback @ chunk-FJ2A54M7.js?v=5885f028:3733
+beginWork$1 @ chunk-FJ2A54M7.js?v=5885f028:19765
+performUnitOfWork @ chunk-FJ2A54M7.js?v=5885f028:19198
+workLoopSync @ chunk-FJ2A54M7.js?v=5885f028:19137
+renderRootSync @ chunk-FJ2A54M7.js?v=5885f028:19116
+recoverFromConcurrentError @ chunk-FJ2A54M7.js?v=5885f028:18736
+performConcurrentWorkOnRoot @ chunk-FJ2A54M7.js?v=5885f028:18684
+workLoop @ chunk-FJ2A54M7.js?v=5885f028:197
+flushWork @ chunk-FJ2A54M7.js?v=5885f028:176
+performWorkUntilDeadline @ chunk-FJ2A54M7.js?v=5885f028:384Understand this error
+chunk-FJ2A54M7.js?v=5885f028:14032 The above error occurred in the <Navigation> component:
+
+    at Navigation (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/src/components/Navigation.tsx:32:33)
+    at div
+    at Home
+    at Index
+    at div
+    at MotionComponent (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=5885f028:945:40)
+    at RenderedRoute (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=5885f028:4088:5)
+    at Routes (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=5885f028:4558:5)
+    at PresenceChild (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=5885f028:121:24)
+    at AnimatePresence (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=5885f028:210:26)
+    at AnimatedRoutes (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/src/App.tsx:82:22)
+    at Router (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=5885f028:4501:15)
+    at BrowserRouter (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=5885f028:5247:5)
+    at Provider (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/chunk-6V4PV4DW.js?v=5885f028:22:15)
+    at TooltipProvider (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=5885f028:58:5)
+    at O (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/next-themes.js?v=5885f028:23:25)
+    at z (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/next-themes.js?v=5885f028:21:18)
+    at ThemeProvider (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/src/components/ThemeProvider.tsx:23:33)
+    at QueryClientProvider (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/node_modules/.vite/deps/@tanstack_react-query.js?v=5885f028:2934:3)
+    at App (https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/src/App.tsx:2783:5)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-FJ2A54M7.js?v=5885f028:14032
+update.callback @ chunk-FJ2A54M7.js?v=5885f028:14052
+callCallback @ chunk-FJ2A54M7.js?v=5885f028:11248
+commitUpdateQueue @ chunk-FJ2A54M7.js?v=5885f028:11265
+commitLayoutEffectOnFiber @ chunk-FJ2A54M7.js?v=5885f028:17093
+commitLayoutMountEffects_complete @ chunk-FJ2A54M7.js?v=5885f028:17980
+commitLayoutEffects_begin @ chunk-FJ2A54M7.js?v=5885f028:17969
+commitLayoutEffects @ chunk-FJ2A54M7.js?v=5885f028:17920
+commitRootImpl @ chunk-FJ2A54M7.js?v=5885f028:19353
+commitRoot @ chunk-FJ2A54M7.js?v=5885f028:19277
+finishConcurrentRender @ chunk-FJ2A54M7.js?v=5885f028:18760
+performConcurrentWorkOnRoot @ chunk-FJ2A54M7.js?v=5885f028:18718
+workLoop @ chunk-FJ2A54M7.js?v=5885f028:197
+flushWork @ chunk-FJ2A54M7.js?v=5885f028:176
+performWorkUntilDeadline @ chunk-FJ2A54M7.js?v=5885f028:384Understand this error
+chunk-FJ2A54M7.js?v=5885f028:19413 Uncaught ReferenceError: Building is not defined
+    at Navigation (Navigation.tsx:173:54)
+    at renderWithHooks (chunk-FJ2A54M7.js?v=5885f028:11548:26)
+    at mountIndeterminateComponent (chunk-FJ2A54M7.js?v=5885f028:14926:21)
+    at beginWork (chunk-FJ2A54M7.js?v=5885f028:15914:22)
+    at beginWork$1 (chunk-FJ2A54M7.js?v=5885f028:19753:22)
+    at performUnitOfWork (chunk-FJ2A54M7.js?v=5885f028:19198:20)
+    at workLoopSync (chunk-FJ2A54M7.js?v=5885f028:19137:13)
+    at renderRootSync (chunk-FJ2A54M7.js?v=5885f028:19116:15)
+    at recoverFromConcurrentError (chunk-FJ2A54M7.js?v=5885f028:18736:28)
+    at performConcurrentWorkOnRoot (chunk-FJ2A54M7.js?v=5885f028:18684:30)
+Navigation @ Navigation.tsx:173
+renderWithHooks @ chunk-FJ2A54M7.js?v=5885f028:11548
+mountIndeterminateComponent @ chunk-FJ2A54M7.js?v=5885f028:14926
+beginWork @ chunk-FJ2A54M7.js?v=5885f028:15914
+beginWork$1 @ chunk-FJ2A54M7.js?v=5885f028:19753
+performUnitOfWork @ chunk-FJ2A54M7.js?v=5885f028:19198
+workLoopSync @ chunk-FJ2A54M7.js?v=5885f028:19137
+renderRootSync @ chunk-FJ2A54M7.js?v=5885f028:19116
+recoverFromConcurrentError @ chunk-FJ2A54M7.js?v=5885f028:18736
+performConcurrentWorkOnRoot @ chunk-FJ2A54M7.js?v=5885f028:18684
+workLoop @ chunk-FJ2A54M7.js?v=5885f028:197
+flushWork @ chunk-FJ2A54M7.js?v=5885f028:176
+performWorkUntilDeadline @ chunk-FJ2A54M7.js?v=5885f028:384Understand this error
+favicon.ico:1  GET https://23f1067f-f5c3-4dd7-98fb-87eb622eda1a-00-108g8m81jj9oh.riker.replit.dev:5000/favicon.ico 404 (Not Found)
