@@ -351,13 +351,16 @@ const EventsManager = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="text-sm font-medium mb-2 block">Full Content (Learn More)</label>
+                  <label className="text-sm font-medium mb-2 block">Full Content (Learn More & Highlights)</label>
                   <Textarea
                     value={editingEvent.fullContent}
                     onChange={(e) => updateEventField('fullContent', e.target.value)}
-                    placeholder="Detailed content for 'Learn More' page"
+                    placeholder="Detailed content for 'Learn More' page. Add bullet points (one per line) for highlights section."
                     rows={6}
                   />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tip: Each new line will be displayed as a highlight bullet point on the homepage
+                  </p>
                 </div>
 
                 <div className="md:col-span-2">
