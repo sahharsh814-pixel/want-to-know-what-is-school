@@ -27,6 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import DocumentViewer from "@/components/DocumentViewer";
 
 interface StudentData {
   id: string;
@@ -2250,54 +2251,16 @@ const StudentDashboard = () => {
         </div>
       )}
 
-      {/* Image Modal */}
+      {/* Document Viewer for Reports */}
       {showImageModal && selectedImage && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-[60] p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative max-w-[90vw] max-h-[90vh]"
-          >
-            {/* Close Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setShowImageModal(false);
-                setSelectedImage(null);
-              }}
-              className="absolute -top-12 right-0 text-white hover:text-white hover:bg-white/20 z-10"
-            >
-              <X className="h-6 w-6" />
-            </Button>
-
-            {/* Image Title */}
-            <div className="absolute -top-12 left-0 text-white text-sm font-medium">
-              {selectedImage.title}
-            </div>
-
-            {/* Image */}
-            <img
-              src={selectedImage.src}
-              alt="Report Full View"
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-            />
-
-            {/* Click outside to close hint */}
-            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-white/70 text-xs">
-              Click outside or press X to close
-            </div>
-          </motion.div>
-
-          {/* Click outside to close */}
-          <div
-            className="absolute inset-0 -z-10"
-            onClick={() => {
-              setShowImageModal(false);
-              setSelectedImage(null);
-            }}
-          />
-        </div>
+        <DocumentViewer
+          documentUrl={selectedImage.src}
+          documentName={selectedImage.title}
+          onClose={() => {
+            setShowImageModal(false);
+            setSelectedImage(null);
+          }}
+        />
       )}
 
       {/* Principal Remarks Modal */}

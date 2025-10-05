@@ -101,7 +101,7 @@ const DocumentViewer = ({ documentUrl, documentName, onClose }: DocumentViewerPr
 
   return (
     <div 
-      className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex flex-col"
+      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-md flex flex-col"
       onClick={onClose}
     >
       {/* Header with controls */}

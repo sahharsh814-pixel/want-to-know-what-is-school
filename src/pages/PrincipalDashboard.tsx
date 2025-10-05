@@ -36,6 +36,7 @@ import AboutPageManager from "@/components/AboutPageManager";
 import CourseManager from "@/components/CourseManager";
 import TopScorersManager from "@/components/TopScorersManager";
 import AdmissionsPageManager from "@/components/AdmissionsPageManager";
+import DocumentViewer from "@/components/DocumentViewer";
 import { getSupabaseData, setSupabaseData, subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
 
 // Notification interfaces
@@ -141,6 +142,7 @@ const PrincipalDashboard = () => {
   const [admissionsSearch, setAdmissionsSearch] = useState("");
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<{ show: boolean; admissionId: string | null; studentName: string }>({ show: false, admissionId: null, studentName: '' });
   const [neverAskAgain, setNeverAskAgain] = useState(false);
+  const [documentViewer, setDocumentViewer] = useState<{ show: boolean; url: string; name: string }>({ show: false, url: '', name: '' });
   
   // Timetable management state
   const [selectedTimetableClass, setSelectedTimetableClass] = useState("1");
@@ -1358,28 +1360,10 @@ const PrincipalDashboard = () => {
                                   onClick={() => {
                                     try {
                                       if (typeof a.aadhaarCard === 'string') {
-                                        // Check if it's a base64 string
-                                        if (a.aadhaarCard.startsWith('data:')) {
-                                          // Open base64 in new window
-                                          const newWindow = window.open();
-                                          if (newWindow) {
-                                            newWindow.document.write(`
-                                              <html>
-                                                <head><title>Aadhaar Card</title></head>
-                                                <body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#000;">
-                                                  <img src="${a.aadhaarCard}" style="max-width:100%;max-height:100vh;object-fit:contain;" />
-                                                </body>
-                                              </html>
-                                            `);
-                                            newWindow.document.close();
-                                          }
-                                        } else {
-                                          // Regular URL
-                                          window.open(a.aadhaarCard, '_blank');
-                                        }
+                                        setDocumentViewer({ show: true, url: a.aadhaarCard, name: `Aadhaar Card - ${a.firstName} ${a.lastName}` });
                                       } else if (a.aadhaarCard && typeof a.aadhaarCard === 'object' && (a.aadhaarCard as any) instanceof Blob) {
                                         const url = URL.createObjectURL(a.aadhaarCard as Blob);
-                                        window.open(url, '_blank');
+                                        setDocumentViewer({ show: true, url, name: `Aadhaar Card - ${a.firstName} ${a.lastName}` });
                                       } else {
                                         alert('Aadhaar card file not available');
                                       }
@@ -1390,6 +1374,7 @@ const PrincipalDashboard = () => {
                                   }}
                                   title="View Aadhaar Card"
                                   className="h-7 px-2 text-xs bg-blue-500/10 hover:bg-blue-500/20 text-blue-600"
+                                  data-testid={`button-view-aadhaar-${a.id}`}
                                 >
                                   📄 Aadhaar
                                 </Button>
@@ -1401,28 +1386,10 @@ const PrincipalDashboard = () => {
                                   onClick={() => {
                                     try {
                                       if (typeof a.birthCertificate === 'string') {
-                                        // Check if it's a base64 string
-                                        if (a.birthCertificate.startsWith('data:')) {
-                                          // Open base64 in new window
-                                          const newWindow = window.open();
-                                          if (newWindow) {
-                                            newWindow.document.write(`
-                                              <html>
-                                                <head><title>Birth Certificate</title></head>
-                                                <body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#000;">
-                                                  <img src="${a.birthCertificate}" style="max-width:100%;max-height:100vh;object-fit:contain;" />
-                                                </body>
-                                              </html>
-                                            `);
-                                            newWindow.document.close();
-                                          }
-                                        } else {
-                                          // Regular URL
-                                          window.open(a.birthCertificate, '_blank');
-                                        }
+                                        setDocumentViewer({ show: true, url: a.birthCertificate, name: `Birth Certificate - ${a.firstName} ${a.lastName}` });
                                       } else if (a.birthCertificate && typeof a.birthCertificate === 'object' && (a.birthCertificate as any) instanceof Blob) {
                                         const url = URL.createObjectURL(a.birthCertificate as Blob);
-                                        window.open(url, '_blank');
+                                        setDocumentViewer({ show: true, url, name: `Birth Certificate - ${a.firstName} ${a.lastName}` });
                                       } else {
                                         alert('Birth certificate file not available');
                                       }
@@ -1433,6 +1400,7 @@ const PrincipalDashboard = () => {
                                   }}
                                   title="View Birth Certificate"
                                   className="h-7 px-2 text-xs bg-green-500/10 hover:bg-green-500/20 text-green-600"
+                                  data-testid={`button-view-birth-cert-${a.id}`}
                                 >
                                   📄 Birth Cert
                                 </Button>
@@ -1444,28 +1412,10 @@ const PrincipalDashboard = () => {
                                   onClick={() => {
                                     try {
                                       if (typeof a.studentPhoto === 'string') {
-                                        // Check if it's a base64 string
-                                        if (a.studentPhoto.startsWith('data:')) {
-                                          // Open base64 in new window
-                                          const newWindow = window.open();
-                                          if (newWindow) {
-                                            newWindow.document.write(`
-                                              <html>
-                                                <head><title>Student Photo</title></head>
-                                                <body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#000;">
-                                                  <img src="${a.studentPhoto}" style="max-width:100%;max-height:100vh;object-fit:contain;" />
-                                                </body>
-                                              </html>
-                                            `);
-                                            newWindow.document.close();
-                                          }
-                                        } else {
-                                          // Regular URL
-                                          window.open(a.studentPhoto, '_blank');
-                                        }
+                                        setDocumentViewer({ show: true, url: a.studentPhoto, name: `Student Photo - ${a.firstName} ${a.lastName}` });
                                       } else if (a.studentPhoto && typeof a.studentPhoto === 'object' && (a.studentPhoto as any) instanceof Blob) {
                                         const url = URL.createObjectURL(a.studentPhoto as Blob);
-                                        window.open(url, '_blank');
+                                        setDocumentViewer({ show: true, url, name: `Student Photo - ${a.firstName} ${a.lastName}` });
                                       } else {
                                         alert('Student photo not available');
                                       }
@@ -1476,6 +1426,7 @@ const PrincipalDashboard = () => {
                                   }}
                                   title="View Student Photo"
                                   className="h-7 px-2 text-xs bg-purple-500/10 hover:bg-purple-500/20 text-purple-600"
+                                  data-testid={`button-view-photo-${a.id}`}
                                 >
                                   📷 Photo
                                 </Button>
@@ -3443,6 +3394,15 @@ const PrincipalDashboard = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Document Viewer Modal */}
+      {documentViewer.show && (
+        <DocumentViewer
+          documentUrl={documentViewer.url}
+          documentName={documentViewer.name}
+          onClose={() => setDocumentViewer({ show: false, url: '', name: '' })}
+        />
       )}
     </div>
   );
