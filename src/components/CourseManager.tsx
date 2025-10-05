@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { getSupabaseData, setSupabaseData, subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
 
 interface Course {
   id: string;
@@ -56,11 +57,12 @@ const CourseManager = () => {
 
   // Initialize with default course data
   useEffect(() => {
-    const savedCourses = localStorage.getItem('royal-academy-courses');
-    if (savedCourses) {
-      setCategories(JSON.parse(savedCourses));
-    } else {
-      const defaultCategories: CourseCategory[] = [
+    const loadCourses = async () => {
+      const savedCourses = await getSupabaseData<CourseCategory[]>('royal-academy-courses', null);
+      if (savedCourses) {
+        setCategories(savedCourses);
+      } else {
+        const defaultCategories: CourseCategory[] = [
         {
           id: "undergraduate",
           name: "Undergraduate Programs",
@@ -148,13 +150,27 @@ const CourseManager = () => {
           ]
         }
       ];
-      setCategories(defaultCategories);
-      localStorage.setItem('royal-academy-courses', JSON.stringify(defaultCategories));
-    }
+        setCategories(defaultCategories);
+        await setSupabaseData('royal-academy-courses', defaultCategories);
+      }
+    };
+    
+    loadCourses();
+    
+    // Subscribe to realtime changes
+    const unsubscribe = subscribeToSupabaseChanges<CourseCategory[]>(
+      'royal-academy-courses',
+      (newData) => {
+        console.log('[CourseManager] Received realtime update');
+        setCategories(newData);
+      }
+    );
+    
+    return () => unsubscribe();
   }, []);
 
-  const saveCourses = () => {
-    localStorage.setItem('royal-academy-courses', JSON.stringify(categories));
+  const saveCourses = async () => {
+    await setSupabaseData('royal-academy-courses', categories);
     setMessage("Courses updated successfully!");
     setTimeout(() => setMessage(""), 3000);
   };
@@ -214,7 +230,7 @@ const CourseManager = () => {
     });
 
     setCategories(updatedCategories);
-    localStorage.setItem('royal-academy-courses', JSON.stringify(updatedCategories));
+    await setSupabaseData('royal-academy-courses', updatedCategories);
     setIsEditing(false);
     setEditingCourse(null);
     setMessage(isAddingNew ? "Course added successfully!" : "Course updated successfully!");
@@ -233,7 +249,7 @@ const CourseManager = () => {
         return category;
       });
       setCategories(updatedCategories);
-      localStorage.setItem('royal-academy-courses', JSON.stringify(updatedCategories));
+      await setSupabaseData('royal-academy-courses', updatedCategories);
       setMessage("Course deleted successfully!");
       setTimeout(() => setMessage(""), 3000);
     }
@@ -276,7 +292,7 @@ const CourseManager = () => {
       };
       const updatedCategories = [...categories, newCategory];
       setCategories(updatedCategories);
-      localStorage.setItem('royal-academy-courses', JSON.stringify(updatedCategories));
+      await setSupabaseData('royal-academy-courses', updatedCategories);
       setMessage("Category added successfully!");
       setTimeout(() => setMessage(""), 3000);
     }

@@ -23,7 +23,9 @@ const SENSITIVE_PATTERNS: RegExp[] = [
   /^studentName$/i,
   /^payment-redirect-info$/i,
   /^teacher-profile-/i,
-  /^student-profile-/i
+  /^student-profile-/i,
+  /^theme$/i,
+  /^vite-/i
 ]
 
 function shouldSync(key: string): boolean {
