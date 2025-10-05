@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
+import About from "@/components/About";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { 
