@@ -181,6 +181,15 @@ export async function initSupaStorage() {
   subscribeRealtime()
 }
 
+// Helper function to sync localStorage to Supabase
+export const syncToSupabase = async (key: string, value: string): Promise<void> => {
+  try {
+    await upsertKey(key, value);
+  } catch (err) {
+    console.error(`[supaStorage] Sync failed for ${key}:`, err);
+  }
+};
+
 // Helper function to directly set data in Supabase and update cache/emit event
 export async function setSupabaseData(key: string, value: string | null) {
   if (value === null) {

@@ -461,6 +461,9 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
+    // Import subscription helper
+    const { subscribeToSupabaseChanges } = require('@/lib/supabaseHelpers');
+    
     // Check authentication with stricter validation
     const isAuth = localStorage.getItem("studentAuth");
     const currentStudent = localStorage.getItem("currentStudent");
@@ -474,6 +477,46 @@ const StudentDashboard = () => {
       navigate("/student-auth");
       return;
     }
+    
+    // Subscribe to realtime changes for students data
+    const unsubscribeStudents = subscribeToSupabaseChanges(
+      'royal-academy-students',
+      (newData: any[]) => {
+        console.log('[StudentDashboard] Students data updated from Supabase');
+        // Reload current student data if it changed
+        if (studentEmail) {
+          const updatedStudent = newData.find((s: any) => s.email === studentEmail);
+          if (updatedStudent) {
+            setStudentData({
+              id: updatedStudent.id,
+              fullName: updatedStudent.fullName || updatedStudent.name,
+              email: updatedStudent.email,
+              rollNumber: updatedStudent.rollNumber || 'N/A',
+              class: updatedStudent.class || 'N/A',
+              section: updatedStudent.section || 'A',
+              status: updatedStudent.status || 'active'
+            });
+          }
+        }
+      }
+    );
+    
+    // Subscribe to other relevant data
+    const unsubscribeReports = subscribeToSupabaseChanges('royal-academy-student-reports', () => {
+      console.log('[StudentDashboard] Reports updated');
+      window.location.reload(); // Reload to get fresh data
+    });
+    
+    const unsubscribeNotifications = subscribeToSupabaseChanges('royal-academy-student-notifications', () => {
+      console.log('[StudentDashboard] Notifications updated');
+      window.location.reload();
+    });
+    
+    return () => {
+      unsubscribeStudents();
+      unsubscribeReports();
+      unsubscribeNotifications();
+    };
     
     // Ensure auth persists
     if (isAuth === "true") {

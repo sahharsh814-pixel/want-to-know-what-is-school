@@ -171,14 +171,14 @@ export async function setSupabaseData<T>(key: string, value: T): Promise<void> {
   try {
     const stringValue = JSON.stringify(value)
     
-    // Save to localStorage immediately
-    localStorage.setItem(key, stringValue)
+    // Save to localStorage immediately (use direct property access to avoid any interceptors)
+    const storage = window.localStorage;
+    Object.getPrototypeOf(storage).setItem.call(storage, key, stringValue);
     
     // Save to Supabase
     const { error } = await supabase
       .from('app_state')
       .upsert({ key, value: stringValue })
-      .single()
 
     if (error) {
       console.warn(`[setSupabaseData] Error saving ${key}:`, error)
@@ -209,6 +209,10 @@ export function subscribeToSupabaseChanges<T>(
         if (payload.new?.value) {
           try {
             const newData = JSON.parse(payload.new.value)
+            // Update localStorage (use direct property access)
+            const storage = window.localStorage;
+            Object.getPrototypeOf(storage).setItem.call(storage, key, payload.new.value);
+            // Notify callback
             callback(newData)
           } catch (err) {
             console.error(`[subscribeToSupabaseChanges] Parse error for ${key}:`, err)
