@@ -98,6 +98,33 @@ export async function deleteSupabaseData(key: string): Promise<boolean> {
 }
 
 /**
+ * Get a value from Supabase app_state table
+ */
+export async function getSupabaseValue<T>(key: string): Promise<T | null> {
+  try {
+    const { data, error } = await supabase
+      .from('app_state')
+      .select('value')
+      .eq('key', key)
+      .limit(1);
+
+    if (error) {
+      console.error(`[Supabase] Error fetching ${key}:`, error.message);
+      return null;
+    }
+
+    if (!data || data.length === 0) {
+      return null;
+    }
+
+    return JSON.parse(data[0].value);
+  } catch (err) {
+    console.error(`[Supabase] Error parsing ${key}:`, err);
+    return null;
+  }
+}
+
+/**
  * Subscribe to realtime changes for a specific key
  */
 export function subscribeToSupabaseChanges<T>(

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Upload, Image as ImageIcon, Save, RefreshCw, Palette, Type } from "lucide-react";
@@ -6,6 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { createClient } from '@supabase/supabase-js'
+
+// Initialize Supabase client (replace with your actual Supabase URL and anon key)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 interface BrandingData {
   schoolName: string;
@@ -39,13 +44,45 @@ const BrandingManager = () => {
   const [faviconPreview, setFaviconPreview] = useState("");
 
   useEffect(() => {
-    const saved = localStorage.getItem('royal-academy-branding');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setBranding(data);
-      if (data.logoUrl) setLogoPreview(data.logoUrl);
-      if (data.faviconUrl) setFaviconPreview(data.faviconUrl);
-    }
+    const fetchBranding = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('app_state')
+          .select('value')
+          .eq('key', 'branding')
+          .limit(1);
+
+        if (error) throw error;
+
+        if (data && data.length > 0 && data[0]?.value) {
+          const brandingData = JSON.parse(data[0].value);
+          setBranding(brandingData);
+          if (brandingData.logoUrl) setLogoPreview(brandingData.logoUrl);
+          if (brandingData.faviconUrl) setFaviconPreview(brandingData.faviconUrl);
+        } else {
+          // If no branding found in Supabase, load from localStorage
+          const saved = localStorage.getItem('royal-academy-branding');
+          if (saved) {
+            const data = JSON.parse(saved);
+            setBranding(data);
+            if (data.logoUrl) setLogoPreview(data.logoUrl);
+            if (data.faviconUrl) setFaviconPreview(data.faviconUrl);
+          }
+        }
+      } catch (error: any) {
+        console.error('[Supabase] Error fetching branding:', error.message);
+        // Fallback to localStorage if Supabase fetch fails
+        const saved = localStorage.getItem('royal-academy-branding');
+        if (saved) {
+          const data = JSON.parse(saved);
+          setBranding(data);
+          if (data.logoUrl) setLogoPreview(data.logoUrl);
+          if (data.faviconUrl) setFaviconPreview(data.faviconUrl);
+        }
+      }
+    };
+
+    fetchBranding();
   }, []);
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,19 +111,38 @@ const BrandingManager = () => {
     }
   };
 
-  const saveBranding = () => {
+  const saveBranding = async () => {
+    // Save to localStorage
     localStorage.setItem('royal-academy-branding', JSON.stringify(branding));
-    
-    // Update document title and favicon
+
+    // Save to Supabase
+    try {
+      const { error } = await supabase
+        .from('app_state')
+        .upsert({ key: 'branding', value: JSON.stringify(branding) }, { onConflict: 'key' });
+
+      if (error) throw error;
+
+      setMessage("Branding updated successfully in Supabase and local storage!");
+    } catch (error: any) {
+      console.error('[Supabase] Error saving branding:', error.message);
+      setMessage(`Error saving branding: ${error.message}. It has been saved to local storage.`);
+    }
+
+    // Update document title and favicon immediately for preview
     document.title = `${branding.schoolName} - ${branding.tagline}`;
     if (branding.faviconUrl) {
       const favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
       if (favicon) {
         favicon.href = branding.faviconUrl;
+      } else {
+        const newFavicon = document.createElement('link');
+        newFavicon.rel = 'icon';
+        newFavicon.href = branding.faviconUrl;
+        document.head.appendChild(newFavicon);
       }
     }
-    
-    setMessage("Branding updated successfully! Refresh to see changes.");
+
     setTimeout(() => setMessage(""), 5000);
   };
 
@@ -122,14 +178,14 @@ const BrandingManager = () => {
             <ImageIcon className="h-5 w-5 text-gold" />
             <h3 className="text-lg font-semibold">School Logo</h3>
           </div>
-          
+
           <div className="space-y-4">
             {logoPreview && (
               <div className="w-full h-32 bg-muted rounded-lg flex items-center justify-center p-4">
                 <img src={logoPreview} alt="Logo Preview" className="max-h-full max-w-full object-contain" />
               </div>
             )}
-            
+
             <input
               type="file"
               accept="image/*"
@@ -159,14 +215,14 @@ const BrandingManager = () => {
             <ImageIcon className="h-5 w-5 text-gold" />
             <h3 className="text-lg font-semibold">Favicon</h3>
           </div>
-          
+
           <div className="space-y-4">
             {faviconPreview && (
               <div className="w-full h-32 bg-muted rounded-lg flex items-center justify-center p-4">
                 <img src={faviconPreview} alt="Favicon Preview" className="max-h-full max-w-full object-contain" />
               </div>
             )}
-            
+
             <input
               type="file"
               accept="image/*"
@@ -197,7 +253,7 @@ const BrandingManager = () => {
           <Type className="h-5 w-5 text-gold" />
           <h3 className="text-lg font-semibold">School Information</h3>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">School Name</label>
@@ -207,7 +263,7 @@ const BrandingManager = () => {
               placeholder="Royal Academy"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">Tagline</label>
             <Input
@@ -216,7 +272,7 @@ const BrandingManager = () => {
               placeholder="Excellence in Education"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">Contact Email</label>
             <Input
@@ -226,7 +282,7 @@ const BrandingManager = () => {
               placeholder="info@royalacademy.edu"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">Contact Phone</label>
             <Input
@@ -236,7 +292,7 @@ const BrandingManager = () => {
               placeholder="+1 (555) 123-4567"
             />
           </div>
-          
+
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-2">Address</label>
             <Textarea
@@ -260,7 +316,7 @@ const BrandingManager = () => {
           <Palette className="h-5 w-5 text-gold" />
           <h3 className="text-lg font-semibold">Brand Colors</h3>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">Primary Color</label>
@@ -278,7 +334,7 @@ const BrandingManager = () => {
               />
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">Secondary Color</label>
             <div className="flex items-center space-x-2">
@@ -295,7 +351,7 @@ const BrandingManager = () => {
               />
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">Accent Color</label>
             <div className="flex items-center space-x-2">
