@@ -25,18 +25,18 @@ const StudentAuth = () => {
       // Check localStorage for student auth - check both regular students and auth students
       const students = JSON.parse(localStorage.getItem('royal-academy-students') || '[]');
       const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
-      
+
       console.log('=== LOGIN ATTEMPT ===');
       console.log('Trying to login with:', { studentUsername, studentId });
       console.log('Available students in royal-academy-students:', students);
       console.log('Available auth students in royal-academy-auth-students:', authStudents);
-      
+
       // Let's also check if there are any students at all
       if (students.length === 0 && authStudents.length === 0) {
         setError('No students found in the system. Please ask your teacher to create your account.');
         return;
       }
-      
+
       // First try to find in auth students (created by teacher)
       let student = authStudents.find((s: any) => {
         const usernameMatch = s.username === studentUsername || 
@@ -47,11 +47,11 @@ const StudentAuth = () => {
                              s.fullName?.toLowerCase() === studentUsername.toLowerCase();
         const idMatch = s.studentId === studentId || s.id === studentId;
         const statusOk = s.status !== 'banned';
-        
+
         console.log('Checking auth student:', s, { usernameMatch, idMatch, statusOk });
         return usernameMatch && idMatch && statusOk;
       });
-      
+
       // If not found in auth students, try regular students
       if (!student) {
         student = students.find((s: any) => {
@@ -61,11 +61,11 @@ const StudentAuth = () => {
                                s.fullName?.toLowerCase() === studentUsername.toLowerCase();
           const idMatch = s.id === studentId;
           const statusOk = s.status === 'active' || !s.status;
-          
+
           console.log('Checking regular student:', s, { usernameMatch, idMatch, statusOk });
           return usernameMatch && idMatch && statusOk;
         });
-        
+
         // If found in regular students but not in auth students, sync them
         if (student) {
           console.log('Found student in regular database, syncing to auth database...');
@@ -77,22 +77,27 @@ const StudentAuth = () => {
             password: `${(student.name || student.fullName).split(' ')[0].toLowerCase()}123`,
             createdAt: new Date().toISOString()
           };
-          
+
           const updatedAuthStudents = [...authStudents, newAuthStudent];
           localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
           console.log('Student synced to auth database:', newAuthStudent);
         }
       }
-      
+
       console.log('Found student:', student);
 
       if (student) {
+        // Set authentication with all necessary flags
         localStorage.setItem("studentAuth", "true");
+        localStorage.setItem("studentEmail", student.email);
+        localStorage.setItem("studentId", student.studentId || student.id);
+        localStorage.setItem("studentName", student.username || student.name || student.fullName);
         localStorage.setItem("currentStudent", JSON.stringify(student));
-        localStorage.setItem("studentEmail", student.email || student.id + "@school.edu");
-        localStorage.setItem("studentName", student.name || student.fullName || student.username);
-        console.log('Login successful, redirecting to dashboard...');
-        navigate("/student-dashboard");
+
+        console.log('[StudentAuth] Login successful, auth set for:', student.email);
+
+        // Navigate to dashboard
+        navigate("/student-dashboard", { replace: true });
       } else {
         setError("Invalid student username or student ID. Please check your credentials.");
       }

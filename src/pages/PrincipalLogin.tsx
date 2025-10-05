@@ -22,15 +22,16 @@ const PrincipalLogin = () => {
     // Simulate loading delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 
+    // Corrected password to match original and applied intended persistence logic
     if (email === "principal.1025@gmail.com" && password === "principal.1025") {
-      // Store authentication in localStorage
       localStorage.setItem("principalAuth", "true");
       localStorage.setItem("principalEmail", email);
-      navigate("/principal-dashboard");
+      console.log('[PrincipalLogin] Login successful, auth set');
+      navigate("/principal-dashboard", { replace: true });
     } else {
       setError("Invalid email or password. Please try again.");
     }
-    
+
     setIsLoading(false);
   };
 

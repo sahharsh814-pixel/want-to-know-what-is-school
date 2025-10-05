@@ -123,7 +123,11 @@ interface TeacherRecord {
 
 const PrincipalDashboard = () => {
   const [principalEmail, setPrincipalEmail] = useState("");
-  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager">("dashboard");
+  // Restore active section from sessionStorage on mount
+  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager">(() => {
+    const saved = sessionStorage.getItem('principalActiveSection');
+    return (saved as any) || "dashboard";
+  });
   
   // Teacher creation form state
   const [teacherForm, setTeacherForm] = useState({
@@ -305,6 +309,11 @@ const PrincipalDashboard = () => {
       console.error('[PrincipalDashboard] Error deleting from auth teachers:', err);
     }
   };
+
+  // Persist active section to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('principalActiveSection', activeSection);
+  }, [activeSection]);
 
   useEffect(() => {
     // Check authentication

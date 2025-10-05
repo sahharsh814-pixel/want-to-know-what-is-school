@@ -131,25 +131,8 @@ function patchLocalStorage() {
   }
 }
 
-// Flag to prevent recursive calls
-let isSyncing = false;
-
-// Override localStorage.setItem to automatically sync with Supabase
-const originalSetItem = window.localStorage.setItem;
-window.localStorage.setItem = function(key: string, value: string) {
-  originalSetItem.call(window.localStorage, key, value);
-
-  // Sync with Supabase for royal-academy keys (only if not already syncing)
-  if (key.startsWith('royal-academy-') && !isSyncing) {
-    isSyncing = true;
-    upsertKey(key, value).catch(err => {
-      console.error('Failed to sync to Supabase:', err);
-    }).finally(() => {
-      isSyncing = false;
-    });
-  }
-};
-
+// Note: We don't override localStorage.setItem to avoid infinite loops
+// Instead, components should use setSupabaseData() directly when they want to sync
 
 function subscribeRealtime() {
   // Subscribe to changes on public.app_state
@@ -186,4 +169,22 @@ export async function initSupaStorage() {
   await loadAllKeysIntoCache()
   patchLocalStorage()
   subscribeRealtime()
+}
+
+// Helper function to directly set data in Supabase and update cache/emit event
+export async function setSupabaseData(key: string, value: string | null) {
+  if (value === null) {
+    delete cache[key]
+    if (shouldSync(key)) {
+      await deleteKey(key)
+    }
+    emitStorageEvent(key, null, cache[key] ?? null) // Pass the value before deletion
+  } else {
+    const oldValue = cache[key] ?? null
+    cache[key] = value
+    if (shouldSync(key)) {
+      await upsertKey(key, value)
+    }
+    emitStorageEvent(key, value, oldValue)
+  }
 }

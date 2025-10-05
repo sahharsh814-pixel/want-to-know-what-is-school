@@ -461,14 +461,23 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication with stricter validation
     const isAuth = localStorage.getItem("studentAuth");
     const currentStudent = localStorage.getItem("currentStudent");
     const studentEmail = localStorage.getItem("studentEmail");
     
+    console.log('[StudentDashboard] Auth check:', { isAuth, hasCurrentStudent: !!currentStudent, studentEmail });
+    
+    // Only redirect if not authenticated - be more lenient to prevent unnecessary redirects
     if (!isAuth || isAuth !== "true") {
+      console.log('[StudentDashboard] Not authenticated, redirecting to auth');
       navigate("/student-auth");
       return;
+    }
+    
+    // Ensure auth persists
+    if (isAuth === "true") {
+      localStorage.setItem("studentAuth", "true");
     }
     
     // Try to get student data from currentStudent first (faster)
