@@ -9,7 +9,7 @@ import {
   Users,
   Award,
   ArrowLeft,
-  Home
+  ArrowUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
@@ -43,6 +43,7 @@ interface CourseCategory {
 
 const Courses = () => {
   const [categories, setCategories] = useState<CourseCategory[]>([]);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const loadCourses = async () => {
@@ -55,31 +56,46 @@ const Courses = () => {
     loadCourses();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen">
       <Navigation />
       
-      {/* Header with Back Button */}
-      <div className="sticky top-16 z-40 bg-background/95 backdrop-blur-sm border-b border-border/50">
-        <div className="container-wide py-2.5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Link to="/">
-                <Button variant="ghost" size="sm" className="h-8 px-3 text-xs font-medium hover:bg-accent/10">
-                  <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
-                  <span>Back to Home</span>
-                </Button>
-              </Link>
-              <Link to="/">
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-accent/10">
-                  <Home className="h-3.5 w-3.5" />
-                </Button>
-              </Link>
-            </div>
-            <h1 className="text-xl md:text-2xl font-heading font-bold text-gradient-gold">Our Courses</h1>
-          </div>
-        </div>
+      {/* Simple Back Button */}
+      <div className="container-wide pt-6">
+        <Link to="/">
+          <Button variant="ghost" size="sm" className="h-9 px-4 hover:bg-accent/10">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            <span>Back</span>
+          </Button>
+        </Link>
       </div>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0 }}
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 z-50 p-3 rounded-full bg-gold hover:bg-gold/90 text-black shadow-lg hover:shadow-xl transition-all duration-300"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="h-6 w-6" />
+        </motion.button>
+      )}
 
       {/* Main Content */}
       <div className="container-wide py-12">
