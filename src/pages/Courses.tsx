@@ -60,24 +60,23 @@ const Courses = () => {
       <Navigation />
       
       {/* Header with Back Button */}
-      <div className="sticky top-16 z-40 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="container-wide py-4">
+      <div className="sticky top-16 z-40 bg-background/95 backdrop-blur-sm border-b border-border/50">
+        <div className="container-wide py-2.5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               <Link to="/">
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <ArrowLeft className="h-4 w-4" />
+                <Button variant="ghost" size="sm" className="h-8 px-3 text-xs font-medium hover:bg-accent/10">
+                  <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
                   <span>Back to Home</span>
                 </Button>
               </Link>
               <Link to="/">
-                <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                  <Home className="h-4 w-4" />
-                  <span>Home</span>
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-accent/10">
+                  <Home className="h-3.5 w-3.5" />
                 </Button>
               </Link>
             </div>
-            <h1 className="text-2xl font-heading font-bold text-gradient-gold">Our Courses</h1>
+            <h1 className="text-xl md:text-2xl font-heading font-bold text-gradient-gold">Our Courses</h1>
           </div>
         </div>
       </div>

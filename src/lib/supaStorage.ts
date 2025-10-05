@@ -131,32 +131,22 @@ function patchLocalStorage() {
   }
 }
 
-// Track if we're already syncing to prevent infinite loops
+// Flag to prevent recursive calls
 let isSyncing = false;
 
-// Override localStorage methods to sync with Supabase
-const originalSetItem = window.localStorage.setItem.bind(window.localStorage);
-const originalRemoveItem = window.localStorage.removeItem.bind(window.localStorage);
-
+// Override localStorage.setItem to automatically sync with Supabase
+const originalSetItem = window.localStorage.setItem;
 window.localStorage.setItem = function(key: string, value: string) {
-  originalSetItem(key, value);
-  // Only sync to Supabase if we're not already syncing
-  if (!isSyncing) {
-    isSyncing = true;
-    upsertKey(key, value)
-      .catch(err => console.error('Failed to sync to Supabase:', err))
-      .finally(() => { isSyncing = false; });
-  }
-};
+  originalSetItem.call(window.localStorage, key, value);
 
-window.localStorage.removeItem = function(key: string) {
-  originalRemoveItem(key);
-  // Only remove from Supabase if we're not already syncing
-  if (!isSyncing) {
+  // Sync with Supabase for royal-academy keys (only if not already syncing)
+  if (key.startsWith('royal-academy-') && !isSyncing) {
     isSyncing = true;
-    deleteKey(key)
-      .catch(err => console.error('Failed to remove from Supabase:', err))
-      .finally(() => { isSyncing = false; });
+    upsertKey(key, value).catch(err => {
+      console.error('Failed to sync to Supabase:', err);
+    }).finally(() => {
+      isSyncing = false;
+    });
   }
 };
 
