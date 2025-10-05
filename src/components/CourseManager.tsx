@@ -204,7 +204,7 @@ const CourseManager = () => {
     setIsEditing(true);
   };
 
-  const handleSaveCourse = () => {
+  const handleSaveCourse = async () => {
     if (!editingCourse || !editingCourse.title.trim() || !editingCourse.description.trim()) {
       alert("Please fill in title and description");
       return;
@@ -237,7 +237,7 @@ const CourseManager = () => {
     setTimeout(() => setMessage(""), 3000);
   };
 
-  const handleDeleteCourse = (courseId: string, categoryId: string) => {
+  const handleDeleteCourse = async (courseId: string, categoryId: string) => {
     if (confirm("Are you sure you want to delete this course?")) {
       const updatedCategories = categories.map(category => {
         if (category.id === categoryId) {
@@ -281,7 +281,7 @@ const CourseManager = () => {
     });
   };
 
-  const addNewCategory = () => {
+  const addNewCategory = async () => {
     const categoryName = prompt("Enter new category name:");
     if (categoryName && categoryName.trim()) {
       const newCategory: CourseCategory = {
