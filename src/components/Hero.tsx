@@ -190,8 +190,8 @@ const Hero = () => {
               ))}
             </h1>
             <p 
-              className="text-base sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-2 sm:px-0"
-              style={{ fontFamily: homepageData.fonts.body }}
+              className="text-base sm:text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed px-2 sm:px-0"
+              style={{ fontFamily: homepageData.fonts.body, color: '#000000' }}
             >
               {homepageData.heroSubtitle}
             </p>
