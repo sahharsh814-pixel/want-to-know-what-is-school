@@ -103,13 +103,13 @@ function patchLocalStorage() {
   // setItem writes to cache immediately, schedules supabase upsert, and emits event
   window.localStorage.setItem = (key: string, value: string): void => {
     const oldValue = cache[key] ?? original.getItem(key)
-    
+
     // Skip if value hasn't changed
     if (oldValue === value) return
-    
+
     cache[key] = value
     lastValues.set(key, value)
-    
+
     // fire-and-forget network write
     if (shouldSync(key)) {
       void upsertKey(key, value)

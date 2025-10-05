@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   MapPin, 
   Phone, 
@@ -18,6 +18,7 @@ import {
   Minus
 } from "lucide-react";
 import schoolLogo from "@/assets/school-logo.png";
+import { getSupabaseData } from "@/lib/supabaseHelpers";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -30,6 +31,28 @@ const Footer = () => {
     academic: false,
     achievements: false
   });
+
+  // State for dynamic branding data
+  const [brandingData, setBrandingData] = useState({
+    schoolName: "Royal Academy",
+    tagline: "Excellence in Education",
+    logoUrl: schoolLogo
+  });
+
+  // Load branding data from Supabase
+  useEffect(() => {
+    getSupabaseData('branding', {
+      schoolName: "Royal Academy",
+      tagline: "Excellence in Education",
+      logoUrl: schoolLogo
+    }).then(data => {
+      setBrandingData({
+        schoolName: data.schoolName || "Royal Academy",
+        tagline: data.tagline || "Excellence in Education",
+        logoUrl: data.logoUrl || schoolLogo
+      });
+    });
+  }, []);
 
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections(prev => ({
@@ -143,40 +166,40 @@ const Footer = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-6 pb-6 border-b border-border/30"
+              className="mb-4 pb-4 border-b border-border/30"
             >
-              <Link to="/" className="flex items-center space-x-3 mb-4 group">
+              <Link to="/" className="flex items-center space-x-2 mb-3 group">
                 <motion.img
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   transition={{ duration: 0.3 }}
-                  src={schoolLogo}
-                  alt="Royal Academy"
-                  className="h-12 w-12 flex-shrink-0 animate-glow"
+                  src={brandingData.logoUrl}
+                  alt={brandingData.schoolName}
+                  className="h-10 w-10 flex-shrink-0 animate-glow"
                 />
-                <div className="flex flex-col">
-                  <span className="text-lg font-heading font-bold text-gradient-gold">
-                    Royal Academy
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-base font-heading font-bold text-gradient-gold truncate">
+                    {brandingData.schoolName}
                   </span>
-                  <span className="text-xs text-black dark:text-muted-foreground tracking-wider">
-                    Excellence in Education
+                  <span className="text-[10px] text-black dark:text-muted-foreground tracking-wide truncate">
+                    {brandingData.tagline}
                   </span>
                 </div>
               </Link>
               
-              <p className="text-sm text-black dark:text-muted-foreground leading-relaxed mb-4">
-                Nurturing minds, shaping futures. For over 148 years, Royal Academy has been 
+              <p className="text-xs text-black dark:text-muted-foreground leading-relaxed mb-3">
+                Nurturing minds, shaping futures. For over 148 years, {brandingData.schoolName} has been 
                 committed to providing world-class education.
               </p>
 
-              {/* Contact Info - Compact */}
-              <div className="space-y-2">
+              {/* Contact Info - Compact for 375px */}
+              <div className="space-y-1.5">
                 <div className="flex items-center space-x-2 text-black dark:text-muted-foreground">
-                  <Phone className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-xs">+1 (555) 123-4567</span>
+                  <Phone className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="text-[11px] truncate">+1 (555) 123-4567</span>
                 </div>
                 <div className="flex items-center space-x-2 text-black dark:text-muted-foreground">
-                  <Mail className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-xs">info@royalacademy.edu</span>
+                  <Mail className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="text-[11px] truncate">info@royalacademy.edu</span>
                 </div>
               </div>
             </motion.div>
@@ -294,22 +317,22 @@ const Footer = () => {
                 <motion.img
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   transition={{ duration: 0.3 }}
-                  src={schoolLogo}
-                  alt="Royal Academy"
+                  src={brandingData.logoUrl}
+                  alt={brandingData.schoolName}
                   className="h-16 w-16 flex-shrink-0 animate-glow"
                 />
                 <div className="flex flex-col min-w-0 flex-1">
                   <span className="text-xl font-heading font-bold text-gradient-gold leading-tight">
-                    Royal Academy
+                    {brandingData.schoolName}
                   </span>
                   <span className="text-xs text-black dark:text-muted-foreground tracking-wider mt-1">
-                    Excellence in Education
+                    {brandingData.tagline}
                   </span>
                 </div>
               </Link>
               
               <p className="text-black dark:text-muted-foreground leading-relaxed mb-6">
-                Nurturing minds, shaping futures. For over 148 years, Royal Academy has been 
+                Nurturing minds, shaping futures. For over 148 years, {brandingData.schoolName} has been 
                 committed to providing world-class education and developing tomorrow's leaders.
               </p>
 
@@ -525,33 +548,31 @@ const Footer = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="border-t border-border bg-muted/10 backdrop-blur-sm"
         >
-          <div className="container-wide py-4 sm:py-6 px-4 sm:px-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
-              <div className="text-center sm:text-left">
-                <p className="text-black dark:text-muted-foreground text-xs sm:text-sm">
-                  © {currentYear} Royal Academy. All rights reserved.
+          <div className="container-wide py-3 sm:py-6 px-3 sm:px-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
+              <div className="text-center sm:text-left w-full sm:w-auto">
+                <p className="text-black dark:text-muted-foreground text-[10px] sm:text-sm">
+                  © {currentYear} {brandingData.schoolName}. All rights reserved.
                 </p>
-                <p className="text-black dark:text-muted-foreground/80 text-xs mt-1 hidden sm:block">
+                <p className="text-black dark:text-muted-foreground/80 text-[9px] sm:text-xs mt-0.5 sm:mt-1 hidden sm:block">
                   Empowering minds since 1875 • Building tomorrow's leaders today
                 </p>
               </div>
               
-              {/* Mobile: Stack links vertically, Desktop: Horizontal */}
-              <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs sm:text-sm">
-                <Link to="/privacy" className="text-black dark:text-muted-foreground hover:text-gold transition-colors">
-                  Privacy Policy
+              {/* Mobile: 2x2 grid for 375px, Desktop: Horizontal */}
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 sm:flex sm:flex-row sm:items-center sm:space-x-4 text-[10px] sm:text-sm w-full sm:w-auto">
+                <Link to="/privacy" className="text-black dark:text-muted-foreground hover:text-gold transition-colors text-center sm:text-left">
+                  Privacy
                 </Link>
-                <Link to="/terms" className="text-black dark:text-muted-foreground hover:text-gold transition-colors">
-                  Terms of Service
+                <Link to="/terms" className="text-black dark:text-muted-foreground hover:text-gold transition-colors text-center sm:text-left">
+                  Terms
                 </Link>
-                <div className="flex space-x-4 sm:contents">
-                  <Link to="/cookies" className="text-black dark:text-muted-foreground hover:text-gold transition-colors">
-                    Cookie Policy
-                  </Link>
-                  <Link to="/sitemap" className="text-black dark:text-muted-foreground hover:text-gold transition-colors">
-                    Sitemap
-                  </Link>
-                </div>
+                <Link to="/cookies" className="text-black dark:text-muted-foreground hover:text-gold transition-colors text-center sm:text-left">
+                  Cookies
+                </Link>
+                <Link to="/sitemap" className="text-black dark:text-muted-foreground hover:text-gold transition-colors text-center sm:text-left">
+                  Sitemap
+                </Link>
               </div>
             </div>
           </div>
