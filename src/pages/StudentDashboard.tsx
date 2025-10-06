@@ -176,85 +176,37 @@ const StudentDashboard = () => {
     const timetableKey = `royal-academy-timetable-${classSection}`;
     const storedTimetable = localStorage.getItem(timetableKey);
     
+    console.log('Loading timetable for:', classSection, 'Key:', timetableKey);
+    
     if (storedTimetable) {
       try {
         const timetableData = JSON.parse(storedTimetable);
+        console.log('Found timetable data:', timetableData);
+        
         if (timetableData.schedule && Array.isArray(timetableData.schedule) && timetableData.schedule.length > 0) {
-          setStudentTimetable(timetableData.schedule);
-          return;
+          // Check if all days have periods
+          const hasAnyPeriods = timetableData.schedule.some((day: any) => 
+            day.periods && day.periods.length > 0
+          );
+          
+          if (hasAnyPeriods) {
+            setStudentTimetable(timetableData.schedule);
+            console.log('Timetable loaded successfully');
+            return;
+          } else {
+            console.log('Timetable exists but all days are empty');
+            setStudentTimetable([]);
+            return;
+          }
         }
       } catch (e) {
         console.error('Error parsing timetable:', e);
       }
     }
     
-    // Fallback to default timetable if none exists or parsing failed
-    const defaultTimetable = [
-      { day: "Monday", periods: [
-        { time: "9:00-9:45", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-        { time: "9:45-10:30", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
-        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-        { time: "10:45-11:30", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-        { time: "11:30-12:15", subject: "English", teacher: "Ms. Davis", room: "102" },
-        { time: "12:15-1:00", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
-        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-        { time: "2:00-2:45", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
-        { time: "2:45-3:30", subject: "Physical Education", teacher: "Coach Miller", room: "Playground" }
-      ]},
-      { day: "Tuesday", periods: [
-        { time: "9:00-9:45", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
-        { time: "9:45-10:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-        { time: "10:45-11:30", subject: "English", teacher: "Ms. Davis", room: "102" },
-        { time: "11:30-12:15", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-        { time: "12:15-1:00", subject: "Hindi", teacher: "Mrs. Sharma", room: "103" },
-        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-        { time: "2:00-2:45", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
-        { time: "2:45-3:30", subject: "Art", teacher: "Ms. Anderson", room: "Art Room" }
-      ]},
-      { day: "Wednesday", periods: [
-        { time: "9:00-9:45", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-        { time: "9:45-10:30", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
-        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-        { time: "10:45-11:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-        { time: "11:30-12:15", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
-        { time: "12:15-1:00", subject: "English", teacher: "Ms. Davis", room: "102" },
-        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-        { time: "2:00-2:45", subject: "History", teacher: "Mr. Thompson", room: "104" },
-        { time: "2:45-3:30", subject: "Geography", teacher: "Ms. Clark", room: "105" }
-      ]},
-      { day: "Thursday", periods: [
-        { time: "9:00-9:45", subject: "English", teacher: "Ms. Davis", room: "102" },
-        { time: "9:45-10:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-        { time: "10:45-11:30", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
-        { time: "11:30-12:15", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
-        { time: "12:15-1:00", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
-        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-        { time: "2:00-2:45", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-        { time: "2:45-3:30", subject: "Music", teacher: "Ms. Roberts", room: "Music Room" }
-      ]},
-      { day: "Friday", periods: [
-        { time: "9:00-9:45", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
-        { time: "9:45-10:30", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-        { time: "10:45-11:30", subject: "English", teacher: "Ms. Davis", room: "102" },
-        { time: "11:30-12:15", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-        { time: "12:15-1:00", subject: "Physical Education", teacher: "Coach Miller", room: "Playground" },
-        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-        { time: "2:00-2:45", subject: "Hindi", teacher: "Mrs. Sharma", room: "103" },
-        { time: "2:45-3:30", subject: "Library Period", teacher: "Librarian", room: "Library" }
-      ]},
-      { day: "Saturday", periods: [
-        { time: "9:00-9:45", subject: "Extra Classes", teacher: "Various Teachers", room: "Multiple Rooms" },
-        { time: "9:45-10:30", subject: "Sports", teacher: "Coach Miller", room: "Playground" },
-        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-        { time: "10:45-11:30", subject: "Art & Craft", teacher: "Ms. Anderson", room: "Art Room" },
-        { time: "11:30-12:15", subject: "Music", teacher: "Ms. Roberts", room: "Music Room" },
-        { time: "12:15-1:00", subject: "Library Period", teacher: "Librarian", room: "Library" }
-      ]}
-    ];
-    setStudentTimetable(defaultTimetable);
+    console.log('No timetable found for this class');
+    // If no timetable exists, show empty
+    setStudentTimetable([]);
   };
 
   // Helper function to load remarks for current student
@@ -1055,15 +1007,17 @@ const StudentDashboard = () => {
                   setShowRemarksModal(true);
                 } },
                 { title: "Timetable", icon: Clock, color: "from-orange-500 to-red-500", action: () => {
-                  if (!studentData) {
+                  if (!studentData || !studentData.class || !studentData.section) {
                     alert('Please wait for student data to load');
                     return;
                   }
                   console.log('Opening timetable modal for class:', studentData.class, studentData.section);
+                  // Load timetable immediately
                   loadStudentTimetable();
+                  // Small delay to ensure state updates
                   setTimeout(() => {
                     setShowTimetableModal(true);
-                  }, 100);
+                  }, 200);
                 } },
                 { title: "Fees", icon: CreditCard, color: "from-green-500 to-emerald-500", action: () => setActiveSection("fees") },
                 { title: "Principal Audio", icon: Volume2, color: "from-indigo-500 to-purple-500", action: () => navigate('/principal-audio') },
@@ -1749,63 +1703,69 @@ const StudentDashboard = () => {
                         {daySchedule.day}
                       </h4>
                       <span className="text-xs text-muted-foreground bg-muted/30 px-3 py-1 rounded-full">
-                        {daySchedule.periods.length} periods
+                        {daySchedule.periods?.length || 0} periods
                       </span>
                     </div>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                      {daySchedule.periods.map((period: any, periodIndex: number) => (
-                        <motion.div
-                          key={periodIndex}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: dayIndex * 0.1 + periodIndex * 0.05 }}
-                          className={`p-3 rounded-lg border transition-all ${
-                            period.subject === "Break" || period.subject === "Lunch Break"
-                              ? "bg-blue-500/10 border-blue-500/30 hover:bg-blue-500/20"
-                              : "bg-card border-border/30 hover:border-gold/50 hover:shadow-md"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs font-medium text-gold flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {period.time}
-                            </span>
-                            {period.room && (
-                              <span className="text-xs text-muted-foreground bg-muted/30 px-2 py-0.5 rounded">
-                                {period.room}
+                    {daySchedule.periods && daySchedule.periods.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                        {daySchedule.periods.map((period: any, periodIndex: number) => (
+                          <motion.div
+                            key={periodIndex}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: dayIndex * 0.1 + periodIndex * 0.05 }}
+                            className={`p-3 rounded-lg border transition-all ${
+                              period.subject === "Break" || period.subject === "Lunch Break"
+                                ? "bg-blue-500/10 border-blue-500/30 hover:bg-blue-500/20"
+                                : "bg-card border-border/30 hover:border-gold/50 hover:shadow-md"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-xs font-medium text-gold flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {period.time}
                               </span>
+                              {period.room && (
+                                <span className="text-xs text-muted-foreground bg-muted/30 px-2 py-0.5 rounded">
+                                  {period.room}
+                                </span>
+                              )}
+                            </div>
+                            
+                            <h5 className={`font-semibold mb-1 text-sm ${
+                              period.subject === "Break" || period.subject === "Lunch Break"
+                                ? "text-blue-400"
+                                : "text-foreground"
+                            }`}>
+                              {period.subject}
+                            </h5>
+                            
+                            {period.teacher && (
+                              <p className="text-xs text-muted-foreground truncate" title={period.teacher}>
+                                👨‍🏫 {period.teacher}
+                              </p>
                             )}
-                          </div>
-                          
-                          <h5 className={`font-semibold mb-1 text-sm ${
-                            period.subject === "Break" || period.subject === "Lunch Break"
-                              ? "text-blue-400"
-                              : "text-foreground"
-                          }`}>
-                            {period.subject}
-                          </h5>
-                          
-                          {period.teacher && (
-                            <p className="text-xs text-muted-foreground truncate" title={period.teacher}>
-                              👨‍🏫 {period.teacher}
-                            </p>
-                          )}
-                        </motion.div>
-                      ))}
-                    </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-4">
+                        <p className="text-sm text-muted-foreground">No periods scheduled for {daySchedule.day}</p>
+                      </div>
+                    )}
                   </motion.div>
                 ))}
               </div>
             ) : (
               <div className="text-center py-12">
                 <Clock className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-                <h4 className="text-lg font-semibold text-foreground mb-2">No Timetable Available</h4>
-                <p className="text-muted-foreground">
-                  Timetable for Class {studentData.class}{studentData.section} is not available yet.
+                <h4 className="text-lg font-semibold text-foreground mb-2">No Timetable Created Yet</h4>
+                <p className="text-muted-foreground mb-2">
+                  The Principal hasn't created a timetable for Class {studentData?.class}{studentData?.section} yet.
                 </p>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Contact your class teacher or principal to set up the timetable.
+                <p className="text-sm text-muted-foreground">
+                  Please contact your Principal to create the timetable in the Timetable Manager.
                 </p>
               </div>
             )}
