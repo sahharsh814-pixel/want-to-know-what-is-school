@@ -172,11 +172,19 @@ const StudentDashboard = () => {
       const storedTimetable = localStorage.getItem(timetableKey);
       
       if (storedTimetable) {
-        const timetableData = JSON.parse(storedTimetable);
-        setStudentTimetable(timetableData.schedule || []);
-      } else {
-        // Fallback to default timetable if none exists
-        const defaultTimetable = [
+        try {
+          const timetableData = JSON.parse(storedTimetable);
+          if (timetableData.schedule && Array.isArray(timetableData.schedule) && timetableData.schedule.length > 0) {
+            setStudentTimetable(timetableData.schedule);
+            return;
+          }
+        } catch (e) {
+          console.error('Error parsing timetable:', e);
+        }
+      }
+      
+      // Fallback to default timetable if none exists or parsing failed
+      const defaultTimetable = [
           { day: "Monday", periods: [
             { time: "9:00-9:45", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
             { time: "9:45-10:30", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
@@ -242,7 +250,9 @@ const StudentDashboard = () => {
           ]}
         ];
         setStudentTimetable(defaultTimetable);
-      }
+    } else {
+      // If no student data, set empty timetable
+      setStudentTimetable([]);
     }
   };
 
@@ -1691,7 +1701,7 @@ const StudentDashboard = () => {
       )}
 
       {/* Timetable Modal */}
-      {showTimetableModal && (
+      {showTimetableModal && studentData && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -1714,7 +1724,7 @@ const StudentDashboard = () => {
               </Button>
             </div>
 
-            {studentTimetable.length > 0 ? (
+            {studentTimetable && studentTimetable.length > 0 ? (
               <div className="space-y-6">
                 {studentTimetable.map((daySchedule, dayIndex) => (
                   <motion.div
