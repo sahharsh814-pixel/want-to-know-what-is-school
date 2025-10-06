@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
 import { 
   Calendar, 
   Clock, 
@@ -462,9 +463,6 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
-    // Import subscription helper
-    const { subscribeToSupabaseChanges } = require('@/lib/supabaseHelpers');
-    
     // Check authentication with stricter validation
     const isAuth = localStorage.getItem("studentAuth");
     const currentStudent = localStorage.getItem("currentStudent");
