@@ -679,18 +679,6 @@ const StudentDashboard = () => {
     { title: "Winter Break Starts", date: "Dec 22", time: "All Day", type: "holiday" }
   ];
 
-  // Show loading screen while student data is being loaded
-  if (!studentData) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-royal border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-lg text-foreground">Loading your dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Header */}
@@ -717,10 +705,10 @@ const StudentDashboard = () => {
               </div>
               <div className="min-w-0 flex-1">
                 <h1 className="text-sm sm:text-xl font-heading font-bold text-foreground truncate">
-                  {studentProfile.name || studentData.fullName}
+                  {studentProfile.name || studentData?.fullName || "Student"}
                 </h1>
                 <p className="text-[10px] sm:text-sm text-muted-foreground hidden sm:block">
-                  Welcome back, {studentProfile.name || studentData.fullName}
+                  Welcome back, {studentProfile.name || studentData?.fullName || "Student"}
                 </p>
               </div>
             </div>
@@ -761,9 +749,9 @@ const StudentDashboard = () => {
             
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
-                <span>Class {studentData.class}{studentData.section}</span>
+                <span>Class {studentData?.class || ""}{studentData?.section || ""}</span>
                 <span>•</span>
-                <span>Roll: {studentData.rollNumber}</span>
+                <span>Roll: {studentData?.rollNumber || ""}</span>
               </div>
               
               {/* Student Notifications Bell */}
