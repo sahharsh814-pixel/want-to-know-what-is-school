@@ -1727,7 +1727,6 @@ const TeacherDashboard = () => {
               <div className="rounded-md overflow-hidden bg-border/30 sm:bg-transparent">
                 <div className="grid grid-cols-3 gap-[1px] sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 sm:gap-3 lg:gap-4">
                 {[
-                  { title: "Teach Online", desc: "Start live class", icon: Video, action: () => setShowLiveClassroom(true) },
                   { title: "Send Homework", desc: "Assign homework with photos", icon: BookOpen, action: () => setActiveSection("homework") },
                   { title: "Take Attendance", desc: "Mark student attendance", icon: CheckCircle, action: () => setActiveSection("attendance") },
                   { title: "Create Student ID", desc: "Register new students", icon: UserPlus, action: () => setActiveSection("createstudent") },

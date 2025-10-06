@@ -165,26 +165,31 @@ const StudentDashboard = () => {
 
   // Helper function to load timetable for current student
   const loadStudentTimetable = () => {
-    if (studentData) {
-      // Load timetable from Principal's system
-      const classSection = `${studentData.class}${studentData.section}`;
-      const timetableKey = `royal-academy-timetable-${classSection}`;
-      const storedTimetable = localStorage.getItem(timetableKey);
-      
-      if (storedTimetable) {
-        try {
-          const timetableData = JSON.parse(storedTimetable);
-          if (timetableData.schedule && Array.isArray(timetableData.schedule) && timetableData.schedule.length > 0) {
-            setStudentTimetable(timetableData.schedule);
-            return;
-          }
-        } catch (e) {
-          console.error('Error parsing timetable:', e);
+    if (!studentData || !studentData.class || !studentData.section) {
+      console.log('Student data not available yet');
+      setStudentTimetable([]);
+      return;
+    }
+    
+    // Load timetable from Principal's system
+    const classSection = `${studentData.class}${studentData.section}`;
+    const timetableKey = `royal-academy-timetable-${classSection}`;
+    const storedTimetable = localStorage.getItem(timetableKey);
+    
+    if (storedTimetable) {
+      try {
+        const timetableData = JSON.parse(storedTimetable);
+        if (timetableData.schedule && Array.isArray(timetableData.schedule) && timetableData.schedule.length > 0) {
+          setStudentTimetable(timetableData.schedule);
+          return;
         }
+      } catch (e) {
+        console.error('Error parsing timetable:', e);
       }
-      
-      // Fallback to default timetable if none exists or parsing failed
-      const defaultTimetable = [
+    }
+    
+    // Fallback to default timetable if none exists or parsing failed
+    const defaultTimetable = [
           { day: "Monday", periods: [
             { time: "9:00-9:45", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
             { time: "9:45-10:30", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
@@ -1040,10 +1045,6 @@ const StudentDashboard = () => {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
-                { title: "Learn Online", icon: Video, color: "from-red-500 to-pink-500", action: () => {
-                  console.log('Opening Live Class Viewer for:', studentData?.class, studentData?.section);
-                  setShowLiveClassViewer(true);
-                } },
                 { title: "View Grades", icon: BarChart3, color: "from-blue-500 to-cyan-500", action: () => setShowGradesModal(true) },
                 { title: "Assignments", icon: FileText, color: "from-green-500 to-emerald-500", action: () => {
                   loadAssignments(); // Refresh assignments when opening
@@ -1058,7 +1059,11 @@ const StudentDashboard = () => {
                   setShowRemarksModal(true);
                 } },
                 { title: "Timetable", icon: Clock, color: "from-orange-500 to-red-500", action: () => {
-                  console.log('Opening timetable modal for class:', studentData?.class, studentData?.section);
+                  if (!studentData) {
+                    alert('Please wait for student data to load');
+                    return;
+                  }
+                  console.log('Opening timetable modal for class:', studentData.class, studentData.section);
                   loadStudentTimetable();
                   setTimeout(() => {
                     setShowTimetableModal(true);
