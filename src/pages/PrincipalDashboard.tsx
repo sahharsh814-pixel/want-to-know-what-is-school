@@ -944,9 +944,10 @@ const PrincipalDashboard = () => {
               </Button>
             </div>
           </div>
-        </motion.header>
+        </div>
+      </motion.header>
 
-        <div className="container-wide py-4 sm:py-8 px-4 sm:px-6">
+      <div className="container-wide py-4 sm:py-8 px-4 sm:px-6">
           {/* Main Dashboard Content */}
           {activeSection === "dashboard" && (
             <>
