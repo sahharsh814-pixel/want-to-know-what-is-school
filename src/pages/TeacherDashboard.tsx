@@ -35,12 +35,14 @@ import {
   Upload,
   Lock,
   Image,
-  Volume2 // Import Volume2 icon for Principal Audio
+  Volume2, // Import Volume2 icon for Principal Audio
+  Video // Import Video icon for Live Teaching
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // import { textarea } from "@/components/ui/textarea";
 import StudentManager from "@/components/StudentManager";
+import LiveClassroom from "@/components/LiveClassroom";
 
 interface Student {
   id: string;
@@ -208,6 +210,7 @@ const TeacherDashboard = () => {
   const [showRemarksModal, setShowRemarksModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showLiveClassroom, setShowLiveClassroom] = useState(false);
   const [selectedStudentForReport, setSelectedStudentForReport] = useState<Student | null>(null);
   const [reportForm, setReportForm] = useState({
     reportImage: "",
@@ -1724,6 +1727,7 @@ const TeacherDashboard = () => {
               <div className="rounded-md overflow-hidden bg-border/30 sm:bg-transparent">
                 <div className="grid grid-cols-3 gap-[1px] sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 sm:gap-3 lg:gap-4">
                 {[
+                  { title: "Teach Online", desc: "Start live class", icon: Video, action: () => setShowLiveClassroom(true) },
                   { title: "Send Homework", desc: "Assign homework with photos", icon: BookOpen, action: () => setActiveSection("homework") },
                   { title: "Take Attendance", desc: "Mark student attendance", icon: CheckCircle, action: () => setActiveSection("attendance") },
                   { title: "Create Student ID", desc: "Register new students", icon: UserPlus, action: () => setActiveSection("createstudent") },
@@ -4945,6 +4949,17 @@ const TeacherDashboard = () => {
             />
           </motion.div>
         </div>
+      )}
+
+      {/* Live Classroom Modal */}
+      {showLiveClassroom && (
+        <LiveClassroom
+          teacherName={teacherName}
+          teacherEmail={teacherEmail}
+          teacherClass={selectedClass}
+          teacherSection={selectedSection}
+          onClose={() => setShowLiveClassroom(false)}
+        />
       )}
     </div>
   );
