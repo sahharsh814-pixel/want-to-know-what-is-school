@@ -34,7 +34,8 @@ import {
   Download,
   Upload,
   Lock,
-  Image
+  Image,
+  Volume2 // Import Volume2 icon for Principal Audio
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -190,7 +191,7 @@ const TeacherDashboard = () => {
     const storedEmail = localStorage.getItem("teacherEmail") || "";
     const storedName = localStorage.getItem("teacherName") || "";
     const storedSubject = localStorage.getItem("teacherSubject") || "";
-    
+
     setTeacherEmail(storedEmail);
     setTeacherName(storedName);
     setTeacherSubject(storedSubject);
@@ -271,7 +272,7 @@ const TeacherDashboard = () => {
   const [editingRemarkIndex, setEditingRemarkIndex] = useState<number>(-1);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<{src: string, title: string} | null>(null);
-  
+
   // Fee management state
   const [feeRecords, setFeeRecords] = useState<FeeRecord[]>([]);
   const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
@@ -283,7 +284,7 @@ const TeacherDashboard = () => {
     notes: ''
   });
   const [showFeeStatusModal, setShowFeeStatusModal] = useState(false);
-  
+
   // Notification state
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [notificationForm, setNotificationForm] = useState({
@@ -305,7 +306,7 @@ const TeacherDashboard = () => {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [selectedNotificationForReply, setSelectedNotificationForReply] = useState<Notification | null>(null);
   const [replyMessage, setReplyMessage] = useState('');
-  
+
   // Student notification state
   const [showStudentNotificationModal, setShowStudentNotificationModal] = useState(false);
   const [studentNotificationForm, setStudentNotificationForm] = useState({
@@ -322,13 +323,13 @@ const TeacherDashboard = () => {
   const [showSentNotificationsModal, setShowSentNotificationsModal] = useState(false);
   const [editingStudentNotification, setEditingStudentNotification] = useState<any>(null);
   const [showEditStudentNotificationModal, setShowEditStudentNotificationModal] = useState(false);
-  
+
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
   const currentYear = new Date().getFullYear();
-  
+
   // Profile state
   const [teacherProfile, setTeacherProfile] = useState({
     name: teacherName,
@@ -348,7 +349,7 @@ const TeacherDashboard = () => {
     const email = localStorage.getItem("teacherEmail");
     const name = localStorage.getItem("teacherName");
     const subject = localStorage.getItem("teacherSubject");
-    
+
     if (!isAuth || isAuth !== "true") {
       // Not authenticated: redirect to teacher login
       navigate("/teacher", { replace: true });
@@ -390,18 +391,18 @@ const TeacherDashboard = () => {
     if (storedProfile) {
       setTeacherProfile(JSON.parse(storedProfile));
     }
-    
+
     // Load fee records and payment requests
     const storedFeeRecords = localStorage.getItem('royal-academy-fee-records');
     if (storedFeeRecords) {
       setFeeRecords(JSON.parse(storedFeeRecords));
     }
-    
+
     const storedPaymentRequests = localStorage.getItem('royal-academy-payment-requests');
     if (storedPaymentRequests) {
       setPaymentRequests(JSON.parse(storedPaymentRequests));
     }
-    
+
     // Load teacher notifications (sent by this teacher)
     const storedNotifications = localStorage.getItem('royal-academy-notifications');
     if (storedNotifications) {
@@ -410,7 +411,7 @@ const TeacherDashboard = () => {
       const myNotifications = allNotifications.filter(n => n.fromId === teacherEmail);
       setTeacherNotifications(myNotifications);
     }
-    
+
     // Load sent student notifications
     const storedStudentNotifications = localStorage.getItem('royal-academy-student-notifications');
     if (storedStudentNotifications) {
@@ -446,7 +447,7 @@ const TeacherDashboard = () => {
 
   const handleImageUpload = async (files: FileList | null, type: 'homework' | 'student') => {
     if (!files) return;
-    
+
     const newImages: string[] = [];
     for (const file of Array.from(files)) {
       if (file.type.startsWith('image/')) {
@@ -458,7 +459,7 @@ const TeacherDashboard = () => {
         }
       }
     }
-    
+
     if (type === 'homework') {
       setHomeworkForm(prev => ({
         ...prev,
@@ -504,7 +505,7 @@ const TeacherDashboard = () => {
       localStorage.setItem('royal-academy-homework', JSON.stringify(updatedHomework));
       alert(`Homework "${newHomework.title}" has been sent to Class ${newHomework.class}-${newHomework.section} students!`);
     }
-    
+
     setShowHomeworkModal(false);
     setEditingHomework(null);
     setHomeworkForm({
@@ -569,10 +570,10 @@ const TeacherDashboard = () => {
               }
             : student
         );
-        
+
         setStudents(updatedStudents);
         localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
-        
+
         // Also update auth students
         const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
         const updatedAuthStudents = authStudents.map((s: any) => 
@@ -591,14 +592,14 @@ const TeacherDashboard = () => {
             : s
         );
         localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
-        
+
         alert('Student updated successfully!');
         setEditingStudentId(null);
       } else {
         // Create new student
         const studentId = `STU${Date.now().toString().slice(-6)}`;
         const defaultPassword = `${studentForm.fullName.split(' ')[0].toLowerCase()}123`;
-        
+
         const newStudent: Student = {
           id: studentId,
           name: studentForm.fullName,
@@ -617,7 +618,7 @@ const TeacherDashboard = () => {
         // Save to localStorage
         const existingStudents: Student[] = JSON.parse(localStorage.getItem('royal-academy-students') || '[]');
         localStorage.setItem('royal-academy-students', JSON.stringify([...existingStudents, newStudent]));
-        
+
         // Also save to auth students for login
         const existingAuthStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
         const authStudent = { 
@@ -631,10 +632,10 @@ const TeacherDashboard = () => {
         localStorage.setItem('royal-academy-auth-students', JSON.stringify([...existingAuthStudents, authStudent]));
 
         alert(`Student account created successfully!\n\nLogin Credentials:\nEmail: ${studentForm.email}\nPassword: ${defaultPassword}\nStudent ID: ${studentId}`);
-        
+
         setStudents(prev => [...prev, newStudent]);
       }
-      
+
       setActiveSection('students');
       setStudentForm({
         fullName: "",
@@ -656,13 +657,13 @@ const TeacherDashboard = () => {
   // Take attendance
   const handleTakeAttendance = () => {
     const classStudents = students.filter(s => s.class === selectedClass && s.section === selectedSection);
-    
+
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     const dateStr = `${year}-${month}-${day}`;
-    
+
     const attendanceRecord: AttendanceRecord = {
       id: Date.now().toString(),
       date: dateStr,
@@ -679,7 +680,7 @@ const TeacherDashboard = () => {
     const updatedAttendance = [...attendanceRecords, attendanceRecord];
     setAttendanceRecords(updatedAttendance);
     localStorage.setItem('royal-academy-attendance', JSON.stringify(updatedAttendance));
-    
+
     // Update student attendance records in main students array
     const updatedStudents = students.map(student => {
       if (student.class === selectedClass && student.section === selectedSection) {
@@ -698,10 +699,10 @@ const TeacherDashboard = () => {
       }
       return student;
     });
-    
+
     setStudents(updatedStudents);
     localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
-    
+
     // Critical: Update auth students for student dashboard access
     const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
     const updatedAuthStudents = authStudents.map((authStudent: any) => {
@@ -720,7 +721,7 @@ const TeacherDashboard = () => {
       return authStudent;
     });
     localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
-    
+
     console.log('Attendance updated:', {
       date: dateStr,
       studentsUpdated: classStudents.length,
@@ -728,7 +729,7 @@ const TeacherDashboard = () => {
         classStudents.some(cs => cs.id === s.studentId || cs.email === s.email)
       ).length
     });
-    
+
     alert(`Attendance taken for Class ${selectedClass}-${selectedSection}!`);
     setCurrentAttendance({});
     setAttendanceRemarks({});
@@ -739,10 +740,10 @@ const TeacherDashboard = () => {
     const updatedStudents = students.map(student => {
       if (student.id === studentId) {
         let updatedAttendance = [...(student.attendance || [])];
-        
+
         // Find existing attendance record for this date
         const existingIndex = updatedAttendance.findIndex(a => a.date === selectedEditDate);
-        
+
         if (status === 'remove') {
           // Remove attendance record
           if (existingIndex !== -1) {
@@ -755,7 +756,7 @@ const TeacherDashboard = () => {
             status: status,
             remarks: ''
           };
-          
+
           if (existingIndex !== -1) {
             // Update existing record
             updatedAttendance[existingIndex] = attendanceRecord;
@@ -764,7 +765,7 @@ const TeacherDashboard = () => {
             updatedAttendance.push(attendanceRecord);
           }
         }
-        
+
         return {
           ...student,
           attendance: updatedAttendance
@@ -772,10 +773,10 @@ const TeacherDashboard = () => {
       }
       return student;
     });
-    
+
     setStudents(updatedStudents);
     localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
-    
+
     // Critical: Update auth students for student dashboard access with comprehensive matching
     const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
     const updatedAuthStudents = authStudents.map((authStudent: any) => {
@@ -796,7 +797,7 @@ const TeacherDashboard = () => {
       return authStudent;
     });
     localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
-    
+
     console.log('Edit day attendance updated:', {
       date: selectedEditDate,
       studentId,
@@ -805,11 +806,11 @@ const TeacherDashboard = () => {
         s.studentId === studentId || s.id === studentId
       )
     });
-    
+
     // Show success message
     const studentName = students.find(s => s.id === studentId)?.name || 'Student';
     const dateStr = new Date(selectedEditDate).toLocaleDateString();
-    
+
     if (status === 'remove') {
       alert(`Attendance removed for ${studentName} on ${dateStr}`);
     } else {
@@ -829,7 +830,7 @@ const TeacherDashboard = () => {
       alert('Student not found in teacher\'s student list');
       return;
     }
-    
+
 
     const remarkData = {
       id: editingRemark ? editingRemark.id : Date.now().toString(),
@@ -843,7 +844,7 @@ const TeacherDashboard = () => {
     const updatedStudents = students.map(student => {
       if (student.id === targetStudent.id) {
         let updatedRemarks = [...(student.remarks || [])];
-        
+
         if (editingRemark && editingRemarkIndex >= 0) {
           // Update existing remark
           updatedRemarks[editingRemarkIndex] = remarkData;
@@ -851,7 +852,7 @@ const TeacherDashboard = () => {
           // Add new remark
           updatedRemarks.push(remarkData);
         }
-        
+
         return {
           ...student,
           remarks: updatedRemarks
@@ -862,13 +863,13 @@ const TeacherDashboard = () => {
 
     setStudents(updatedStudents);
     localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
-    
+
     // Also update auth students for student dashboard access
     const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
     console.log('Updating auth students for remarks sync...');
     console.log('Target student:', targetStudent);
     console.log('Current auth students:', authStudents);
-    
+
     // Find and update the auth student record
     let authStudentUpdated = false;
     const updatedAuthStudents = authStudents.map((authStudent: any) => {
@@ -881,7 +882,7 @@ const TeacherDashboard = () => {
         authStudent.fullName === targetStudent.name ||
         authStudent.name === targetStudent.fullName ||
         authStudent.rollNumber === targetStudent.rollNumber;
-        
+
       if (isMatch) {
         console.log('Found matching auth student, updating remarks...');
         authStudentUpdated = true;
@@ -892,7 +893,7 @@ const TeacherDashboard = () => {
       }
       return authStudent;
     });
-    
+
     // If no auth student was found, create one
     if (!authStudentUpdated) {
       console.log('No matching auth student found, creating new one...');
@@ -910,12 +911,12 @@ const TeacherDashboard = () => {
       updatedAuthStudents.push(newAuthStudent);
       console.log('Created new auth student:', newAuthStudent);
     }
-    
+
     localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
     console.log('Updated auth students saved:', updatedAuthStudents);
-    
+
     alert(`${remarksForm.type === 'good' ? 'Good' : 'Bad'} remark ${editingRemark ? 'updated' : 'added'} for ${targetStudent.name}!`);
-    
+
     setShowRemarksModal(false);
     setEditingRemark(null);
     setEditingRemarkIndex(-1);
@@ -957,7 +958,7 @@ const TeacherDashboard = () => {
 
       setStudents(updatedStudents);
       localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
-      
+
       // Also update auth students with comprehensive matching
       const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
       const updatedAuthStudents = authStudents.map((authStudent: any) => {
@@ -979,7 +980,7 @@ const TeacherDashboard = () => {
       });
       localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
       console.log('Auth students updated after remark deletion:', updatedAuthStudents);
-      
+
       alert('Remark deleted successfully!');
     }
   };
@@ -1027,7 +1028,7 @@ const TeacherDashboard = () => {
     localStorage.setItem('royal-academy-student-reports', JSON.stringify(updatedReports));
 
     alert(`Report sent to ${selectedStudentForReport.name} successfully!`);
-    
+
     // Reset form
     setReportForm({ reportImage: "", notes: "", subject: "" });
     setSelectedStudentForReport(null);
@@ -1081,7 +1082,7 @@ const TeacherDashboard = () => {
     localStorage.setItem('royal-academy-fee-records', JSON.stringify(updatedFeeRecords));
 
     alert(`Payment request created for ${selectedStudentForPayment.name}!\nAmount: ₹${paymentForm.amount}\nMonths: ${paymentForm.months.join(', ')}`);
-    
+
     // Reset form
     setPaymentForm({ amount: '', months: [], notes: '' });
     setSelectedStudentForPayment(null);
@@ -1093,7 +1094,7 @@ const TeacherDashboard = () => {
     const pendingMonths = studentFees.filter(fee => fee.status === 'pending').map(fee => fee.month);
     const paidMonths = studentFees.filter(fee => fee.status === 'paid').map(fee => fee.month);
     const totalPending = studentFees.filter(fee => fee.status === 'pending').reduce((sum, fee) => sum + fee.amount, 0);
-    
+
     return {
       pendingMonths,
       paidMonths,
@@ -1121,7 +1122,7 @@ const TeacherDashboard = () => {
       timestamp: new Date().toISOString()
     };
     localStorage.setItem('payment-redirect-info', JSON.stringify(paymentInfo));
-    
+
     // Navigate to student auth with payment flag
     navigate('/student-auth?action=payment');
   };
@@ -1156,7 +1157,7 @@ const TeacherDashboard = () => {
     localStorage.setItem('royal-academy-notifications', JSON.stringify(updatedNotifications));
 
     alert(`Notification sent to Principal successfully!\nSubject: ${notificationForm.subject}`);
-    
+
     // Reset form
     setNotificationForm({ subject: '', message: '', photo1: '', photo2: '' });
     setShowNotificationModal(false);
@@ -1318,7 +1319,7 @@ const TeacherDashboard = () => {
     }
 
     alert(`Notification sent to ${targetDescription} successfully!\nSubject: ${studentNotificationForm.subject}`);
-    
+
     // Reset form
     setStudentNotificationForm({
       subject: '',
@@ -1331,7 +1332,7 @@ const TeacherDashboard = () => {
       photo2: ''
     });
     setShowStudentNotificationModal(false);
-    
+
     // Reload sent notifications
     const updatedSentNotifications = [...sentStudentNotifications, newStudentNotification];
     setSentStudentNotifications(updatedSentNotifications);
@@ -1448,7 +1449,7 @@ const TeacherDashboard = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Navigation & Actions - Mobile Optimized */}
             <div className="flex flex-col lg:flex-row lg:items-center space-y-3 lg:space-y-0 lg:space-x-6">
               {/* Royal Navigation - Hidden on Mobile */}
@@ -1484,10 +1485,10 @@ const TeacherDashboard = () => {
                   Gallery
                 </button>
               </div>
-              
+
               {/* Action Buttons Container - Mobile Optimized */}
               <div className="flex items-center justify-center lg:justify-end space-x-1 sm:space-x-2 w-full lg:w-auto">
-              
+
               {/* Teacher Notifications Bell */}
               <div className="relative">
                 <Button
@@ -1503,14 +1504,14 @@ const TeacherDashboard = () => {
                     </span>
                   )}
                 </Button>
-                
+
                 {/* Teacher Notifications Dropdown */}
                 {showTeacherNotifications && (
                   <div className="absolute right-0 top-full mt-2 w-80 bg-card border border-border rounded-lg shadow-lg z-50 max-h-96 overflow-hidden">
                     <div className="p-4 border-b border-border">
                       <h3 className="font-semibold text-foreground">My Notifications & Replies</h3>
                     </div>
-                    
+
                     <div className="max-h-80 overflow-y-auto">
                       {teacherNotifications.length === 0 ? (
                         <div className="p-4 text-center text-muted-foreground">
@@ -1531,7 +1532,7 @@ const TeacherDashboard = () => {
                               To: {notification.toName} • {new Date(notification.createdAt).toLocaleDateString()}
                             </p>
                             <p className="text-xs text-muted-foreground mb-2">{notification.message}</p>
-                            
+
                             {notification.replies && notification.replies.length > 0 && (
                               <div className="mt-2 p-2 bg-green-500/10 rounded border-l-2 border-green-500">
                                 <p className="text-xs font-medium text-green-400 mb-1">Principal Reply:</p>
@@ -1541,7 +1542,7 @@ const TeacherDashboard = () => {
                                 </p>
                               </div>
                             )}
-                            
+
                             {/* Action Buttons */}
                             <div className="flex items-center space-x-2 mt-2">
                               <Button
@@ -1579,7 +1580,7 @@ const TeacherDashboard = () => {
                   </div>
                 )}
               </div>
-              
+
                 {/* Notify Students Button */}
                 <Button
                   variant="outline"
@@ -1591,7 +1592,7 @@ const TeacherDashboard = () => {
                   <span className="hidden lg:inline font-medium">Notify Students</span>
                   <span className="hidden sm:inline lg:hidden text-xs font-medium ml-1">Notify</span>
                 </Button>
-                
+
                 {/* Manage Sent Button */}
                 <Button
                   variant="outline"
@@ -1608,7 +1609,7 @@ const TeacherDashboard = () => {
                     </span>
                   )}
                 </Button>
-                
+
                 {/* Notify Principal Button */}
                 <Button
                   variant="outline"
@@ -1620,7 +1621,7 @@ const TeacherDashboard = () => {
                   <span className="hidden lg:inline font-medium">Notify Principal</span>
                   <span className="hidden sm:inline lg:hidden text-xs font-medium ml-1">Principal</span>
                 </Button>
-              
+
                 {/* Logout Button - Mobile Optimized */}
                 <Button
                   variant="outline"
@@ -1729,6 +1730,7 @@ const TeacherDashboard = () => {
                   { title: "View Students", desc: "Manage student records", icon: Users, action: () => setActiveSection("students") },
                   { title: "Add Remarks", desc: "Give good/bad remarks", icon: MessageSquare, action: () => setActiveSection("remarks") },
                   { title: "Fee Management", desc: "Manage student fees", icon: CreditCard, action: () => setActiveSection("fees") },
+                  { title: "Principal Audio", desc: "Listen to Principal messages", icon: Volume2, action: () => navigate('/principal-audio') },
                   { title: "View Teachers", desc: "Manage all teachers", icon: Users, action: () => navigate('/manage-teachers') },
                   { title: "Profile", desc: "Manage your profile", icon: User, action: () => setActiveSection("profile") }
                 ].map((item, index) => (
@@ -1845,7 +1847,7 @@ const TeacherDashboard = () => {
                     <span>Due: {hw.dueDate}</span>
                     <span>{hw.attachments.length} attachments</span>
                   </div>
-                  
+
                   {/* Action Buttons */}
                   <div className="flex space-x-2 pt-2 border-t border-border/30">
                     <Button
@@ -2248,7 +2250,7 @@ const TeacherDashboard = () => {
                           );
                           setStudents(updatedStudents);
                           localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
-                          
+
                           // Also update auth students
                           const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
                           const updatedAuthStudents = authStudents.map((s: any) => 
@@ -2257,7 +2259,7 @@ const TeacherDashboard = () => {
                               : s
                           );
                           localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
-                          
+
                           alert(`Student ${student.status === 'banned' ? 'unbanned' : 'banned'} successfully!`);
                         }}
                         title={student.status === 'banned' ? 'Unban Student' : 'Ban Student'}
@@ -2269,7 +2271,7 @@ const TeacherDashboard = () => {
                       >
                         {student.status === 'banned' ? 'Unban' : 'Ban'}
                       </Button>
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"
@@ -2292,7 +2294,7 @@ const TeacherDashboard = () => {
                       >
                         Edit
                       </Button>
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"
@@ -2301,12 +2303,12 @@ const TeacherDashboard = () => {
                             const updatedStudents = students.filter(s => s.id !== student.id);
                             setStudents(updatedStudents);
                             localStorage.setItem('royal-academy-students', JSON.stringify(updatedStudents));
-                            
+
                             // Also remove from auth students
                             const authStudents = JSON.parse(localStorage.getItem('royal-academy-auth-students') || '[]');
                             const updatedAuthStudents = authStudents.filter((s: any) => s.studentId !== student.id);
                             localStorage.setItem('royal-academy-auth-students', JSON.stringify(updatedAuthStudents));
-                            
+
                             alert(`Student ${student.name} deleted successfully!`);
                           }
                         }}
@@ -2435,7 +2437,7 @@ const TeacherDashboard = () => {
                     </span>
                   )}
                 </div>
-                
+
                 {getClassStudents().length > 0 ? (
                   <>
                     {getClassStudents().map((student) => (
@@ -2540,14 +2542,14 @@ const TeacherDashboard = () => {
                       Class {selectedClass}-{selectedSection}
                     </div>
                   </div>
-                  
+
                   {getClassStudents().length > 0 ? (
                     <>
                       {getClassStudents().map((student) => {
                         // Get existing attendance for this date
                         const existingAttendance = student.attendance?.find(a => a.date === selectedEditDate);
                         const currentStatus = existingAttendance?.status || 'not-marked';
-                        
+
                         return (
                           <div key={student.id} className="flex items-center justify-between p-4 bg-muted/20 rounded-lg border border-border/30">
                             <div className="flex items-center space-x-3">
@@ -2653,7 +2655,7 @@ const TeacherDashboard = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 {getClassStudents().length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="min-w-full text-xs">
@@ -2679,7 +2681,7 @@ const TeacherDashboard = () => {
                               const dateStr = date.toISOString().split('T')[0];
                               const isHoliday = date.getDay() === 0 || holidays.includes(dateStr);
                               const attendance = student.attendance?.find(a => a.date === dateStr);
-                              
+
                               return (
                                 <td key={dayIndex} className="text-center py-2 px-1">
                                   {isHoliday ? (
@@ -2716,7 +2718,7 @@ const TeacherDashboard = () => {
               <div className="space-y-4">
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-4">Manage Holidays</h3>
-                  
+
                   {/* Add Holiday */}
                   <div className="flex gap-2 mb-4">
                     <input
@@ -2921,7 +2923,7 @@ const TeacherDashboard = () => {
                         alert('Maximum 6 images allowed per remark');
                         return;
                       }
-                      
+
                       // Convert all files to base64
                       Promise.all(files.map(file => convertToBase64(file)))
                         .then(base64Images => {
@@ -2932,9 +2934,9 @@ const TeacherDashboard = () => {
                         });
                     }
                   }}
-                  className="w-full p-3 border border-border rounded-lg bg-background"
+                  className="w-full p-3 border border-border rounded-lg bg-background text-foreground"
                 />
-                
+
                 {/* Image Preview Grid */}
                 {remarksForm.images.length > 0 && (
                   <div className="mt-4">
@@ -3023,7 +3025,7 @@ const TeacherDashboard = () => {
                     Add New Remark
                   </Button>
                 </div>
-                
+
                 {/* Instructions */}
                 <div className="mb-4 p-4 bg-blue-500/10 rounded-lg border border-blue-500/30">
                   <h4 className="font-semibold text-blue-400 mb-2">📝 How to Edit Remarks | रिमार्क कैसे एडिट करें</h4>
@@ -3079,13 +3081,13 @@ const TeacherDashboard = () => {
                           </Button>
                         </div>
                       </div>
-                      
+
                       <p className={`text-sm mb-2 ${
                         remark.type === 'good' ? 'text-green-100' : 'text-red-100'
                       }`}>
                         {remark.message}
                       </p>
-                      
+
                       {/* Multiple Images Display */}
                       {((remark.images && remark.images.length > 0) || remark.image) && (
                         <div className="mb-2">
@@ -3115,7 +3117,7 @@ const TeacherDashboard = () => {
                           )}
                         </div>
                       )}
-                      
+
                       <div className="text-xs text-muted-foreground">
                         Subject: {remark.subject || 'General'}
                       </div>
@@ -3210,7 +3212,7 @@ const TeacherDashboard = () => {
                       : 0;
                     const goodRemarks = student.remarks.filter(r => r.type === 'good').length;
                     const badRemarks = student.remarks.filter(r => r.type === 'bad').length;
-                    
+
                     return (
                       <motion.div
                         key={student.id}
@@ -3239,17 +3241,17 @@ const TeacherDashboard = () => {
                               {attendanceRate}%
                             </span>
                           </div>
-                          
+
                           <div className="flex justify-between items-center">
                             <span className="text-sm text-muted-foreground">Good Remarks</span>
                             <span className="text-sm font-medium text-green-500">{goodRemarks}</span>
                           </div>
-                          
+
                           <div className="flex justify-between items-center">
                             <span className="text-sm text-muted-foreground">Areas to Improve</span>
                             <span className="text-sm font-medium text-red-500">{badRemarks}</span>
                           </div>
-                          
+
                           <div className="flex justify-between items-center">
                             <span className="text-sm text-muted-foreground">Overall Grade</span>
                             <span className={`text-sm font-bold px-2 py-1 rounded ${
@@ -3364,7 +3366,7 @@ const TeacherDashboard = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center">
@@ -3378,7 +3380,7 @@ const TeacherDashboard = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
@@ -3397,7 +3399,7 @@ const TeacherDashboard = () => {
           {/* Students Fee Status */}
           <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
             <h3 className="text-lg font-semibold text-foreground mb-4">Students Fee Status</h3>
-            
+
             {/* Class and Section Filter */}
             <div className="flex space-x-4 mb-6">
               <div>
@@ -3446,7 +3448,7 @@ const TeacherDashboard = () => {
                           </p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-4">
                         <div className="text-right">
                           <p className="text-sm font-medium text-foreground">
@@ -3456,7 +3458,7 @@ const TeacherDashboard = () => {
                             {feeStatus.pendingMonths.length} months due
                           </p>
                         </div>
-                        
+
                         <div className="flex space-x-2">
                           <Button
                             variant="outline"
@@ -3469,7 +3471,7 @@ const TeacherDashboard = () => {
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </Button>
-                          
+
                           <Button
                             variant="outline"
                             size="sm"
@@ -3481,7 +3483,7 @@ const TeacherDashboard = () => {
                             <CreditCard className="h-4 w-4 mr-1" />
                             Request Payment
                           </Button>
-                          
+
                           {feeStatus.pendingMonths.length > 0 && (
                             <Button
                               size="sm"
@@ -3495,7 +3497,7 @@ const TeacherDashboard = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Fee Status Details */}
                     {(feeStatus.pendingMonths.length > 0 || feeStatus.paidMonths.length > 0) && (
                       <div className="mt-4 pt-4 border-t border-border/30">
@@ -3517,7 +3519,7 @@ const TeacherDashboard = () => {
                               </div>
                             </div>
                           )}
-                          
+
                           {feeStatus.paidMonths.length > 0 && (
                             <div>
                               <p className="text-sm font-medium text-green-400 mb-2">
@@ -3541,7 +3543,7 @@ const TeacherDashboard = () => {
                   </div>
                 );
               })}
-              
+
               {getClassStudents().length === 0 && (
                 <div className="text-center py-8">
                   <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
@@ -3594,7 +3596,7 @@ const TeacherDashboard = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="flex space-x-2">
                     <Button
                       variant="outline"
@@ -3615,7 +3617,7 @@ const TeacherDashboard = () => {
                       <Camera className="h-4 w-4 mr-2" />
                       Upload Photo
                     </Button>
-                    
+
                     {teacherProfile.photo && (
                       <Button
                         variant="destructive"
@@ -3632,7 +3634,7 @@ const TeacherDashboard = () => {
               {/* Profile Information Section */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-foreground">Profile Information</h3>
-                
+
                 <div>
                   <label className="block text-sm font-medium mb-2">Full Name</label>
                   <Input
@@ -4024,7 +4026,7 @@ const TeacherDashboard = () => {
                       </div>
                     ))
                   }
-                  
+
                   {feeRecords.filter(fee => fee.studentId === selectedStudentForPayment.id).length === 0 && (
                     <div className="text-center py-8">
                       <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
@@ -4067,7 +4069,7 @@ const TeacherDashboard = () => {
                       </div>
                     ))
                   }
-                  
+
                   {paymentRequests.filter(req => req.studentId === selectedStudentForPayment.id).length === 0 && (
                     <div className="text-center py-4">
                       <p className="text-muted-foreground text-sm">No payment requests found</p>
@@ -4319,7 +4321,7 @@ const TeacherDashboard = () => {
                             </span>
                           </div>
                         </div>
-                        
+
                         {/* Action Buttons */}
                         <div className="flex items-center space-x-2 ml-4">
                           <Button
@@ -4642,7 +4644,7 @@ const TeacherDashboard = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1">Photo 2</label>
                     <input
@@ -4800,7 +4802,7 @@ const TeacherDashboard = () => {
                           reader.readAsDataURL(file);
                         }
                       }}
-                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                     {notificationForm.photo1 && (
                       <div className="mt-2 relative">
@@ -4819,7 +4821,7 @@ const TeacherDashboard = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1">Photo 2</label>
                     <input
@@ -4836,7 +4838,7 @@ const TeacherDashboard = () => {
                           reader.readAsDataURL(file);
                         }
                       }}
-                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                     {notificationForm.photo2 && (
                       <div className="mt-2 relative">

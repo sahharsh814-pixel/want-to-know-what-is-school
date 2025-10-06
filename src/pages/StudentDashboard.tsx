@@ -22,7 +22,8 @@ import {
   DollarSign,
   CheckCircle,
   AlertCircle,
-  Calendar as CalendarIcon
+  Calendar as CalendarIcon,
+  Volume2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1059,6 +1060,7 @@ const StudentDashboard = () => {
                   setShowTimetableModal(true);
                 } },
                 { title: "Fees", icon: CreditCard, color: "from-green-500 to-emerald-500", action: () => setActiveSection("fees") },
+                { title: "Principal Audio", icon: Volume2, color: "from-indigo-500 to-purple-500", action: () => navigate('/principal-audio') },
                 { title: "Principal Remarks", icon: Star, color: "from-yellow-500 to-orange-500", action: () => setShowPrincipalRemarksModal(true) },
                 { title: "Profile", icon: User, color: "from-teal-500 to-blue-500", action: () => setActiveSection("profile") }
               ].map((action, index) => (

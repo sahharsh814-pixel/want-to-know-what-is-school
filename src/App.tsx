@@ -56,12 +56,13 @@ import TeacherProfileSettings from "./pages/TeacherProfileSettings";
 import StudentProfileSettings from "./pages/StudentProfileSettings";
 import CoursesManagement from "./pages/CoursesManagement";
 import Courses from "./pages/Courses";
+import PrincipalAudioMessages from "@/pages/PrincipalAudioMessages";
 
 const queryClient = new QueryClient();
 
 function AnimatedRoutes() {
   const location = useLocation();
-  
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
@@ -554,6 +555,48 @@ function AnimatedRoutes() {
             <CoursesManagement />
           </motion.div>
         } />
+        <Route 
+          path="/principal-audio" 
+          element={
+            (() => {
+              const isTeacherAuth = localStorage.getItem("teacherAuth") === "true";
+              const isStudentAuth = localStorage.getItem("studentAuth") === "true";
+              const teacherEmail = localStorage.getItem("teacherEmail") || "";
+              const studentEmail = localStorage.getItem("studentEmail") || "";
+
+              if (isTeacherAuth) {
+                return <PrincipalAudioMessages userEmail={teacherEmail} userType="teacher" />;
+              } else if (isStudentAuth) {
+                const currentStudent = localStorage.getItem("currentStudent");
+                let userClass = "";
+                let userSection = "";
+                let userId = "";
+
+                if (currentStudent) {
+                  try {
+                    const student = JSON.parse(currentStudent);
+                    userClass = student.class || "";
+                    userSection = student.section || "";
+                    userId = student.studentId || student.id || "";
+                  } catch (e) {
+                    console.error("Error parsing student data:", e);
+                  }
+                }
+
+                return <PrincipalAudioMessages 
+                  userEmail={studentEmail} 
+                  userType="student" 
+                  userClass={userClass}
+                  userSection={userSection}
+                  userId={userId}
+                />;
+              } else {
+                window.location.href = "/";
+                return null;
+              }
+            })()
+          } 
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
