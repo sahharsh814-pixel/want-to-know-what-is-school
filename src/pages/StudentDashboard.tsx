@@ -1006,19 +1006,7 @@ const StudentDashboard = () => {
                   }, 100);
                   setShowRemarksModal(true);
                 } },
-                { title: "Timetable", icon: Clock, color: "from-orange-500 to-red-500", action: () => {
-                  if (!studentData || !studentData.class || !studentData.section) {
-                    alert('Please wait for student data to load');
-                    return;
-                  }
-                  console.log('Opening timetable modal for class:', studentData.class, studentData.section);
-                  // Load timetable immediately
-                  loadStudentTimetable();
-                  // Small delay to ensure state updates
-                  setTimeout(() => {
-                    setShowTimetableModal(true);
-                  }, 200);
-                } },
+                { title: "Timetable", icon: Clock, color: "from-orange-500 to-red-500", action: () => navigate('/student-timetable') },
                 { title: "Fees", icon: CreditCard, color: "from-green-500 to-emerald-500", action: () => setActiveSection("fees") },
                 { title: "Principal Audio", icon: Volume2, color: "from-indigo-500 to-purple-500", action: () => navigate('/principal-audio') },
                 { title: "Principal Remarks", icon: Star, color: "from-yellow-500 to-orange-500", action: () => setShowPrincipalRemarksModal(true) },
