@@ -190,76 +190,71 @@ const StudentDashboard = () => {
     
     // Fallback to default timetable if none exists or parsing failed
     const defaultTimetable = [
-          { day: "Monday", periods: [
-            { time: "9:00-9:45", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-            { time: "9:45-10:30", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
-            { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-            { time: "10:45-11:30", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-            { time: "11:30-12:15", subject: "English", teacher: "Ms. Davis", room: "102" },
-            { time: "12:15-1:00", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
-            { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-            { time: "2:00-2:45", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
-            { time: "2:45-3:30", subject: "Physical Education", teacher: "Coach Miller", room: "Playground" }
-          ]},
-          { day: "Tuesday", periods: [
-            { time: "9:00-9:45", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
-            { time: "9:45-10:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-            { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-            { time: "10:45-11:30", subject: "English", teacher: "Ms. Davis", room: "102" },
-            { time: "11:30-12:15", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-            { time: "12:15-1:00", subject: "Hindi", teacher: "Mrs. Sharma", room: "103" },
-            { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-            { time: "2:00-2:45", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
-            { time: "2:45-3:30", subject: "Art", teacher: "Ms. Anderson", room: "Art Room" }
-          ]},
-          { day: "Wednesday", periods: [
-            { time: "9:00-9:45", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-            { time: "9:45-10:30", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
-            { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-            { time: "10:45-11:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-            { time: "11:30-12:15", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
-            { time: "12:15-1:00", subject: "English", teacher: "Ms. Davis", room: "102" },
-            { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-            { time: "2:00-2:45", subject: "History", teacher: "Mr. Thompson", room: "104" },
-            { time: "2:45-3:30", subject: "Geography", teacher: "Ms. Clark", room: "105" }
-          ]},
-          { day: "Thursday", periods: [
-            { time: "9:00-9:45", subject: "English", teacher: "Ms. Davis", room: "102" },
-            { time: "9:45-10:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-            { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-            { time: "10:45-11:30", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
-            { time: "11:30-12:15", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
-            { time: "12:15-1:00", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
-            { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-            { time: "2:00-2:45", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-            { time: "2:45-3:30", subject: "Music", teacher: "Ms. Roberts", room: "Music Room" }
-          ]},
-          { day: "Friday", periods: [
-            { time: "9:00-9:45", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
-            { time: "9:45-10:30", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
-            { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-            { time: "10:45-11:30", subject: "English", teacher: "Ms. Davis", room: "102" },
-            { time: "11:30-12:15", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
-            { time: "12:15-1:00", subject: "Physical Education", teacher: "Coach Miller", room: "Playground" },
-            { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
-            { time: "2:00-2:45", subject: "Hindi", teacher: "Mrs. Sharma", room: "103" },
-            { time: "2:45-3:30", subject: "Library Period", teacher: "Librarian", room: "Library" }
-          ]},
-          { day: "Saturday", periods: [
-            { time: "9:00-9:45", subject: "Extra Classes", teacher: "Various Teachers", room: "Multiple Rooms" },
-            { time: "9:45-10:30", subject: "Sports", teacher: "Coach Miller", room: "Playground" },
-            { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
-            { time: "10:45-11:30", subject: "Art & Craft", teacher: "Ms. Anderson", room: "Art Room" },
-            { time: "11:30-12:15", subject: "Music", teacher: "Ms. Roberts", room: "Music Room" },
-            { time: "12:15-1:00", subject: "Library Period", teacher: "Librarian", room: "Library" }
-          ]}
-        ];
-        setStudentTimetable(defaultTimetable);
-      }
-    } else {
-      // If no student data, set empty timetable
-      setStudentTimetable([]);
-    }
+      { day: "Monday", periods: [
+        { time: "9:00-9:45", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
+        { time: "9:45-10:30", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
+        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
+        { time: "10:45-11:30", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
+        { time: "11:30-12:15", subject: "English", teacher: "Ms. Davis", room: "102" },
+        { time: "12:15-1:00", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
+        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
+        { time: "2:00-2:45", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
+        { time: "2:45-3:30", subject: "Physical Education", teacher: "Coach Miller", room: "Playground" }
+      ]},
+      { day: "Tuesday", periods: [
+        { time: "9:00-9:45", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
+        { time: "9:45-10:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
+        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
+        { time: "10:45-11:30", subject: "English", teacher: "Ms. Davis", room: "102" },
+        { time: "11:30-12:15", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
+        { time: "12:15-1:00", subject: "Hindi", teacher: "Mrs. Sharma", room: "103" },
+        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
+        { time: "2:00-2:45", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
+        { time: "2:45-3:30", subject: "Art", teacher: "Ms. Anderson", room: "Art Room" }
+      ]},
+      { day: "Wednesday", periods: [
+        { time: "9:00-9:45", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
+        { time: "9:45-10:30", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
+        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
+        { time: "10:45-11:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
+        { time: "11:30-12:15", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
+        { time: "12:15-1:00", subject: "English", teacher: "Ms. Davis", room: "102" },
+        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
+        { time: "2:00-2:45", subject: "History", teacher: "Mr. Thompson", room: "104" },
+        { time: "2:45-3:30", subject: "Geography", teacher: "Ms. Clark", room: "105" }
+      ]},
+      { day: "Thursday", periods: [
+        { time: "9:00-9:45", subject: "English", teacher: "Ms. Davis", room: "102" },
+        { time: "9:45-10:30", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
+        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
+        { time: "10:45-11:30", subject: "Physics", teacher: "Prof. Johnson", room: "Lab-1" },
+        { time: "11:30-12:15", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
+        { time: "12:15-1:00", subject: "Computer Science", teacher: "Mr. Wilson", room: "Computer Lab" },
+        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
+        { time: "2:00-2:45", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
+        { time: "2:45-3:30", subject: "Music", teacher: "Ms. Roberts", room: "Music Room" }
+      ]},
+      { day: "Friday", periods: [
+        { time: "9:00-9:45", subject: "Biology", teacher: "Dr. Taylor", room: "Lab-3" },
+        { time: "9:45-10:30", subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-2" },
+        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
+        { time: "10:45-11:30", subject: "English", teacher: "Ms. Davis", room: "102" },
+        { time: "11:30-12:15", subject: "Mathematics", teacher: "Dr. Smith", room: "101" },
+        { time: "12:15-1:00", subject: "Physical Education", teacher: "Coach Miller", room: "Playground" },
+        { time: "1:00-2:00", subject: "Lunch Break", teacher: "", room: "" },
+        { time: "2:00-2:45", subject: "Hindi", teacher: "Mrs. Sharma", room: "103" },
+        { time: "2:45-3:30", subject: "Library Period", teacher: "Librarian", room: "Library" }
+      ]},
+      { day: "Saturday", periods: [
+        { time: "9:00-9:45", subject: "Extra Classes", teacher: "Various Teachers", room: "Multiple Rooms" },
+        { time: "9:45-10:30", subject: "Sports", teacher: "Coach Miller", room: "Playground" },
+        { time: "10:30-10:45", subject: "Break", teacher: "", room: "" },
+        { time: "10:45-11:30", subject: "Art & Craft", teacher: "Ms. Anderson", room: "Art Room" },
+        { time: "11:30-12:15", subject: "Music", teacher: "Ms. Roberts", room: "Music Room" },
+        { time: "12:15-1:00", subject: "Library Period", teacher: "Librarian", room: "Library" }
+      ]}
+    ];
+    setStudentTimetable(defaultTimetable);
   };
 
   // Helper function to load remarks for current student
