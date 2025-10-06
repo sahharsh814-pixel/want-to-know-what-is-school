@@ -11,13 +11,18 @@ export async function getSupabaseData<T>(key: string, defaultValue: T): Promise<
       .from('app_state')
       .select('value')
       .eq('key', key)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.warn(`[Supabase] Error fetching ${key}:`, error.message);
       // Fallback to localStorage
       const localData = localStorage.getItem(key);
-      return localData ? JSON.parse(localData) : defaultValue;
+      if (localData) {
+        return JSON.parse(localData);
+      }
+      // Initialize with default value in Supabase
+      await setSupabaseData(key, defaultValue);
+      return defaultValue;
     }
 
     if (data && data.value) {
@@ -29,12 +34,23 @@ export async function getSupabaseData<T>(key: string, defaultValue: T): Promise<
 
     // If no data in Supabase, check localStorage
     const localData = localStorage.getItem(key);
-    return localData ? JSON.parse(localData) : defaultValue;
+    if (localData) {
+      return JSON.parse(localData);
+    }
+    
+    // Initialize with default value in Supabase
+    await setSupabaseData(key, defaultValue);
+    return defaultValue;
   } catch (err) {
     console.error(`[Supabase] Exception fetching ${key}:`, err);
     // Fallback to localStorage
     const localData = localStorage.getItem(key);
-    return localData ? JSON.parse(localData) : defaultValue;
+    if (localData) {
+      return JSON.parse(localData);
+    }
+    // Initialize with default value in Supabase
+    await setSupabaseData(key, defaultValue);
+    return defaultValue;
   }
 }
 
