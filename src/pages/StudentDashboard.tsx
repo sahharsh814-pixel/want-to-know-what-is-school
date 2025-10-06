@@ -2390,13 +2390,15 @@ const StudentDashboard = () => {
 
       {/* Live Class Viewer Modal */}
       {showLiveClassViewer && studentData && (
-        <LiveClassViewer
-          studentClass={studentData.class}
-          studentSection={studentData.section}
-          studentName={studentData.fullName}
-          studentId={studentData.id}
-          onClose={() => setShowLiveClassViewer(false)}
-        />
+        <div className="fixed inset-0 z-50">
+          <LiveClassViewer
+            studentClass={studentData.class}
+            studentSection={studentData.section}
+            studentName={studentData.fullName}
+            studentId={studentData.id}
+            onClose={() => setShowLiveClassViewer(false)}
+          />
+        </div>
       )}
     </div>
   );
