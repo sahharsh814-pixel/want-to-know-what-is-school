@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
+import LearnOnline from "@/components/LearnOnline";
 import { 
   Calendar, 
   Clock, 
@@ -24,7 +25,8 @@ import {
   CheckCircle,
   AlertCircle,
   Calendar as CalendarIcon,
-  Volume2
+  Volume2,
+  Video
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -121,6 +123,7 @@ const StudentDashboard = () => {
   // Student notifications state
   const [studentNotifications, setStudentNotifications] = useState<any[]>([]);
   const [showStudentNotifications, setShowStudentNotifications] = useState(false);
+  const [showLearnOnline, setShowLearnOnline] = useState(false);
   
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -1029,6 +1032,7 @@ const StudentDashboard = () => {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
+                { title: "Learn Online", icon: Video, color: "from-red-500 to-pink-500", action: () => setShowLearnOnline(true) },
                 { title: "View Grades", icon: BarChart3, color: "from-blue-500 to-cyan-500", action: () => setShowGradesModal(true) },
                 { title: "Assignments", icon: FileText, color: "from-green-500 to-emerald-500", action: () => {
                   loadAssignments(); // Refresh assignments when opening
@@ -2384,6 +2388,17 @@ const StudentDashboard = () => {
             )}
           </motion.div>
         </div>
+      )}
+
+      {/* Learn Online Modal */}
+      {showLearnOnline && studentData && (
+        <LearnOnline
+          studentId={studentData.id}
+          studentName={studentData.fullName}
+          studentClass={studentData.class}
+          studentSection={studentData.section}
+          onClose={() => setShowLearnOnline(false)}
+        />
       )}
     </div>
   );

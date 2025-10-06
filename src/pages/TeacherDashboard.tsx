@@ -35,12 +35,14 @@ import {
   Upload,
   Lock,
   Image,
-  Volume2 // Import Volume2 icon for Principal Audio
+  Volume2,
+  Video
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // import { textarea } from "@/components/ui/textarea";
 import StudentManager from "@/components/StudentManager";
+import TeachOnline from "@/components/TeachOnline";
 
 interface Student {
   id: string;
@@ -272,6 +274,7 @@ const TeacherDashboard = () => {
   const [editingRemarkIndex, setEditingRemarkIndex] = useState<number>(-1);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<{src: string, title: string} | null>(null);
+  const [showTeachOnline, setShowTeachOnline] = useState(false);
 
   // Fee management state
   const [feeRecords, setFeeRecords] = useState<FeeRecord[]>([]);
@@ -1724,6 +1727,7 @@ const TeacherDashboard = () => {
               <div className="rounded-md overflow-hidden bg-border/30 sm:bg-transparent">
                 <div className="grid grid-cols-3 gap-[1px] sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 sm:gap-3 lg:gap-4">
                 {[
+                  { title: "Teach Online", desc: "Start live class", icon: Video, action: () => setShowTeachOnline(true), featured: true },
                   { title: "Send Homework", desc: "Assign homework with photos", icon: BookOpen, action: () => setActiveSection("homework") },
                   { title: "Take Attendance", desc: "Mark student attendance", icon: CheckCircle, action: () => setActiveSection("attendance") },
                   { title: "Create Student ID", desc: "Register new students", icon: UserPlus, action: () => setActiveSection("createstudent") },
@@ -4945,6 +4949,17 @@ const TeacherDashboard = () => {
             />
           </motion.div>
         </div>
+      )}
+
+      {/* Teach Online Modal */}
+      {showTeachOnline && (
+        <TeachOnline
+          teacherId={teacherEmail}
+          teacherName={teacherName}
+          assignedClass={selectedClass}
+          assignedSection={selectedSection}
+          onClose={() => setShowTeachOnline(false)}
+        />
       )}
     </div>
   );
