@@ -69,12 +69,20 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
   };
 
   const filterMessagesForUser = (allMessages: AudioMessage[]) => {
+    // Get additional user info for better matching
+    const teacherEmail = userType === 'teacher' ? userEmail : '';
+    const teacherName = userType === 'teacher' ? localStorage.getItem('teacherName') || '' : '';
+    const studentId = userType === 'student' ? userId : '';
+    const studentName = userType === 'student' ? (JSON.parse(localStorage.getItem('currentStudent') || '{}').name || '') : '';
+    
     console.log('[PrincipalAudioMessages] Filtering messages. User info:', { 
       userEmail, 
       userType, 
       userClass, 
       userSection, 
       userId,
+      teacherName,
+      studentName,
       totalMessages: allMessages.length 
     });
     
@@ -110,18 +118,28 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
         return true;
       }
       
-      // Individual teacher
-      if (message.recipientType === 'individual_teacher' && userType === 'teacher' && 
-          (message.recipientId === userEmail || message.recipientId === userId)) {
-        console.log('[PrincipalAudioMessages] Individual teacher message matched:', message.id);
-        return true;
+      // Individual teacher - check all possible matching fields
+      if (message.recipientType === 'individual_teacher' && userType === 'teacher') {
+        const isMatch = message.recipientId === userEmail || 
+                       message.recipientId === userId ||
+                       message.recipientName === teacherEmail ||
+                       message.recipientName === teacherName;
+        if (isMatch) {
+          console.log('[PrincipalAudioMessages] Individual teacher message matched:', message.id);
+          return true;
+        }
       }
       
-      // Individual student
-      if (message.recipientType === 'individual_student' && userType === 'student' && 
-          (message.recipientId === userId || message.recipientId === userEmail)) {
-        console.log('[PrincipalAudioMessages] Individual student message matched:', message.id);
-        return true;
+      // Individual student - check all possible matching fields
+      if (message.recipientType === 'individual_student' && userType === 'student') {
+        const isMatch = message.recipientId === userId || 
+                       message.recipientId === userEmail ||
+                       message.recipientId === studentId ||
+                       message.recipientName === studentName;
+        if (isMatch) {
+          console.log('[PrincipalAudioMessages] Individual student message matched:', message.id);
+          return true;
+        }
       }
       
       return false;
