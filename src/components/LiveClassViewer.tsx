@@ -44,6 +44,8 @@ const LiveClassViewer = ({ studentClass, studentSection, studentName, studentId,
   useEffect(() => {
     const loadClasses = () => {
       const broadcasts = JSON.parse(localStorage.getItem('royal-academy-live-broadcasts') || '[]');
+      console.log('[LiveClassViewer] All broadcasts:', broadcasts);
+      console.log('[LiveClassViewer] Looking for class:', studentClass, 'section:', studentSection);
       
       // Filter to show only classes for this student's class and section
       const myClasses = broadcasts.filter((b: LiveBroadcast) => 
@@ -52,6 +54,7 @@ const LiveClassViewer = ({ studentClass, studentSection, studentName, studentId,
         b.isActive
       );
       
+      console.log('[LiveClassViewer] My classes:', myClasses);
       setAvailableClasses(myClasses);
       
       // Check if currently joined class ended

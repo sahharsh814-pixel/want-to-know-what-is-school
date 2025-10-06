@@ -1040,7 +1040,10 @@ const StudentDashboard = () => {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
-                { title: "Learn Online", icon: Video, color: "from-red-500 to-pink-500", action: () => setShowLiveClassViewer(true) },
+                { title: "Learn Online", icon: Video, color: "from-red-500 to-pink-500", action: () => {
+                  console.log('Opening Live Class Viewer for:', studentData?.class, studentData?.section);
+                  setShowLiveClassViewer(true);
+                } },
                 { title: "View Grades", icon: BarChart3, color: "from-blue-500 to-cyan-500", action: () => setShowGradesModal(true) },
                 { title: "Assignments", icon: FileText, color: "from-green-500 to-emerald-500", action: () => {
                   loadAssignments(); // Refresh assignments when opening
@@ -1055,8 +1058,11 @@ const StudentDashboard = () => {
                   setShowRemarksModal(true);
                 } },
                 { title: "Timetable", icon: Clock, color: "from-orange-500 to-red-500", action: () => {
+                  console.log('Opening timetable modal for class:', studentData?.class, studentData?.section);
                   loadStudentTimetable();
-                  setShowTimetableModal(true);
+                  setTimeout(() => {
+                    setShowTimetableModal(true);
+                  }, 100);
                 } },
                 { title: "Fees", icon: CreditCard, color: "from-green-500 to-emerald-500", action: () => setActiveSection("fees") },
                 { title: "Principal Audio", icon: Volume2, color: "from-indigo-500 to-purple-500", action: () => navigate('/principal-audio') },
@@ -1702,11 +1708,11 @@ const StudentDashboard = () => {
 
       {/* Timetable Modal */}
       {showTimetableModal && studentData && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-card rounded-xl p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto border border-border/50"
+            className="bg-card rounded-xl p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto border border-border/50 shadow-2xl"
           >
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -2400,7 +2406,7 @@ const StudentDashboard = () => {
 
       {/* Live Class Viewer Modal */}
       {showLiveClassViewer && studentData && (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-[100]">
           <LiveClassViewer
             studentClass={studentData.class}
             studentSection={studentData.section}
