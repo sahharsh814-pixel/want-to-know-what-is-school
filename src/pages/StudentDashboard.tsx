@@ -679,7 +679,17 @@ const StudentDashboard = () => {
     { title: "Winter Break Starts", date: "Dec 22", time: "All Day", type: "holiday" }
   ];
 
-  // Removed loading screen - dashboard loads instantly now
+  // Show loading screen while student data is being loaded
+  if (!studentData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-royal border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg text-foreground">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
