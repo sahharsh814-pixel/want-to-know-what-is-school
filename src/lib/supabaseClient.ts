@@ -8,8 +8,8 @@ import { createClient } from '@supabase/supabase-js'
 const _env = (import.meta as any).env ?? {}
 
 // User-provided public creds (anon key is safe for client usage)
-const FALLBACK_SUPABASE_URL = 'https://rqcurvueraeqhvenohba.supabase.co'
-const FALLBACK_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxY3VydnVlcmFlcWh2ZW5vaGJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3OTAwODgsImV4cCI6MjA3MTM2NjA4OH0.LxIxkkoWAQKpnpNoQQEq8d7GuL07UXY4AO2coMAxlms'
+const FALLBACK_SUPABASE_URL = 'https://hnrbccdlqnganfgixnru.supabase.co'
+const FALLBACK_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhucmJjY2RscW5nYW5mZ2l4bnJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMjU4OTAsImV4cCI6MjA3MDkwMTg5MH0.0Efr-jKFb80T22zaXyPB_i7wLBY4zgwoIfy2_ILrnzg'
 
 export const supabaseUrl: string = _env.VITE_SUPABASE_URL ?? FALLBACK_SUPABASE_URL
 export const supabaseAnonKey: string = _env.VITE_SUPABASE_ANON_KEY ?? FALLBACK_SUPABASE_ANON_KEY
