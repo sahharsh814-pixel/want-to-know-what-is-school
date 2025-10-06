@@ -2394,8 +2394,8 @@ const StudentDashboard = () => {
       )}
 
       {/* Learn Online Modal */}
-      <AnimatePresence>
-        {showLearnOnline && studentData && (
+      {showLearnOnline && studentData && (
+        <AnimatePresence mode="wait">
           <LearnOnline
             studentId={studentData.id}
             studentName={studentData.fullName}
@@ -2403,8 +2403,8 @@ const StudentDashboard = () => {
             studentSection={studentData.section}
             onClose={() => setShowLearnOnline(false)}
           />
-        )}
-      </AnimatePresence>
+        </AnimatePresence>
+      )}
     </div>
   );
 };
