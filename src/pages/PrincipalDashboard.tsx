@@ -2006,6 +2006,7 @@ const PrincipalDashboard = () => {
               </div>
             </motion.div>
           )}
+
           {activeSection === "manageteacherid" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
