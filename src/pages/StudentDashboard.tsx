@@ -24,12 +24,14 @@ import {
   CheckCircle,
   AlertCircle,
   Calendar as CalendarIcon,
-  Volume2
+  Volume2,
+  Video
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import DocumentViewer from "@/components/DocumentViewer";
+import LiveClassViewer from "@/components/LiveClassViewer";
 
 interface StudentData {
   id: string;
@@ -92,6 +94,7 @@ const StudentDashboard = () => {
   const [showGradesModal, setShowGradesModal] = useState(false);
   const [showAttendanceModal, setShowAttendanceModal] = useState(false);
   const [studentReports, setStudentReports] = useState<StudentReport[]>([]);
+  const [showLiveClassViewer, setShowLiveClassViewer] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<{src: string, title: string} | null>(null);
   const [customHolidays, setCustomHolidays] = useState<string[]>([]);
@@ -1027,6 +1030,7 @@ const StudentDashboard = () => {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
+                { title: "Learn Online", icon: Video, color: "from-red-500 to-pink-500", action: () => setShowLiveClassViewer(true) },
                 { title: "View Grades", icon: BarChart3, color: "from-blue-500 to-cyan-500", action: () => setShowGradesModal(true) },
                 { title: "Assignments", icon: FileText, color: "from-green-500 to-emerald-500", action: () => {
                   loadAssignments(); // Refresh assignments when opening
@@ -2382,6 +2386,17 @@ const StudentDashboard = () => {
             )}
           </motion.div>
         </div>
+      )}
+
+      {/* Live Class Viewer Modal */}
+      {showLiveClassViewer && studentData && (
+        <LiveClassViewer
+          studentClass={studentData.class}
+          studentSection={studentData.section}
+          studentName={studentData.fullName}
+          studentId={studentData.id}
+          onClose={() => setShowLiveClassViewer(false)}
+        />
       )}
     </div>
   );
