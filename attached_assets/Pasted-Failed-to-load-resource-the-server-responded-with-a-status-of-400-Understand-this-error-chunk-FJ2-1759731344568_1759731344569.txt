@@ -1,0 +1,62 @@
+Failed to load resource: the server responded with a status of 400 ()Understand this error
+chunk-FJ2A54M7.js?v=6076053e:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+supabaseClient.ts:23 [supabaseClient] Falling back to provided public Supabase credentials. Configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment for production.
+(anonymous) @ supabaseClient.ts:23Understand this warning
+:5000/:1 <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">Understand this warning
+react-router-dom.js?v=6076053e:4393 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+warnOnce @ react-router-dom.js?v=6076053e:4393Understand this warning
+react-router-dom.js?v=6076053e:4393 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+warnOnce @ react-router-dom.js?v=6076053e:4393Understand this warning
+StudentAuth.tsx:29 === LOGIN ATTEMPT ===
+StudentAuth.tsx:30 Trying to login with: Object
+StudentAuth.tsx:31 Available students in royal-academy-students: Array(1)
+StudentAuth.tsx:32 Available auth students in royal-academy-auth-students: Array(1)
+StudentAuth.tsx:51 Checking auth student: Object Object
+StudentAuth.tsx:87 Found student: Object
+StudentAuth.tsx:97 [StudentAuth] Login successful, auth set for: harsh.kr1025@gmail.com
+2StudentDashboard.tsx:2397 Uncaught ReferenceError: AnimatePresence is not defined
+    at StudentDashboard (StudentDashboard.tsx:2397:8)
+    at renderWithHooks (chunk-FJ2A54M7.js?v=6076053e:11548:26)
+    at mountIndeterminateComponent (chunk-FJ2A54M7.js?v=6076053e:14926:21)
+    at beginWork (chunk-FJ2A54M7.js?v=6076053e:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-FJ2A54M7.js?v=6076053e:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-FJ2A54M7.js?v=6076053e:3699:24)
+    at invokeGuardedCallback (chunk-FJ2A54M7.js?v=6076053e:3733:39)
+    at beginWork$1 (chunk-FJ2A54M7.js?v=6076053e:19765:15)
+    at performUnitOfWork (chunk-FJ2A54M7.js?v=6076053e:19198:20)
+    at workLoopSync (chunk-FJ2A54M7.js?v=6076053e:19137:13)Understand this error
+chunk-FJ2A54M7.js?v=6076053e:14032 The above error occurred in the <StudentDashboard> component:
+
+    at StudentDashboard (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/src/pages/StudentDashboard.tsx:34:43)
+    at div
+    at MotionComponent (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=6076053e:945:40)
+    at ProtectedRoute (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/src/components/ProtectedRoute.tsx:24:27)
+    at RenderedRoute (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=6076053e:4088:5)
+    at Routes (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=6076053e:4558:5)
+    at PresenceChild (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=6076053e:121:24)
+    at AnimatePresence (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/framer-motion.js?v=6076053e:210:26)
+    at AnimatedRoutes (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/src/App.tsx:84:22)
+    at Router (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=6076053e:4501:15)
+    at BrowserRouter (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/react-router-dom.js?v=6076053e:5247:5)
+    at Provider (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/chunk-O2CNVHOO.js?v=6076053e:22:15)
+    at TooltipProvider (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=6076053e:58:5)
+    at O (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/next-themes.js?v=6076053e:23:25)
+    at z (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/next-themes.js?v=6076053e:21:18)
+    at ThemeProvider (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/src/components/ThemeProvider.tsx:23:33)
+    at QueryClientProvider (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/node_modules/.vite/deps/@tanstack_react-query.js?v=6076053e:2934:3)
+    at App (https://5fd1bd76-58de-4324-a65f-9152279bb10c-00-3nhehti2i5svs.riker.replit.dev:5000/src/App.tsx:2867:5)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-FJ2A54M7.js?v=6076053e:14032Understand this error
+chunk-FJ2A54M7.js?v=6076053e:19413 Uncaught ReferenceError: AnimatePresence is not defined
+    at StudentDashboard (StudentDashboard.tsx:2397:8)
+    at renderWithHooks (chunk-FJ2A54M7.js?v=6076053e:11548:26)
+    at mountIndeterminateComponent (chunk-FJ2A54M7.js?v=6076053e:14926:21)
+    at beginWork (chunk-FJ2A54M7.js?v=6076053e:15914:22)
+    at beginWork$1 (chunk-FJ2A54M7.js?v=6076053e:19753:22)
+    at performUnitOfWork (chunk-FJ2A54M7.js?v=6076053e:19198:20)
+    at workLoopSync (chunk-FJ2A54M7.js?v=6076053e:19137:13)
+    at renderRootSync (chunk-FJ2A54M7.js?v=6076053e:19116:15)
+    at recoverFromConcurrentError (chunk-FJ2A54M7.js?v=6076053e:18736:28)
+    at performConcurrentWorkOnRoot (chunk-FJ2A54M7.js?v=6076053e:18684:30)Understand this error
