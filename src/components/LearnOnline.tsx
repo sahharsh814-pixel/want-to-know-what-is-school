@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Maximize, Minimize, Volume2, VolumeX, Loader2, Users } from "lucide-react";
+import { X, Maximize, Minimize, Volume2, VolumeX, Loader2, Users, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { getSupabaseData, setSupabaseData, subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
