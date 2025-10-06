@@ -707,10 +707,10 @@ const StudentDashboard = () => {
               </div>
               <div className="min-w-0 flex-1">
                 <h1 className="text-sm sm:text-xl font-heading font-bold text-foreground truncate">
-                  {studentProfile.name || studentData.fullName}
+                  {studentProfile.name || studentData?.fullName || 'Student'}
                 </h1>
                 <p className="text-[10px] sm:text-sm text-muted-foreground hidden sm:block">
-                  Welcome back, {studentProfile.name || studentData.fullName}
+                  Welcome back, {studentProfile.name || studentData?.fullName || 'Student'}
                 </p>
               </div>
             </div>
@@ -751,9 +751,9 @@ const StudentDashboard = () => {
             
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
-                <span>Class {studentData.class}{studentData.section}</span>
+                <span>Class {studentData?.class}{studentData?.section}</span>
                 <span>•</span>
-                <span>Roll: {studentData.rollNumber}</span>
+                <span>Roll: {studentData?.rollNumber}</span>
               </div>
               
               {/* Student Notifications Bell */}
