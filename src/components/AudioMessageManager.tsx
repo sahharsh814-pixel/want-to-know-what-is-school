@@ -465,8 +465,8 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
                       value={messageForm.recipientId}
                       onChange={(e) => {
                         const student = students.find(s => s.id === e.target.value);
-                        // Store student ID for better matching
-                        const studentId = student?.id || student?.email || e.target.value;
+                        // Store student email or ID for better matching
+                        const studentId = student?.email || student?.id || e.target.value;
                         setMessageForm({ ...messageForm, recipientId: studentId, recipientName: student?.name || student?.fullName || '' });
                       }}
                       className="w-full p-3 border border-border rounded-lg bg-background"
@@ -489,8 +489,8 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
                       value={messageForm.recipientId}
                       onChange={(e) => {
                         const teacher = teachers.find(t => t.id === e.target.value);
-                        // Store both teacher ID and email for better matching
-                        const teacherId = teacher?.id || teacher?.email || e.target.value;
+                        // Store teacher email as primary ID for better matching
+                        const teacherId = teacher?.email || teacher?.id || e.target.value;
                         setMessageForm({ ...messageForm, recipientId: teacherId, recipientName: teacher?.name || '' });
                       }}
                       className="w-full p-3 border border-border rounded-lg bg-background"
