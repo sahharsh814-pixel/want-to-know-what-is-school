@@ -11,6 +11,7 @@ const TeacherLogin = () => {
   const [teacherId, setTeacherId] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const navigate = useNavigate();
 
   // If already authenticated, redirect to dashboard
@@ -18,6 +19,8 @@ const TeacherLogin = () => {
     const isAuth = localStorage.getItem("teacherAuth");
     if (isAuth === "true") {
       navigate("/teacher-dashboard", { replace: true });
+    } else {
+      setIsCheckingAuth(false);
     }
   }, [navigate]);
 
@@ -61,6 +64,15 @@ const TeacherLogin = () => {
     setIsLoading(false);
   };
 
+
+  // Show loading spinner while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-royal via-royal/90 to-gold/20 flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-gold/30 border-t-gold rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-royal via-royal/90 to-gold/20 flex items-center justify-center p-4">
