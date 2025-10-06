@@ -42,10 +42,11 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
   useEffect(() => {
     loadMessages();
     
-    // Subscribe to real-time changes
+    // Subscribe to real-time changes for cross-port synchronization
     const unsubscribe = subscribeToSupabaseChanges<AudioMessage[]>(
       'royal-academy-audio-messages',
       (newData) => {
+        console.log('[PrincipalAudioMessages] Received realtime update, syncing across ports');
         filterMessagesForUser(newData);
       }
     );

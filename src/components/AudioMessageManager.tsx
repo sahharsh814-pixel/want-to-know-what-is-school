@@ -32,7 +32,7 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
   const [audioUrl, setAudioUrl] = useState<string>("");
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
-  
+
   const [messageForm, setMessageForm] = useState({
     subject: '',
     description: '',
@@ -45,7 +45,7 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
 
   const [students, setStudents] = useState<any[]>([]);
   const [teachers, setTeachers] = useState<any[]>([]);
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
@@ -53,15 +53,17 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
   useEffect(() => {
     loadMessages();
     loadStudentsAndTeachers();
-    
+
+    // Real-time subscription ensures audio messages sync across all ports (5000, 5001, etc.)
     const unsubMessages = subscribeToSupabaseChanges<AudioMessage[]>(
       'royal-academy-audio-messages',
       (newData) => {
+        console.log('[AudioMessageManager] Received realtime update from Supabase, syncing across ports');
         const myMessages = newData.filter(m => m.senderId === principalEmail);
         setMessages(myMessages);
       }
     );
-    
+
     return () => {
       unsubMessages();
     };
@@ -158,7 +160,7 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64Audio = reader.result as string;
-        
+
         const newMessage: AudioMessage = {
           id: Date.now().toString(),
           senderId: principalEmail,
@@ -177,14 +179,16 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
         };
 
         const allMessages = await getSupabaseData<AudioMessage[]>('royal-academy-audio-messages', []);
+        // Save to Supabase - this will sync across all ports (5000, 5001, etc.)
+        console.log('[AudioMessageManager] Saving audio message to Supabase for cross-port sync');
         await setSupabaseData('royal-academy-audio-messages', [...allMessages, newMessage]);
-        
+
         setMessages(prev => [...prev, newMessage]);
         resetForm();
         setShowCreateModal(false);
         alert('Audio message sent successfully!');
       };
-      
+
       reader.readAsDataURL(audioBlob);
     } catch (error) {
       console.error('[AudioMessageManager] Error sending message:', error);
@@ -194,10 +198,12 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
 
   const handleDeleteMessage = async (messageId: string) => {
     if (!confirm('Are you sure you want to delete this audio message?')) return;
-    
+
     try {
       const allMessages = await getSupabaseData<AudioMessage[]>('royal-academy-audio-messages', []);
       const updated = allMessages.filter(m => m.id !== messageId);
+      // Delete from Supabase - this will sync deletion across all ports
+      console.log('[AudioMessageManager] Deleting audio message from Supabase, syncing across ports');
       await setSupabaseData('royal-academy-audio-messages', updated);
       setMessages(prev => prev.filter(m => m.id !== messageId));
       alert('Audio message deleted successfully!');
@@ -272,7 +278,7 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
   return (
     <div className="space-y-6">
       <audio ref={audioPlayerRef} onEnded={() => setPlayingMessageId(null)} className="hidden" />
-      
+
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -495,7 +501,7 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
                 {/* Audio Recording/Upload */}
                 <div className="border-2 border-dashed border-border rounded-lg p-6 space-y-4">
                   <p className="text-sm font-medium">Audio Message *</p>
-                  
+
                   <div className="flex gap-3">
                     {!isRecording && !audioBlob && (
                       <>
