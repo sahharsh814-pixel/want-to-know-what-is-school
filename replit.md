@@ -68,6 +68,9 @@ Preferred communication style: Simple, everyday language.
 - `royal-academy-courses` - Course catalog
 - `royal-academy-top-scorers` - Student achievements
 - `royal-academy-pricing` - Tuition pricing (monthly/yearly)
+- `royal-academy-academics` - Academics page content (departments, achievements)
+- `royal-academy-facilities` - Facilities page content (facilities, stats)
+- `royal-academy-audio-messages` - Principal audio messages with base64 audio data
 
 **Data Flow**
 1. User action triggers state update in React component
@@ -107,3 +110,41 @@ Preferred communication style: Simple, everyday language.
 **Hosting & Deployment**
 - Vercel configuration (vercel.json) with SPA rewrite rules
 - Static site deployment with client-side routing fallback
+
+## Recent Changes
+
+### Audio Messaging System (October 2025)
+Added comprehensive audio messaging feature for Principal-to-Student/Teacher communication:
+
+**Features:**
+- Audio recording via browser MediaRecorder API or file upload
+- Multi-tier recipient selection:
+  - Whole school (all teachers and students)
+  - All teachers or all students
+  - Specific class (all students in that class)
+  - Specific section (all students in class + section)
+  - Individual student or teacher
+- Playback controls with adjustable speed (0.5x to 2x)
+- Message deletion capability
+- Real-time synchronization via Supabase
+
+**Technical Implementation:**
+- Component: `AudioMessageManager.tsx`
+- Storage: Audio files encoded as base64 and stored in Supabase (following existing binary data pattern)
+- Integration: Quick action button in Principal Dashboard
+- Data key: `royal-academy-audio-messages`
+
+**Note:** Audio files are stored as base64-encoded strings in JSON, consistent with how the application handles all binary data (images, documents). This approach ensures compatibility with the existing key-value storage architecture.
+
+### Content Management Systems
+Added Academics and Facilities page managers in Principal Dashboard:
+
+**AcademicsManager:**
+- Manage academic departments with descriptions
+- Track student achievements and milestones
+- Full CRUD operations with Supabase sync
+
+**FacilitiesManager:**
+- Manage school facilities with images and descriptions
+- Track facility statistics (library books, labs, sports facilities)
+- Full CRUD operations with Supabase sync
