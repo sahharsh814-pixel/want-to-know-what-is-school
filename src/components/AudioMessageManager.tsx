@@ -178,10 +178,13 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
           createdAt: new Date().toISOString()
         };
 
+        console.log('[AudioMessageManager] Creating new message:', newMessage);
         const allMessages = await getSupabaseData<AudioMessage[]>('royal-academy-audio-messages', []);
+        console.log('[AudioMessageManager] Current messages before save:', allMessages.length);
         // Save to Supabase - this will sync across all ports (5000, 5001, etc.)
         console.log('[AudioMessageManager] Saving audio message to Supabase for cross-port sync');
         await setSupabaseData('royal-academy-audio-messages', [...allMessages, newMessage]);
+        console.log('[AudioMessageManager] Message saved successfully');
 
         setMessages(prev => [...prev, newMessage]);
         resetForm();

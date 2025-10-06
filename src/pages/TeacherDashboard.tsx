@@ -1730,7 +1730,10 @@ const TeacherDashboard = () => {
                   { title: "View Students", desc: "Manage student records", icon: Users, action: () => setActiveSection("students") },
                   { title: "Add Remarks", desc: "Give good/bad remarks", icon: MessageSquare, action: () => setActiveSection("remarks") },
                   { title: "Fee Management", desc: "Manage student fees", icon: CreditCard, action: () => setActiveSection("fees") },
-                  { title: "Principal Audio", desc: "Listen to Principal messages", icon: Volume2, action: () => navigate('/principal-audio') },
+                  { title: "Principal Audio", desc: "Listen to Principal messages", icon: Volume2, action: () => {
+                    console.log('[TeacherDashboard] Navigating to principal audio with teacher info:', { teacherEmail, teacherName });
+                    navigate('/principal-audio');
+                  } },
                   { title: "View Teachers", desc: "Manage all teachers", icon: Users, action: () => navigate('/manage-teachers') },
                   { title: "Profile", desc: "Manage your profile", icon: User, action: () => setActiveSection("profile") }
                 ].map((item, index) => (

@@ -47,6 +47,7 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
       'royal-academy-audio-messages',
       (newData) => {
         console.log('[PrincipalAudioMessages] Received realtime update, syncing across ports');
+        console.log('[PrincipalAudioMessages] New data:', newData);
         filterMessagesForUser(newData);
       }
     );
@@ -58,7 +59,9 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
 
   const loadMessages = async () => {
     try {
+      console.log('[PrincipalAudioMessages] Loading messages for:', { userEmail, userType, userClass, userSection, userId });
       const allMessages = await getSupabaseData<AudioMessage[]>('royal-academy-audio-messages', []);
+      console.log('[PrincipalAudioMessages] All messages loaded:', allMessages);
       filterMessagesForUser(allMessages);
     } catch (error) {
       console.error('[PrincipalAudioMessages] Error loading messages:', error);
@@ -66,48 +69,65 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
   };
 
   const filterMessagesForUser = (allMessages: AudioMessage[]) => {
+    console.log('[PrincipalAudioMessages] Filtering messages. User info:', { 
+      userEmail, 
+      userType, 
+      userClass, 
+      userSection, 
+      userId,
+      totalMessages: allMessages.length 
+    });
+    
     const filtered = allMessages.filter(message => {
       // Whole school messages
       if (message.recipientType === 'whole_school') {
+        console.log('[PrincipalAudioMessages] Whole school message matched:', message.id);
         return true;
       }
       
       // All teachers
       if (message.recipientType === 'all_teachers' && userType === 'teacher') {
+        console.log('[PrincipalAudioMessages] All teachers message matched:', message.id);
         return true;
       }
       
       // All students
       if (message.recipientType === 'all_students' && userType === 'student') {
+        console.log('[PrincipalAudioMessages] All students message matched:', message.id);
         return true;
       }
       
       // Specific class (for students)
       if (message.recipientType === 'class' && userType === 'student' && message.recipientClass === userClass) {
+        console.log('[PrincipalAudioMessages] Class message matched:', message.id);
         return true;
       }
       
       // Specific section (for students)
       if (message.recipientType === 'section' && userType === 'student' && 
           message.recipientClass === userClass && message.recipientSection === userSection) {
+        console.log('[PrincipalAudioMessages] Section message matched:', message.id);
         return true;
       }
       
       // Individual teacher
       if (message.recipientType === 'individual_teacher' && userType === 'teacher' && 
           (message.recipientId === userEmail || message.recipientId === userId)) {
+        console.log('[PrincipalAudioMessages] Individual teacher message matched:', message.id);
         return true;
       }
       
       // Individual student
       if (message.recipientType === 'individual_student' && userType === 'student' && 
           (message.recipientId === userId || message.recipientId === userEmail)) {
+        console.log('[PrincipalAudioMessages] Individual student message matched:', message.id);
         return true;
       }
       
       return false;
     });
     
+    console.log('[PrincipalAudioMessages] Filtered messages:', filtered.length, 'out of', allMessages.length);
     setMessages(filtered);
   };
 
