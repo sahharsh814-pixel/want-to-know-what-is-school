@@ -24,7 +24,8 @@ import {
   GraduationCap,
   MessageSquare,
   Star,
-  Send
+  Send,
+  Volume2
 } from "lucide-react";
 import { Button } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,7 @@ import EventsManager from "@/components/EventsManager";
 import CategoryManager from "@/components/CategoryManager";
 import AcademicsManager from "@/components/AcademicsManager";
 import FacilitiesManager from "@/components/FacilitiesManager";
+import AudioMessageManager from "@/components/AudioMessageManager";
 import { getSupabaseData, setSupabaseData, subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
 
 // Notification interfaces
@@ -129,7 +131,7 @@ interface TeacherRecord {
 const PrincipalDashboard = () => {
   const [principalEmail, setPrincipalEmail] = useState("");
   // Restore active section from sessionStorage on mount
-  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager" | "branding" | "events" | "categories" | "academicsmanager" | "facilitiesmanager">(() => {
+  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager" | "branding" | "events" | "categories" | "academicsmanager" | "facilitiesmanager" | "audiomessages">(() => {
     const saved = sessionStorage.getItem('principalActiveSection');
     return (saved as any) || "dashboard";
   });
@@ -702,6 +704,7 @@ const PrincipalDashboard = () => {
 
   const quickActions = [
     { icon: Bell, label: "Send Announcement", color: "from-red-500 to-red-600", action: () => setActiveSection("announcements") },
+    { icon: Volume2, label: "Audio Messages", color: "from-blue-500 to-blue-600", action: () => setActiveSection("audiomessages") },
     { icon: MessageSquare, label: "Notify Students", color: "from-purple-500 to-purple-600", action: () => setShowStudentNotificationModal(true) },
     { icon: Star, label: "Principal Remarks", color: "from-yellow-500 to-yellow-600", action: () => setShowPrincipalRemarksModal(true) },
     { icon: Settings, label: "Branding & Logo", color: "from-pink-500 to-pink-600", action: () => setActiveSection("branding") },
@@ -2930,6 +2933,29 @@ const PrincipalDashboard = () => {
                 </Button>
               </div>
               <FacilitiesManager />
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === "audiomessages" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mt-8"
+          >
+            <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
+              <div className="flex items-center justify-between mb-6">
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveSection("dashboard")}
+                  size="sm"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </div>
+              <AudioMessageManager principalEmail={principalEmail} />
             </div>
           </motion.div>
         )}
