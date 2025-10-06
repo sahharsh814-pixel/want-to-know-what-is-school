@@ -1032,7 +1032,10 @@ const StudentDashboard = () => {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
-                { title: "Learn Online", icon: Video, color: "from-red-500 to-pink-500", action: () => setShowLearnOnline(true) },
+                { title: "Learn Online", icon: Video, color: "from-red-500 to-pink-500", action: () => {
+                  console.log('Learn Online clicked');
+                  setShowLearnOnline(true);
+                } },
                 { title: "View Grades", icon: BarChart3, color: "from-blue-500 to-cyan-500", action: () => setShowGradesModal(true) },
                 { title: "Assignments", icon: FileText, color: "from-green-500 to-emerald-500", action: () => {
                   loadAssignments(); // Refresh assignments when opening
@@ -2391,15 +2394,17 @@ const StudentDashboard = () => {
       )}
 
       {/* Learn Online Modal */}
-      {showLearnOnline && studentData && (
-        <LearnOnline
-          studentId={studentData.id}
-          studentName={studentData.fullName}
-          studentClass={studentData.class}
-          studentSection={studentData.section}
-          onClose={() => setShowLearnOnline(false)}
-        />
-      )}
+      <AnimatePresence>
+        {showLearnOnline && studentData && (
+          <LearnOnline
+            studentId={studentData.id}
+            studentName={studentData.fullName}
+            studentClass={studentData.class}
+            studentSection={studentData.section}
+            onClose={() => setShowLearnOnline(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

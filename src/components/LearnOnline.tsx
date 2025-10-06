@@ -249,14 +249,45 @@ const LearnOnline = ({ studentId, studentName, studentClass, studentSection, onC
             <div ref={containerRef} className={`${isFullscreen ? 'fixed inset-0 z-50 bg-black' : ''}`}>
               <div className={`${isFullscreen ? 'h-full' : ''} space-y-4`}>
                 <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4" />
-                      <p className="text-lg font-semibold">{selectedSession.teacherName} is teaching live</p>
-                      <p className="text-sm text-white/70 mt-2">{selectedSession.title}</p>
-                      <p className="text-xs text-white/50 mt-4">
-                        {selectedSession.streamType === 'screen' ? '📺 Screen Share Active' : '🎥 Camera Active'}
-                      </p>
+                  {/* Simulated Video Player - In production, this would connect to actual streaming service */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-purple-900/50">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <div className="relative mb-6">
+                          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-royal to-gold mx-auto flex items-center justify-center animate-pulse">
+                            <Video className="h-12 w-12 text-white" />
+                          </div>
+                          <span className="absolute -top-2 -right-2 flex h-6 w-6">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-6 w-6 bg-red-500 items-center justify-center text-xs font-bold">LIVE</span>
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold mb-2">{selectedSession.teacherName}</p>
+                        <p className="text-lg text-white/90 mb-4">{selectedSession.title}</p>
+                        <div className="flex items-center justify-center space-x-4 text-sm">
+                          <span className="px-3 py-1 bg-white/20 rounded-full">
+                            {selectedSession.streamType === 'screen' ? '📺 Screen Share' : '🎥 Camera'}
+                          </span>
+                          <span className="px-3 py-1 bg-green-500/30 rounded-full flex items-center">
+                            <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                            Connected
+                          </span>
+                        </div>
+                        <p className="text-xs text-white/50 mt-6">
+                          🎓 Interactive lesson in progress
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Simulated video effects */}
+                    <div className="absolute top-4 left-4 right-4 flex justify-between text-white text-sm">
+                      <div className="bg-black/50 px-3 py-1 rounded">
+                        <span className="text-red-500 mr-2">●</span> Recording
+                      </div>
+                      <div className="bg-black/50 px-3 py-1 rounded">
+                        <Users className="h-4 w-4 inline mr-1" />
+                        Live viewers
+                      </div>
                     </div>
                   </div>
                 </div>
