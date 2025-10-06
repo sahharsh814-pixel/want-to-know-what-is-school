@@ -1,8 +1,7 @@
-
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Volume2, Play, Pause, ArrowLeft, Trash2, Users, Calendar } from "lucide-react";
+import { Volume2, Play, Pause, ArrowLeft, Trash2, Users, Calendar, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSupabaseData, subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
 
@@ -37,11 +36,12 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const [volume, setVolume] = useState<number>(1); // State for volume
   const navigate = useNavigate();
 
   useEffect(() => {
     loadMessages();
-    
+
     // Subscribe to real-time changes for cross-port synchronization
     const unsubscribe = subscribeToSupabaseChanges<AudioMessage[]>(
       'royal-academy-audio-messages',
@@ -51,7 +51,7 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
         filterMessagesForUser(newData);
       }
     );
-    
+
     return () => {
       unsubscribe();
     };
@@ -74,7 +74,7 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
     const teacherName = userType === 'teacher' ? localStorage.getItem('teacherName') || '' : '';
     const studentId = userType === 'student' ? userId : '';
     const studentName = userType === 'student' ? (JSON.parse(localStorage.getItem('currentStudent') || '{}').name || '') : '';
-    
+
     console.log('[PrincipalAudioMessages] Filtering messages. User info:', { 
       userEmail, 
       userType, 
@@ -85,39 +85,39 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
       studentName,
       totalMessages: allMessages.length 
     });
-    
+
     const filtered = allMessages.filter(message => {
       // Whole school messages
       if (message.recipientType === 'whole_school') {
         console.log('[PrincipalAudioMessages] Whole school message matched:', message.id);
         return true;
       }
-      
+
       // All teachers
       if (message.recipientType === 'all_teachers' && userType === 'teacher') {
         console.log('[PrincipalAudioMessages] All teachers message matched:', message.id);
         return true;
       }
-      
+
       // All students
       if (message.recipientType === 'all_students' && userType === 'student') {
         console.log('[PrincipalAudioMessages] All students message matched:', message.id);
         return true;
       }
-      
+
       // Specific class (for students)
       if (message.recipientType === 'class' && userType === 'student' && message.recipientClass === userClass) {
         console.log('[PrincipalAudioMessages] Class message matched:', message.id);
         return true;
       }
-      
+
       // Specific section (for students)
       if (message.recipientType === 'section' && userType === 'student' && 
           message.recipientClass === userClass && message.recipientSection === userSection) {
         console.log('[PrincipalAudioMessages] Section message matched:', message.id);
         return true;
       }
-      
+
       // Individual teacher - check all possible matching fields
       if (message.recipientType === 'individual_teacher' && userType === 'teacher') {
         const isMatch = message.recipientId === userEmail || 
@@ -129,7 +129,7 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
           return true;
         }
       }
-      
+
       // Individual student - check all possible matching fields
       if (message.recipientType === 'individual_student' && userType === 'student') {
         const isMatch = message.recipientId === userId || 
@@ -141,10 +141,10 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
           return true;
         }
       }
-      
+
       return false;
     });
-    
+
     console.log('[PrincipalAudioMessages] Filtered messages:', filtered.length, 'out of', allMessages.length);
     setMessages(filtered);
   };
@@ -157,6 +157,7 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
       if (audioPlayerRef.current) {
         audioPlayerRef.current.src = audioSrc;
         audioPlayerRef.current.playbackRate = playbackSpeed;
+        audioPlayerRef.current.volume = volume; // Set volume when playing
         audioPlayerRef.current.play();
         setPlayingMessageId(messageId);
       }
@@ -167,6 +168,14 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
     setPlaybackSpeed(speed);
     if (audioPlayerRef.current) {
       audioPlayerRef.current.playbackRate = speed;
+    }
+  };
+
+  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(event.target.value);
+    setVolume(newVolume);
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.volume = newVolume;
     }
   };
 
@@ -194,7 +203,7 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <audio ref={audioPlayerRef} onEnded={() => setPlayingMessageId(null)} className="hidden" />
-      
+
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -225,20 +234,39 @@ const PrincipalAudioMessages = ({ userEmail, userType, userClass, userSection, u
       </motion.header>
 
       <div className="container-wide py-8 px-6">
-        {/* Playback Speed Control */}
-        <div className="flex items-center gap-3 p-4 bg-card rounded-lg border border-border/50 mb-6">
-          <span className="text-sm font-medium">Playback Speed:</span>
-          {[0.5, 0.75, 1, 1.25, 1.5, 2].map(speed => (
-            <Button
-              key={speed}
-              size="sm"
-              variant={playbackSpeed === speed ? "default" : "outline"}
-              onClick={() => changePlaybackSpeed(speed)}
-            >
-              {speed}x
-            </Button>
-          ))}
+        {/* Playback Controls Bar */}
+        <div className="flex flex-wrap items-center gap-3 p-4 bg-card rounded-lg border border-border/50 mb-6 justify-between">
+          {/* Playback Speed Control */}
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium">Playback Speed:</span>
+            {[0.5, 0.75, 1, 1.25, 1.5, 2].map(speed => (
+              <Button
+                key={speed}
+                size="sm"
+                variant={playbackSpeed === speed ? "default" : "outline"}
+                onClick={() => changePlaybackSpeed(speed)}
+              >
+                {speed}x
+              </Button>
+            ))}
+          </div>
+          
+          {/* Volume Control */}
+          <div className="flex items-center gap-2">
+            <Volume2 className="h-5 w-5 text-muted-foreground" />
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              onChange={handleVolumeChange}
+              className="w-24 h-2 bg-muted rounded-lg appearance-none cursor-pointer"
+            />
+            <span className="text-sm font-medium">{Math.round(volume * 100)}%</span>
+          </div>
         </div>
+
 
         {/* Messages List */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

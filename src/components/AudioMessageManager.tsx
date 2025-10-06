@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, Mic, Upload, Trash2, Play, Pause, Send, X, Users, UserCheck } from "lucide-react";
+import { Volume2, Mic, Upload, Trash2, Play, Pause, Send, X, Users, UserCheck, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,6 +31,7 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string>("");
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [volume, setVolume] = useState(1);
   const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
 
   const [messageForm, setMessageForm] = useState({
@@ -224,6 +225,7 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
       if (audioPlayerRef.current) {
         audioPlayerRef.current.src = audioSrc;
         audioPlayerRef.current.playbackRate = playbackSpeed;
+        audioPlayerRef.current.volume = volume;
         audioPlayerRef.current.play();
         setPlayingMessageId(messageId);
       }
@@ -234,6 +236,13 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
     setPlaybackSpeed(speed);
     if (audioPlayerRef.current) {
       audioPlayerRef.current.playbackRate = speed;
+    }
+  };
+
+  const changeVolume = (newVolume: number) => {
+    setVolume(newVolume);
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.volume = newVolume;
     }
   };
 
@@ -309,6 +318,29 @@ const AudioMessageManager = ({ principalEmail }: { principalEmail: string }) => 
             {speed}x
           </Button>
         ))}
+      </div>
+
+      {/* Volume Control */}
+      <div className="flex items-center gap-3 p-4 bg-muted rounded-lg">
+        <span className="text-sm font-medium flex items-center gap-2">
+          {volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          Volume:
+        </span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value={volume}
+          onChange={(e) => changeVolume(parseFloat(e.target.value))}
+          className="flex-1 h-2 bg-muted rounded-lg appearance-none cursor-pointer"
+          style={{
+            background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${volume * 100}%, hsl(var(--muted)) ${volume * 100}%, hsl(var(--muted)) 100%)`
+          }}
+        />
+        <span className="text-sm font-medium min-w-[3rem] text-right">
+          {Math.round(volume * 100)}%
+        </span>
       </div>
 
       {/* Messages List */}
