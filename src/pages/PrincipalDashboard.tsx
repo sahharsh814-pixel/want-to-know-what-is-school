@@ -40,6 +40,8 @@ import DocumentViewer from "@/components/DocumentViewer";
 import BrandingManager from "@/components/BrandingManager";
 import EventsManager from "@/components/EventsManager";
 import CategoryManager from "@/components/CategoryManager";
+import AcademicsManager from "@/components/AcademicsManager";
+import FacilitiesManager from "@/components/FacilitiesManager";
 import { getSupabaseData, setSupabaseData, subscribeToSupabaseChanges } from "@/lib/supabaseHelpers";
 
 // Notification interfaces
@@ -127,7 +129,7 @@ interface TeacherRecord {
 const PrincipalDashboard = () => {
   const [principalEmail, setPrincipalEmail] = useState("");
   // Restore active section from sessionStorage on mount
-  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager" | "branding" | "events" | "categories">(() => {
+  const [activeSection, setActiveSection] = useState<"dashboard" | "teachers" | "homepage" | "courses" | "gallery" | "about" | "announcements" | "admissions" | "topscorers" | "createteacherid" | "manageteachers" | "manageteacherid" | "pricemanagement" | "timetable" | "admissionsmanager" | "branding" | "events" | "categories" | "academicsmanager" | "facilitiesmanager">(() => {
     const saved = sessionStorage.getItem('principalActiveSection');
     return (saved as any) || "dashboard";
   });
@@ -1071,6 +1073,8 @@ const PrincipalDashboard = () => {
                 { title: "Manage Courses", desc: "Add/edit academic programs", icon: BookOpen, action: () => navigate('/courses-management') },
                 { title: "Update Gallery", desc: "Manage photo galleries", icon: Eye, action: () => setActiveSection("gallery") },
                 { title: "Edit About Page", desc: "Update school information", icon: FileText, action: () => setActiveSection("about") },
+                { title: "Academics Manager", desc: "Edit departments and achievements", icon: GraduationCap, action: () => setActiveSection("academicsmanager") },
+                { title: "Facilities Manager", desc: "Edit facilities and campus stats", icon: Settings, action: () => setActiveSection("facilitiesmanager") },
                 { title: "View Admissions", desc: "Review submitted applications", icon: FileText, action: () => setActiveSection("admissions") },
                 { title: "Manage Top Scorers", desc: "Edit students, rankings, and categories", icon: Trophy, action: () => setActiveSection("topscorers") },
                 { title: "Create New Teacher ID", desc: "Generate teacher login credentials", icon: UserPlus, action: () => setActiveSection("createteacherid") },
@@ -2876,6 +2880,56 @@ const PrincipalDashboard = () => {
               </div>
 
               <BrandingManager />
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === "academicsmanager" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mt-8"
+          >
+            <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-heading font-bold text-foreground">
+                  Academic Content Management
+                </h2>
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveSection("dashboard")}
+                  size="sm"
+                >
+                  Back to Dashboard
+                </Button>
+              </div>
+              <AcademicsManager />
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === "facilitiesmanager" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mt-8"
+          >
+            <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-heading font-bold text-foreground">
+                  Facilities Content Management
+                </h2>
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveSection("dashboard")}
+                  size="sm"
+                >
+                  Back to Dashboard
+                </Button>
+              </div>
+              <FacilitiesManager />
             </div>
           </motion.div>
         )}
